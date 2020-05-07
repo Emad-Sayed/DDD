@@ -1,4 +1,5 @@
-﻿using Application.Common.Models;
+﻿using Application.Common.Interfaces;
+using Application.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,10 +8,10 @@ using Twilio.Rest.Api.V2010.Account;
 
 namespace Infrastructure.SMSMessage
 {
-    public class SMSMessagesService : ISMSMessagesService
+    public class TwilioSMSNotification : ISMSNotification
     {
-        private readonly SMSMessagesConfigurations _sMSMessagesConfigurations;
-        public SMSMessagesService(SMSMessagesConfigurations sMSMessagesConfigurations)
+        private readonly TwilioSMSConfigurations _sMSMessagesConfigurations;
+        public TwilioSMSNotification(TwilioSMSConfigurations sMSMessagesConfigurations)
         {
             _sMSMessagesConfigurations = sMSMessagesConfigurations;
         }

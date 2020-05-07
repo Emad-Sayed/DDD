@@ -18,9 +18,9 @@ namespace Infrastructure
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            var SsSMessagesConfigurations = Configuration.GetSection(nameof(SMSMessagesConfigurations)).Get<SMSMessagesConfigurations>();
-            services.AddSingleton(SsSMessagesConfigurations);
-            services.AddTransient<ISMSMessagesService, SMSMessagesService>();
+            var twilioSMSConfigurations = Configuration.GetSection(nameof(TwilioSMSConfigurations)).Get<TwilioSMSConfigurations>();
+            services.AddSingleton(twilioSMSConfigurations);
+            services.AddTransient<ISMSNotification, TwilioSMSNotification>();
             //throw new NotImplementedException();
         }
 

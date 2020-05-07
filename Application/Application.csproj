@@ -23,9 +23,8 @@
 
   <ItemGroup>
     <Folder Include="Campaign\" />
-    <Folder Include="ProductCatalog\Product\Commands\" />
-    <Folder Include="ProductCatalog\Product\ViewModels\" />
-    <Folder Include="ProductCatalog\Product\Queries\" />
+    <Folder Include="ProductCatalog\Products\ViewModels\" />
+    <Folder Include="ProductCatalog\Products\Queries\" />
     <Folder Include="ShoppingVan\" />
     <Folder Include="Order\" />
     <Folder Include="SharedKernel\" />

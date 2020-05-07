@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Domain.ProductCatalog.Products.DomainModels;
+using Domain.ProductCatalog.Product.DomainModels;
 
 namespace Application.ProductCatalog
 {

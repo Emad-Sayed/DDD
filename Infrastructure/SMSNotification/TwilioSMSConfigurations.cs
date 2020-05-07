@@ -5,7 +5,7 @@ using System.Text;
 namespace Infrastructure.SMSMessage
 {
     // Configurations for twilio rest api
-    public class SMSMessagesConfigurations
+    public class TwilioSMSConfigurations
     {
         /// <summary>
         /// Account unique identification for a twilio app

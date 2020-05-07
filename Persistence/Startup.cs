@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.ProductCatalog;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,10 @@ namespace Persistence
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ProductCatalogContext>(options =>
-                 options.UseSqlServer(Configuration.GetConnectionString("BrimoDatabase"), o => o.MigrationsHistoryTable("_ProductCatalog_MigrationHistory")));
+                    options.UseSqlServer(Configuration.GetConnectionString("BrimoDatabase"),
+                    o => o.MigrationsHistoryTable("_ProductCatalog_MigrationHistory")));
+
+            services.AddScoped<IProductCatalogContext>(provider => provider.GetService<ProductCatalogContext>());
 
         }
 

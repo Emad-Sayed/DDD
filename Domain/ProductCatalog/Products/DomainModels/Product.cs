@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.ProductCatalog.Products.DomainModels
+namespace Domain.ProductCatalog.Product.DomainModels
 {
     public class Product : EntityBase
     {

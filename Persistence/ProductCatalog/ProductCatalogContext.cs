@@ -1,5 +1,5 @@
 ﻿using Application.ProductCatalog;
-using Domain.ProductCatalog.Products.DomainModels;
+using Domain.ProductCatalog.Product.DomainModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

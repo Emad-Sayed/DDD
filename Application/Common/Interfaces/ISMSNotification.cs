@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.SMSMessage
+namespace Application.Common.Interfaces
 {
-    public interface ISMSMessagesService
+    public interface ISMSNotification
     {
         void Send(SMSMessageModel smsMessageModel);
 
