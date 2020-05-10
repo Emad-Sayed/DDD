@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace Application.Common.Validation
 {
-    public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+         where TRequest : IRequest<TResponse>
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
+
         public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
         {
             _validators = validators;
@@ -18,24 +20,20 @@ namespace Application.Common.Validation
 
         public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
-            var context = new System.ComponentModel.DataAnnotations.ValidationContext(request);
-            var failures = _validators.Select(x => x.Validate(context))
-                                      .SelectMany(x => x.Errors)
-                                      .Where(x => x != null)
-                                      .Select(x => new DataTypeException.DataTypeExceptionError
-                                      {
-                                          PropertyName = x.PropertyName,
-                                          Code = x.ErrorCode
-                                      })
-                                      .ToList();
+            var context = new ValidationContext(request);
 
-            if (failures.Any())
-                throw new DataTypeException(failures.ToArray());
+            var failures = _validators
+                .Select(v => v.Validate(context))
+                .SelectMany(result => result.Errors)
+                .Where(f => f != null)
+                .ToList();
+
+            if (failures.Count != 0)
+            {
+                throw new ValidationException(failures);
+            }
 
             return next();
         }
-
-
-
     }
 }

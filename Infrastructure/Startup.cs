@@ -20,6 +20,7 @@ namespace Infrastructure
         {
             var twilioSMSConfigurations = Configuration.GetSection(nameof(TwilioSMSConfigurations)).Get<TwilioSMSConfigurations>();
             services.AddSingleton(twilioSMSConfigurations);
+
             services.AddTransient<ISMSNotification, TwilioSMSNotification>();
             //throw new NotImplementedException();
         }

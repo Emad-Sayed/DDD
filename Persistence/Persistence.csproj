@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Folder Include="Campaign\" />
+    <Folder Include="CustomerManagment\Migrations\" />
     <Folder Include="Order\" />
     <Folder Include="ProductCatalog\Migrations\" />
     <Folder Include="ShoppingVan\" />

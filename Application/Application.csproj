@@ -23,6 +23,8 @@
 
   <ItemGroup>
     <Folder Include="Campaign\" />
+    <Folder Include="CustomerManagment\Customer\ViewModels\" />
+    <Folder Include="CustomerManagment\Customer\Queries\" />
     <Folder Include="ProductCatalog\Products\ViewModels\" />
     <Folder Include="ProductCatalog\Products\Queries\" />
     <Folder Include="ShoppingVan\" />

@@ -21,8 +21,8 @@ namespace Infrastructure.SMSMessage
             var message = MessageResource.Create(
             body: smsMessageModel.Message,
             from: new Twilio.Types.PhoneNumber(_sMSMessagesConfigurations.FromPhoneNumber),
-            to: new Twilio.Types.PhoneNumber(smsMessageModel.ToPhoneNumber)
-        );
+            to: new Twilio.Types.PhoneNumber(smsMessageModel.ToPhoneNumber));
+
 
         }
     }

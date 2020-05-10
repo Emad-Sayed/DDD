@@ -12,7 +12,6 @@ namespace Domain.Base.Entity
 
         protected EntityBase(Guid id)
         {
-            DateTime date = new DateTime();
             Id = id;
         }
 
