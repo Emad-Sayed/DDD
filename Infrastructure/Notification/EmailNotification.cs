@@ -55,7 +55,7 @@ namespace Infrastructure.Notification
             }
             catch (Exception ex)
             {
-                //throw ex;
+                throw ex;
             }
         }
 

@@ -12,7 +12,6 @@ namespace API.Controllers.CustomerManagment
 {
     [EnableCors("AllowOrigin")]
     [Route("api/" + nameof(Contexts.CustomerManagment) + "/[controller]")]
-    [Authorize]
     public class CustomersController : BaseController
     {
         [HttpPost]

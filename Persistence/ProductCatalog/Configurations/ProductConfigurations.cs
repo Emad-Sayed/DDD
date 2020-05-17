@@ -1,9 +1,6 @@
-﻿using Domain.ProductCatalog.Product.DomainModels;
+﻿using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Persistence.ProductCatalog.Configurations
 {
@@ -11,7 +8,7 @@ namespace Persistence.ProductCatalog.Configurations
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-           
+            builder.HasKey(x => x.Id);
         }
     }
 }

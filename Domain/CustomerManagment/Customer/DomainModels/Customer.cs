@@ -7,10 +7,10 @@ namespace Domain.CustomerManagment.Customer.DomainModels
 {
     public class Customer : EntityBase
     {
-        public string AccountId { get; set; }
-        public string ShopName { get; set; }
-        public string ShopAddress { get; set; }
-        public string LocationOnMap { get; set; }
+        public string AccountId { get; private set; }
+        public string ShopName { get; private set; }
+        public string ShopAddress { get; private set; }
+        public string LocationOnMap { get; private set; }
 
         private Customer()
         {

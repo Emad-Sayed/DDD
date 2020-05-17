@@ -1,0 +1,2 @@
+﻿Add-Migration -Context ProductCatalogContext -OutputDir ProductCatalog/Migrations -StartupProject API -Project Persistence
+Drop-Database -Context ProductCatalogContext -StartupProject API -Project Persistence

@@ -25,9 +25,7 @@ namespace Persistence
         {
             services.AddDbContext<ProductCatalogContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("BrimoDatabase"),
-                    o => o.MigrationsHistoryTable("_ProductCatalog_MigrationHistory")));
-
-            services.AddScoped<IProductCatalogContext>(provider => provider.GetService<ProductCatalogContext>());
+                    o => o.MigrationsHistoryTable("_ProductCatalog_MigrationHistory")), ServiceLifetime.Scoped);
 
             services.AddDbContext<CustomerManagmentContext>(options =>
                    options.UseSqlServer(Configuration.GetConnectionString("BrimoDatabase"),

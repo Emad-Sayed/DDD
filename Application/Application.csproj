@@ -25,8 +25,12 @@
     <Folder Include="Campaign\" />
     <Folder Include="CustomerManagment\Customer\ViewModels\" />
     <Folder Include="CustomerManagment\Customer\Queries\" />
-    <Folder Include="ProductCatalog\Products\ViewModels\" />
-    <Folder Include="ProductCatalog\Products\Queries\" />
+    <Folder Include="ProductCatalog\BrandAggregate\Commands\DeleteBrand\" />
+    <Folder Include="ProductCatalog\BrandAggregate\Commands\UpdateBrand\" />
+    <Folder Include="ProductCatalog\BrandAggregate\Queries\" />
+    <Folder Include="ProductCatalog\ProductCategoryAggregate\Queries\" />
+    <Folder Include="ProductCatalog\ProductUnit\" />
+    <Folder Include="ProductCatalog\ProductAggregate\Queries\" />
     <Folder Include="ShoppingVan\" />
     <Folder Include="Order\" />
     <Folder Include="SharedKernel\" />

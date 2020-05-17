@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using API.Controllers;
 using Application.Common.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,6 +40,8 @@ namespace API
                 c.SwaggerDoc(Contexts.CustomerManagment, new OpenApiInfo { Title = Contexts.CustomerManagment, Version = "v1" });
             });
 
+           
+
             _assembliesStartup.ForEach(startup => startup.ConfigureServices(services));
             services.AddCors(x => x.AddPolicy("AllowOrigin", o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
@@ -57,7 +61,7 @@ namespace API
             {
                 app.UseDeveloperExceptionPage();
             }
-            _assembliesStartup.ForEach(x=>x.Configure(app.ApplicationServices));
+            _assembliesStartup.ForEach(x => x.Configure(app.ApplicationServices));
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

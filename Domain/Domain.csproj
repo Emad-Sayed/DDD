@@ -6,8 +6,14 @@
 
   <ItemGroup>
     <Folder Include="Campaign\" />
+    <Folder Include="ProductCatalog\Exceptions\" />
     <Folder Include="ShoppingVan\" />
     <Folder Include="Order\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="8.0.0" />
+  </ItemGroup>
+
 
 </Project>
