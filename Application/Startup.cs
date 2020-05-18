@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
+using Application.Common.Behaviours;
 using Application.Common.Interfaces;
 using Application.Common.TransactionManagement;
-using Application.Common.Validation;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
@@ -25,9 +25,9 @@ namespace Application
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
-            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AntiCorruptionLayerMiddleWare<,>));
 
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionMiddleware<,>));
 
             services.AddScoped<UnitOfWork>();

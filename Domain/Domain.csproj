@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Campaign\" />
-    <Folder Include="ProductCatalog\Exceptions\" />
     <Folder Include="ShoppingVan\" />
     <Folder Include="Order\" />
   </ItemGroup>
