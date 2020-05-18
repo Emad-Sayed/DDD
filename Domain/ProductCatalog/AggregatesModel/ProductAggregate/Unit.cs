@@ -29,17 +29,15 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 
         private Unit() { }
 
-        public Unit(string name, int unitCount, int itemsInUnitCount, float unitPrice, float unitWeight, bool isAvilable, Guid productId, Guid id = default)
+        public Unit(string name, int count, int contentCount, float price, float weight, bool isAvilable, Guid productId)
         {
             Name = name;
-            Count = unitCount;
-            ContentCount = itemsInUnitCount;
-            Price = unitPrice;
-            Weight = unitWeight;
+            Count = count;
+            ContentCount = contentCount;
+            Price = price;
+            Weight = weight;
             IsAvilable = isAvilable;
             ProductId = productId;
-
-            Id = id == default ? Guid.NewGuid() : id;
         }
     }
 }

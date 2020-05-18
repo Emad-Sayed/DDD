@@ -14,12 +14,6 @@ namespace Application.ProductCatalog.ProductCategoryAggregate
     {
         public ProductCategoryMappingProfile()
         {
-            CreateMap<Product, AlgoliaProductVM>()
-                .ForMember(pro => pro.ObjectID, op => op.MapFrom(y => y.Id.ToString()))
-                .ForMember(pro => pro.BrandId, op => op.MapFrom(y => y.BrandId.ToString()))
-                .ForMember(pro => pro.ProductCategoryId, op => op.MapFrom(y => y.ProductCategoryId.ToString()))
-                .ReverseMap();
-            CreateMap<Brand, BrandVM>().ReverseMap();
             CreateMap<ProductCategory, ProductCategoryVM>().ReverseMap();
         }
     }

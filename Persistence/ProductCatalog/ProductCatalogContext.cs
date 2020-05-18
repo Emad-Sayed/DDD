@@ -36,6 +36,7 @@ namespace Persistence.ProductCatalog
         public DbSet<Product> Products { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<Domain.ProductCatalog.AggregatesModel.ProductAggregate.Unit> Units { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -15,5 +15,6 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate
         ProductCategory Update(ProductCategory productCategory);
         Task<ProductCategory> FindAsync(string id);
         Task<ProductCategory> FindByIdAsync(string id);
+        Task<(int, List<ProductCategory>)> GetAllProductCategorys();
     }
 }

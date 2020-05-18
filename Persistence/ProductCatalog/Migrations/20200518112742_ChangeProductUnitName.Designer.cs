@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.ProductCatalog;
 
 namespace Persistence.ProductCatalog.Migrations
 {
     [DbContext(typeof(ProductCatalogContext))]
-    partial class ProductCatalogContextModelSnapshot : ModelSnapshot
+    [Migration("20200518112742_ChangeProductUnitName")]
+    partial class ChangeProductUnitName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,7 +108,7 @@ namespace Persistence.ProductCatalog.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Units");
+                    b.ToTable("Unit");
                 });
 
             modelBuilder.Entity("Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate.ProductCategory", b =>

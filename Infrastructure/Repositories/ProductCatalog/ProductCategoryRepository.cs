@@ -1,5 +1,6 @@
 ﻿using Domain.Common.Interfaces;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
+using Microsoft.EntityFrameworkCore;
 using Persistence.ProductCatalog;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,17 @@ namespace Infrastructure.Repositories.ProductCatalog
         public Task<ProductCategory> FindByIdAsync(string id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<(int, List<ProductCategory>)> GetAllProductCategorys()
+        {
+            var query = _context.ProductCategories.AsQueryable();
+
+            var totalProductCategories = await query.CountAsync();
+
+            var productCategoriesFromRepo = await query.ToListAsync();
+
+            return (totalProductCategories, productCategoriesFromRepo);
         }
     }
 }

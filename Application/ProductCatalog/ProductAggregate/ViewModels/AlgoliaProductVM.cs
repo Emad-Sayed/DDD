@@ -12,11 +12,10 @@ namespace Application.ProductCatalog.ProductAggregate.ViewModels
         public string Barcode { get; private set; }
         public string PhotoUrl { get; private set; }
         public bool AvailableToSell { get; set; }
-        public string BrandId { get; private set; }
         public string ObjectID { get; private set; }
-        public string ProductCategoryId { get; private set; }
-        public ProductCategoryVM ProductCategory { get; set; }
-        public BrandVM Brand { get; set; }
+        public string Category { get; set; }
+        public string Brand { get; set; }
+        public List<UnitVM> Units { get; set; }
 
     }
 }

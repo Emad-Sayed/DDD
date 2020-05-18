@@ -37,20 +37,16 @@ namespace Infrastructure.Repositories.ProductCatalog
 
         public void Update(Product product)
         {
-             _context.Products.Update(product);
-        }
-
-        public Task<Product> FindAsync(string id)
-        {
-            return _context.Products
-                .Include(x => x.Brand)
-                .Include(x => x.ProductCategory)
-                .FirstOrDefaultAsync(x => x.Id.ToString() == id);
+            _context.Entry(product).State = EntityState.Modified;
         }
 
         public Task<Product> FindByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            return _context.Products
+                   .Include(x => x.Brand)
+                   .Include(x => x.Units)
+                   .Include(x => x.ProductCategory)
+                   .FirstOrDefaultAsync(x => x.Id.ToString() == id);
         }
     }
 }

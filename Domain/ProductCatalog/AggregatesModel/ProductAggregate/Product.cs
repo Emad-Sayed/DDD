@@ -4,6 +4,8 @@ using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
 using Domain.ProductCatalog.Events;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 {
@@ -20,7 +22,12 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         public Guid ProductCategoryId { get; private set; }
         public ProductCategory ProductCategory { get; private set; }
 
-        private Product() { }
+        public ICollection<Unit> Units { get; private set; }
+
+        private Product()
+        {
+            Units = new List<Unit>();
+        }
 
         public Product(string name, string barcode, string photoUrl, bool availableToSell, string brandId, string productCategoryId, Guid id = default)
         {
@@ -46,6 +53,15 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             Barcode = barcode;
             PhotoUrl = photoUrl;
             AvailableToSell = availableToSell;
+
+            // rais product updated event
+            AddDomainEvent(new ProductUpdated(this));
+        }
+
+        public void AddUnitToProduct(string name, int count, int contentCount, float price, float weight, bool isAvilable)
+        {
+            var newProductUnit = new Unit(name, count, contentCount, price, weight, isAvilable, this.Id);
+            Units.Add(newProductUnit);
 
             // rais product updated event
             AddDomainEvent(new ProductUpdated(this));

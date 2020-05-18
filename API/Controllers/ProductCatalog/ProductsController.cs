@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,13 @@ namespace API.Controllers.ProductCatalog
     {
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateProductCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("{productId}/AddUnit")]
+        public async Task<IActionResult> Post([FromBody]AddUnitCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);

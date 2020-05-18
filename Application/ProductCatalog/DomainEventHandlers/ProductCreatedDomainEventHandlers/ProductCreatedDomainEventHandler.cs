@@ -26,7 +26,7 @@ namespace Application.ProductCatalog.DomainEventHandlers.ProductCreatedDomainEve
 
         public async Task Handle(ProductCreated notification, CancellationToken cancellationToken)
         {
-            var productWithBrandAndCategory = await _productRepository.FindAsync(notification.Product.Id.ToString());
+            var productWithBrandAndCategory = await _productRepository.FindByIdAsync(notification.Product.Id.ToString());
 
             var productToAddToAlgoia = _mapper.Map<AlgoliaProductVM>(productWithBrandAndCategory);
 
