@@ -22,7 +22,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 
         private Product() { }
 
-        public Product(string name, string barcode, string photoUrl,bool availableToSell, string brandId, string productCategoryId, Guid id = default)
+        public Product(string name, string barcode, string photoUrl, bool availableToSell, string brandId, string productCategoryId, Guid id = default)
         {
             Name = name;
             Barcode = barcode;
@@ -38,6 +38,17 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             // Add the ProductCreated to the domain events collection 
             // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]
             AddDomainEvent(new ProductCreated(this));
+        }
+
+        public void UpdateProduct(string name, string barcode, string photoUrl, bool availableToSell)
+        {
+            Name = name;
+            Barcode = barcode;
+            PhotoUrl = photoUrl;
+            AvailableToSell = availableToSell;
+
+            // rais product updated event
+            AddDomainEvent(new ProductUpdated(this));
         }
     }
 }

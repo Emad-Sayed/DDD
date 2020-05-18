@@ -30,7 +30,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.CreateProduct
 
                  _productRepository.Add(newProductToAdd);
 
-                await _productRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+                await _productRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
 
                 return MediatR.Unit.Value;
             }

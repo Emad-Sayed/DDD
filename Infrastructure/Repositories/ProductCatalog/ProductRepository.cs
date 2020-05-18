@@ -35,9 +35,9 @@ namespace Infrastructure.Repositories.ProductCatalog
                    .Entity;
         }
 
-        public Product Update(Product product)
+        public void Update(Product product)
         {
-            throw new NotImplementedException();
+             _context.Products.Update(product);
         }
 
         public Task<Product> FindAsync(string id)

@@ -1,8 +1,10 @@
 ﻿using Domain.Common.Interfaces;
 using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
+using Microsoft.EntityFrameworkCore;
 using Persistence.ProductCatalog;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,6 +48,17 @@ namespace Infrastructure.Repositories.ProductCatalog
         public Task<Brand> FindByIdAsync(string id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<(int, List<Brand>)> GetAllBrands()
+        {
+            var query = _context.Brands.AsQueryable();
+
+            var totalBrands = await query.CountAsync();
+
+            var brandsFromRepo = await query.ToListAsync();
+
+            return (totalBrands, brandsFromRepo);
         }
     }
 }

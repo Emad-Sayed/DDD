@@ -15,5 +15,6 @@ namespace Domain.ProductCatalog.AggregatesModel.BrandAggregate
         Brand Update(Brand brand);
         Task<Brand> FindAsync(string id);
         Task<Brand> FindByIdAsync(string id);
+        Task<(int, List<Brand>)> GetAllBrands();
     }
 }

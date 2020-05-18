@@ -26,9 +26,10 @@ namespace Application.ProductCatalog.DomainEventHandlers.ProductCreatedDomainEve
 
         public async Task Handle(ProductCreated notification, CancellationToken cancellationToken)
         {
-            //var brand = 
             var productWithBrandAndCategory = await _productRepository.FindAsync(notification.Product.Id.ToString());
+
             var productToAddToAlgoia = _mapper.Map<AlgoliaProductVM>(productWithBrandAndCategory);
+
             await _searchEngine.AddEntity(productToAddToAlgoia, "products");
         }
     }

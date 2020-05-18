@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Application.ProductCatalog.BrandAggregate.ViewModels;
+using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,7 +10,7 @@ namespace Application.ProductCatalog.BrandAggregate
     {
         public BrandMappingProfile()
         {
-
+            CreateMap<Brand, BrandVM>().ReverseMap();
         }
     }
 }

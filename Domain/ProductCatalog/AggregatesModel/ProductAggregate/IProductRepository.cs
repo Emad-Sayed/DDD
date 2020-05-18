@@ -12,7 +12,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
     public interface IProductRepository : IRepository<Product>
     {
         Product Add(Product product);
-        Product Update(Product product);
+        void Update(Product product);
         Task<Product> FindAsync(string id);
         Task<Product> FindByIdAsync(string id);
     }
