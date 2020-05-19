@@ -18,6 +18,9 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         // The price of 1 unit
         public float Price { get; private set; }
 
+        // The Selling Price for 1 unit
+        public float SellingPrice { get; set; }
+
         // The Weight of 1 unit
         public float Weight { get; private set; }
 
@@ -29,15 +32,27 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 
         private Unit() { }
 
-        public Unit(string name, int count, int contentCount, float price, float weight, bool isAvilable, Guid productId)
+        public Unit(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvilable, Guid productId)
         {
             Name = name;
             Count = count;
             ContentCount = contentCount;
             Price = price;
+            SellingPrice = sellingPrice;
             Weight = weight;
             IsAvilable = isAvilable;
             ProductId = productId;
+        }
+
+        public void Update(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvilable)
+        {
+            Name = name;
+            Count = count;
+            ContentCount = contentCount;
+            Price = price;
+            SellingPrice = sellingPrice;
+            Weight = weight;
+            IsAvilable = isAvilable;
         }
     }
 }

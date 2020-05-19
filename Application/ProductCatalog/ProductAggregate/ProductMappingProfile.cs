@@ -16,9 +16,13 @@ namespace Application.ProductCatalog.ProductAggregate
                 .ForMember(pro => pro.Brand, op => op.MapFrom(y => y.Brand.Name))
                 .ReverseMap();
 
-            CreateMap<Unit, UnitVM>()
+            CreateMap<Unit, AlgoliaUnitVM>()
                 .ForMember(pro => pro.Unit, op => op.MapFrom(y => y.Name))
                 .ReverseMap();
+
+            CreateMap<Product, ProductVM>().ReverseMap();
+
+            CreateMap<Unit, UnitVM>().ReverseMap();
         }
     }
 }

@@ -35,6 +35,4 @@ namespace Application.ProductCatalog.BrandAggregate.Queries.BrandList
             }
         }
     }
-
-
 }

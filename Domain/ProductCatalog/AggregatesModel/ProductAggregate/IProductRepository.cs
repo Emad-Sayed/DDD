@@ -13,6 +13,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
     {
         Product Add(Product product);
         void Update(Product product);
+        void Delete(Product product);
         Task<Product> FindByIdAsync(string id);
     }
 }

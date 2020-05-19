@@ -1,4 +1,5 @@
 ﻿using Domain.Base.Entity;
+using Domain.Common.Exceptions;
 using Domain.Common.Interfaces;
 using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
@@ -6,6 +7,7 @@ using Domain.ProductCatalog.Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 {
@@ -47,6 +49,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             AddDomainEvent(new ProductCreated(this));
         }
 
+        // update product
         public void UpdateProduct(string name, string barcode, string photoUrl, bool availableToSell)
         {
             Name = name;
@@ -58,13 +61,48 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             AddDomainEvent(new ProductUpdated(this));
         }
 
-        public void AddUnitToProduct(string name, int count, int contentCount, float price, float weight, bool isAvilable)
+        // delete product
+        public void DeleteProduct()
         {
-            var newProductUnit = new Unit(name, count, contentCount, price, weight, isAvilable, this.Id);
+            // rais product deleted event
+            AddDomainEvent(new ProductDeleted(this));
+        }
+
+        // add unit to product
+        public void AddUnitToProduct(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvilable)
+        {
+            var newProductUnit = new Unit(name, count, contentCount, price, sellingPrice, weight, isAvilable, this.Id);
             Units.Add(newProductUnit);
 
             // rais product updated event
             AddDomainEvent(new ProductUpdated(this));
         }
+
+        // update unit product
+        public void UpdateProductUnit(string unitId, string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvilable)
+        {
+            var unitToUpdate = Units.FirstOrDefault(x => x.Id.ToString() == unitId);
+            if (unitToUpdate == null)
+                throw new NotFoundException(nameof(Unit));
+
+            unitToUpdate.Update(name, count, contentCount, price, sellingPrice, weight, isAvilable);
+
+            // rais product updated event
+            AddDomainEvent(new ProductUpdated(this));
+        }
+
+        // Remove unit from product
+        public void DeleteProductUnit(string unitId)
+        {
+            var unitToDelete = Units.FirstOrDefault(x => x.Id.ToString() == unitId);
+            if (unitToDelete == null)
+                throw new NotFoundException(nameof(Unit));
+
+            Units.Remove(unitToDelete);
+
+            // rais product updated event
+            AddDomainEvent(new ProductUpdated(this));
+        }
+
     }
 }

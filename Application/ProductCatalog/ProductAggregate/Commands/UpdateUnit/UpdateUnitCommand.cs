@@ -2,14 +2,13 @@
 using MediatR;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.ProductCatalog.ProductAggregate.Commands.AddUnit
+namespace Application.ProductCatalog.ProductAggregate.Commands.UpdateUnit
 {
-    public class AddUnitCommand : IRequest
+    public class UpdateUnitCommand : IRequest
     {
         public string Name { get; set; }
 
@@ -32,9 +31,10 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.AddUnit
         public bool IsAvilable { get; set; }
 
         public string ProductId { get; set; }
+        public string UnitId { get; set; }
 
 
-        public class Handler : IRequestHandler<AddUnitCommand>
+        public class Handler : IRequestHandler<UpdateUnitCommand>
         {
             private readonly IProductRepository _productRepository;
 
@@ -43,15 +43,15 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.AddUnit
                 _productRepository = productRepository;
             }
 
-            public async Task<MediatR.Unit> Handle(AddUnitCommand request, CancellationToken cancellationToken)
+            public async Task<MediatR.Unit> Handle(UpdateUnitCommand request, CancellationToken cancellationToken)
             {
                 // get product by id
                 var productFromRepo = await _productRepository.FindByIdAsync(request.ProductId);
 
-                // add unit to product
-                productFromRepo.AddUnitToProduct(request.Name, request.Count, request.ContentCount, request.Price, request.SellingPrice, request.Weight, request.IsAvilable);
+                // update unit to product
+                productFromRepo.UpdateProductUnit(request.UnitId, request.Name, request.Count, request.ContentCount, request.Price, request.SellingPrice, request.Weight, request.IsAvilable);
 
-                // update product with the new unit created
+                // update product with the new unit updated
                 _productRepository.Update(productFromRepo);
 
                 // save changes in the database and rase ProductUpdated event

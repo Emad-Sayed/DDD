@@ -48,5 +48,10 @@ namespace Infrastructure.Repositories.ProductCatalog
                    .Include(x => x.ProductCategory)
                    .FirstOrDefaultAsync(x => x.Id.ToString() == id);
         }
+
+        public void Delete(Product product)
+        {
+            _context.Products.Remove(product);
+        }
     }
 }
