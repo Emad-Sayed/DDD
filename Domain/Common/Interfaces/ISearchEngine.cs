@@ -10,6 +10,6 @@ namespace Domain.Common.Interfaces
     {
         Task AddEntity<T>(T entity, string indexName) where T : class;
         Task UpdateEntity<T>(T entity, string indexName) where T : class;
-        Task DeleteEntity<T>(T entity, string indexName) where T : class;
+        Task DeleteEntity(string objectId, string indexName);
     }
 }

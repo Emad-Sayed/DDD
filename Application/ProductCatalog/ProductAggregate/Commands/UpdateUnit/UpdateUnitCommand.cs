@@ -31,7 +31,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.UpdateUnit
         public bool IsAvilable { get; set; }
 
         public string ProductId { get; set; }
-        public string UnitId { get; set; }
+        public string Id { get; set; }
 
 
         public class Handler : IRequestHandler<UpdateUnitCommand>
@@ -49,7 +49,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.UpdateUnit
                 var productFromRepo = await _productRepository.FindByIdAsync(request.ProductId);
 
                 // update unit to product
-                productFromRepo.UpdateProductUnit(request.UnitId, request.Name, request.Count, request.ContentCount, request.Price, request.SellingPrice, request.Weight, request.IsAvilable);
+                productFromRepo.UpdateProductUnit(request.Id, request.Name, request.Count, request.ContentCount, request.Price, request.SellingPrice, request.Weight, request.IsAvilable);
 
                 // update product with the new unit updated
                 _productRepository.Update(productFromRepo);

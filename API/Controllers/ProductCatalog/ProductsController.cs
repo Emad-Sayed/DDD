@@ -42,7 +42,7 @@ namespace API.Controllers.ProductCatalog
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody]DeleteProductCommand command)
+        public async Task<IActionResult> Delete([FromQuery]DeleteProductCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);
@@ -63,7 +63,7 @@ namespace API.Controllers.ProductCatalog
         }
 
         [HttpDelete("{productId}/DeleteUnit")]
-        public async Task<IActionResult> DeleteUnit([FromBody]DeleteUnitCommand command)
+        public async Task<IActionResult> DeleteUnit([FromQuery]DeleteUnitCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);

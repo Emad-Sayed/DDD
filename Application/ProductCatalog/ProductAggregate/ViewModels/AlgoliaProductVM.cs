@@ -15,7 +15,7 @@ namespace Application.ProductCatalog.ProductAggregate.ViewModels
         public string ObjectID { get; private set; }
         public string Category { get; set; }
         public string Brand { get; set; }
-        public List<UnitVM> Units { get; set; }
+        public List<AlgoliaUnitVM> Units { get; set; }
 
     }
 }

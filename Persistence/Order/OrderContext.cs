@@ -1,30 +1,29 @@
 ﻿using Domain.Common.Interfaces;
-using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
-using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
-using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
+using Domain.Order.AggregatesModel.OrderAggregate;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Data;
 
-namespace Persistence.ProductCatalog
+namespace Persistence.Order
 {
-    public class ProductCatalogContext : DbContext, IUnitOfWork
+    public class OrderContext : DbContext, IUnitOfWork
     {
 
         private readonly IMediator _mediator;
         private IDbContextTransaction _currentTransaction;
 
 
-        public ProductCatalogContext(DbContextOptions<ProductCatalogContext> options) : base(options) { }
+        public OrderContext(DbContextOptions<OrderContext> options) : base(options) { }
 
         public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
         public bool HasActiveTransaction => _currentTransaction != null;
 
-        public ProductCatalogContext(DbContextOptions<ProductCatalogContext> options, IMediator mediator) : base(options)
+        public OrderContext(DbContextOptions<OrderContext> options, IMediator mediator) : base(options)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
@@ -33,14 +32,13 @@ namespace Persistence.ProductCatalog
 
 
 
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Brand> Brands { get; set; }
-        public DbSet<ProductCategory> ProductCategories { get; set; }
-        public DbSet<Domain.ProductCatalog.AggregatesModel.ProductAggregate.Unit> Units { get; set; }
+        public DbSet<Domain.Order.AggregatesModel.OrderAggregate.Order> Orders { get; set; }
+        public DbSet<OrderStatus> OrderStatus { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductCatalogContext).Assembly, type => type.FullName.Contains("ProductCatalog"));
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderContext).Assembly, type => type.FullName.Contains("Order"));
         }
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
@@ -51,7 +49,7 @@ namespace Persistence.ProductCatalog
             // side effects from the domain event handlers which are using the same DbContext with "InstancePerLifetimeScope" or "scoped" lifetime
             // B) Right AFTER committing data (EF SaveChanges) into the DB will make multiple transactions. 
             // You will need to handle eventual consistency and compensatory actions in case of failures in any of the Handlers. 
-            await _mediator.DispatchProductDomainEventsAsync(this);
+            await _mediator.DispatchOrderDomainEventsAsync(this);
 
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
             // performed through the DbContext will be committed
@@ -73,7 +71,7 @@ namespace Persistence.ProductCatalog
             // side effects from the domain event handlers which are using the same DbContext with "InstancePerLifetimeScope" or "scoped" lifetime
             // B) Right AFTER committing data (EF SaveChanges) into the DB will make multiple transactions. 
             // You will need to handle eventual consistency and compensatory actions in case of failures in any of the Handlers. 
-            await _mediator.DispatchProductDomainEventsAsync(this);
+            await _mediator.DispatchOrderDomainEventsAsync(this);
 
 
             return true;

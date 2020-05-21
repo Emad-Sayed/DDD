@@ -23,8 +23,7 @@ namespace Application.ProductCatalog.DomainEventHandlers.ProductDeletedDomainEve
 
         public async Task Handle(ProductDeleted notification, CancellationToken cancellationToken)
         {
-            var productToAddToAlgoia = _mapper.Map<AlgoliaProductVM>(notification.Product);
-            await _searchEngine.DeleteEntity(productToAddToAlgoia, "products");
+            await _searchEngine.DeleteEntity(notification.Product.Id.ToString(), "products");
         }
     }
 }

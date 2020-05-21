@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 {
@@ -50,12 +51,14 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         }
 
         // update product
-        public void UpdateProduct(string name, string barcode, string photoUrl, bool availableToSell)
+        public void UpdateProduct(string name, string barcode, string photoUrl, bool availableToSell, string brandId, string productCategoryId)
         {
             Name = name;
             Barcode = barcode;
             PhotoUrl = photoUrl;
             AvailableToSell = availableToSell;
+            BrandId = new Guid(brandId);
+            ProductCategoryId = new Guid(productCategoryId);
 
             // rais product updated event
             AddDomainEvent(new ProductUpdated(this));

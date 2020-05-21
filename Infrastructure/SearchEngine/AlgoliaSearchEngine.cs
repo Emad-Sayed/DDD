@@ -23,9 +23,10 @@ namespace Infrastructure.SearchEngine
             await index.SaveObjectAsync(entity);
         }
 
-        public Task DeleteEntity<T>(T entity, string indexName) where T : class
+        public async Task DeleteEntity(string objectId, string indexName)
         {
-            throw new NotImplementedException();
+            SearchIndex index = _client.InitIndex(indexName);
+            await index.DeleteObjectAsync(objectId);
         }
 
         public async Task UpdateEntity<T>(T entity, string indexName) where T : class

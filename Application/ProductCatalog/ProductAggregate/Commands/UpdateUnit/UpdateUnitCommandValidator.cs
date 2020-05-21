@@ -10,7 +10,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.UpdateUnit
         public UpdateUnitCommandValidator()
         {
             RuleFor(x => x.Name).NotEmpty();
-            RuleFor(x => x.UnitId).NotEmpty();
+            RuleFor(x => x.Id).NotEmpty();
             RuleFor(x => x.ProductId).NotEmpty();
         }
     }

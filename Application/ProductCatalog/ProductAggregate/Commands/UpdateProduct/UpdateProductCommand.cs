@@ -1,4 +1,5 @@
-﻿using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
+﻿using Application.Common.Exceptions;
+using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,12 +28,13 @@ namespace Application.ProductCatalog.Products.Commands.UpdateProduct
             public async Task<MediatR.Unit> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
             {
                 var productFromRepo = await _productRepository.FindByIdAsync(request.Id);
+                if (productFromRepo == null) throw new NotFoundException(nameof(productFromRepo));
 
-                productFromRepo.UpdateProduct(request.Name, request.Barcode, request.PhotoUrl, request.AvailableToSell);
+                productFromRepo.UpdateProduct(request.Name, request.Barcode, request.PhotoUrl, request.AvailableToSell, request.BrandId, request.ProductCategoryId);
 
                 _productRepository.Update(productFromRepo);
 
-                await _productRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+                await _productRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
 
                 return MediatR.Unit.Value;
             }

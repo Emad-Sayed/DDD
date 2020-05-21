@@ -6,6 +6,8 @@ namespace Application.ProductCatalog.ProductAggregate.ViewModels
 {
     public class UnitVM
     {
+        public string Id { get; set; }
+
         public string Name { get; private set; }
 
         // How many units from this unit
@@ -16,6 +18,9 @@ namespace Application.ProductCatalog.ProductAggregate.ViewModels
 
         // The price of 1 unit
         public float Price { get; private set; }
+
+        // The Selling price of 1 unit
+        public float SellingPrice { get; set; }
 
         // The Weight of 1 unit
         public float Weight { get; private set; }

@@ -40,9 +40,9 @@ namespace Infrastructure.Repositories.ProductCatalog
             _context.Entry(product).State = EntityState.Modified;
         }
 
-        public Task<Product> FindByIdAsync(string id)
+        public async Task<Product> FindByIdAsync(string id)
         {
-            return _context.Products
+            return await _context.Products
                    .Include(x => x.Brand)
                    .Include(x => x.Units)
                    .Include(x => x.ProductCategory)

@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Persistence.ProductCatalog
 {
-    static class MediatorExtension
+    static class MediatorProductCatalogExtension
     {
-        public static async Task DispatchDomainEventsAsync(this IMediator mediator, ProductCatalogContext ctx)
+        public static async Task DispatchProductDomainEventsAsync(this IMediator mediator, ProductCatalogContext ctx)
         {
             var domainEntities = ctx.ChangeTracker
                 .Entries<EntityBase>()

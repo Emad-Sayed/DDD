@@ -10,6 +10,6 @@ namespace Application.ProductCatalog.ProductAggregate.ViewModels
         public string Unit { get; set; }
         public float Price { get; set; }
         public float SellingPrice { get; set; }
-        public bool isAvilable { get; set; }
+        public bool IsAvilable { get; set; }
     }
 }
