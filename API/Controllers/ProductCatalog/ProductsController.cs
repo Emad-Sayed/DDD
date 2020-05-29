@@ -7,6 +7,7 @@ using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductAggregate.Commands.DeleteUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.UpdateUnit;
+using Application.ProductCatalog.ProductAggregate.Queries.ListProducts;
 using Application.ProductCatalog.ProductAggregate.Queries.ProductById;
 using Application.ProductCatalog.Products.Commands.DeleteProduct;
 using Application.ProductCatalog.Products.Commands.UpdateProduct;
@@ -28,6 +29,14 @@ namespace API.Controllers.ProductCatalog
         {
             _currentUserService = currentUserService;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery]ListProductsQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
         [HttpGet("{productId}")]
         public async Task<IActionResult> GetById([FromQuery]ProductByIdQuery query)
         {

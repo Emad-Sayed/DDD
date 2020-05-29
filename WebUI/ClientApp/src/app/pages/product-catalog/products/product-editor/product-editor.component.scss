@@ -1,0 +1,40 @@
+.editor-header {
+  border-bottom: 1px solid #dbdbdb; 
+  .save-edit-btn {
+    position: absolute;
+    left: 10px;
+  }
+}
+.editor-content{
+  .for-sale {
+    .checkmark {
+      right: unset !important;
+      margin-right: 1rem;
+    }
+  }
+  // item units
+  .item-units-header {
+    padding: 1rem;
+    h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #001737;
+      padding-bottom: 1rem;
+    }
+  }
+  .item-units-content {
+    font-size: 13px;
+  }
+  .save-del-btn {
+    .btn {
+      i {
+        font-size: 1.3rem;
+      }
+    }
+  }
+  img {
+    width: 80%;
+    display: block;
+    margin-right: auto;
+  }
+}

@@ -28,7 +28,6 @@
     <Folder Include="Order\" />
     <Folder Include="ProductCatalog\BrandAggregate\Commands\DeleteBrand\" />
     <Folder Include="ProductCatalog\BrandAggregate\Commands\UpdateBrand\" />
-    <Folder Include="ProductCatalog\ProductAggregate\Queries\ListProducts\" />
   </ItemGroup>
 
 </Project>

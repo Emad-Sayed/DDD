@@ -1,16 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+// regular style toast 
+@import '~ngx-toastr/toastr';
+ 
+/* You can add global styles to this file, and also import other style files */
+
+/* Provide sufficient contrast against white background */
+*{
+  color: #1b2e4b;
+  
 }
+
 
 code {
   color: #e01a76;
 }
+body{
+  background-color: #fff !important;
+}
+*::-webkit-scrollbar {
+  width: 6px;
+}
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+/* Track */
+*::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  position: absolute;
+  left: 10px;
+}
+ 
+/* Handle */
+*::-webkit-scrollbar-thumb {
+  background: #0000008c; 
+  border-radius: 5px;
+  display: block;
+  height: 15% !important;
+}
+
+/* Handle on hover */
+*::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }

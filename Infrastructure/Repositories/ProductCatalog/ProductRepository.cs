@@ -1,6 +1,7 @@
 ﻿using Domain.Common.Interfaces;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Persistence.ProductCatalog;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,32 @@ namespace Infrastructure.Repositories.ProductCatalog
         public void Update(Product product)
         {
             _context.Entry(product).State = EntityState.Modified;
+        }
+
+        public async Task<(int, List<Product>)> GetAllAsync(int pageNumber, int pageSize, string keyWord)
+        {
+            var query = _context.Products
+                .Include(x => x.ProductCategory)
+                .Include(x => x.Brand)
+                .AsQueryable();
+
+            // fillter by keyword
+            if(!string.IsNullOrEmpty(keyWord))
+            {
+                query = query.Where(x => 
+                x.Barcode.Contains(keyWord) ||
+                x.Id.ToString().Contains(keyWord) ||
+                x.Name.Contains(keyWord) ||
+                x.Brand.Name.Contains(keyWord) ||
+                x.ProductCategory.Name.Contains(keyWord)
+                );
+            }
+
+            // apply pagination to products
+            var products = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            var count = query.Count();
+
+            return (count, products);
         }
 
         public async Task<Product> FindByIdAsync(string id)
