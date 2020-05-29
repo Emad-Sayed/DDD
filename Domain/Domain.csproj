@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Campaign\" />
-    <Folder Include="ShoppingVanBoundedContext\Events\" />
     <Folder Include="ShoppingVanBoundedContext\Exceptions\" />
   </ItemGroup>
 

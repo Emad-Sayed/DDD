@@ -4,7 +4,10 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using API.Controllers;
+using API.Services;
 using Application.Common.Interfaces;
+using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,24 +38,42 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMvcCore()
+                .AddAuthorization();
+            // Note - this is on the IMvcBuilder, not the service collection
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(Contexts.CustomerManagment, new OpenApiInfo { Title = Contexts.CustomerManagment, Version = "v1" });
             });
 
-           
+
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddHttpContextAccessor();
 
             _assembliesStartup.ForEach(startup => startup.ConfigureServices(services));
             services.AddCors(x => x.AddPolicy("AllowOrigin", o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
-            services.AddAuthentication("Bearer")
-            .AddJwtBearer("Bearer", options =>
+            services.AddAuthentication(options =>
             {
-                options.Authority = "http://localhost:5000";
-                options.RequireHttpsMetadata = false;
-
-                options.Audience = "brimo_api";
+                options.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultForbidScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(option =>
+            {
+                option.Authority = "http://localhost:5000";
+                option.Audience = "brimo_api";
+                
+                option.RequireHttpsMetadata = false;
             });
+            //.AddIdentityServerAuthentication(options =>
+            //{
+            //    options.Authority = "http://localhost:5000";
+            //    options.RequireHttpsMetadata = false;
+            //    options.ApiName = "brimo_api";
+            //});
         }
 
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
@@ -69,6 +90,9 @@ namespace API
             });
 
             app.UseRouting();
+
+            app.UseAuthentication();
+
             app.UseCors("AllowOrigin");
 
             app.UseAuthorization();

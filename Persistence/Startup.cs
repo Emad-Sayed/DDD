@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Persistence.CustomerManagment;
 using Persistence.Order;
 using Persistence.ProductCatalog;
+using Persistence.ShoppingVan;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,6 +32,10 @@ namespace Persistence
             services.AddDbContext<OrderContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("BrimoDatabase"),
                 o => o.MigrationsHistoryTable("_Order_MigrationHistory")), ServiceLifetime.Scoped);
+
+            services.AddDbContext<ShoppingVanContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("BrimoDatabase"),
+                o => o.MigrationsHistoryTable("_ShoppingVan_MigrationHistory")), ServiceLifetime.Scoped);
 
             services.AddDbContext<CustomerManagmentContext>(options =>
                    options.UseSqlServer(Configuration.GetConnectionString("BrimoDatabase"),

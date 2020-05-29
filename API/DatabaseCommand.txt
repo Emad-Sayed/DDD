@@ -5,3 +5,7 @@ Update-Database -Context ProductCatalogContext -StartupProject API -Project Pers
 Add-Migration -Context OrderContext -OutputDir Order/Migrations -StartupProject API -Project Persistence
 Drop-Database -Context OrderContext -StartupProject API -Project Persistence
 Update-Database -Context OrderContext -StartupProject API -Project Persistence
+
+Add-Migration -Context ShoppingVanContext -OutputDir ShoppingVan/Migrations -StartupProject API -Project Persistence
+Drop-Database -Context ShoppingVanContext -StartupProject API -Project Persistence
+Update-Database -Context ShoppingVanContext -StartupProject API -Project Persistence

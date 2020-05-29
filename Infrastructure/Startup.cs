@@ -3,7 +3,9 @@ using Domain.Common.Interfaces;
 using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
+using Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate;
 using Infrastructure.Repositories.ProductCatalog;
+using Infrastructure.Repositories.ShoppingVan;
 using Infrastructure.SearchEngine;
 using Infrastructure.SMSMessage;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +36,7 @@ namespace Infrastructure
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IBrandRepository, BrandRepository>();
             services.AddTransient<IProductCategoryRepository, ProductCategoryRepository>();
+            services.AddTransient<IShoppingVanRepository, ShoppingVanRepository>();
 
         }
 

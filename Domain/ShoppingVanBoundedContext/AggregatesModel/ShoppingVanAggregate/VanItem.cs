@@ -5,19 +5,19 @@ using System.Text;
 
 namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
 {
-    public class ShoppingVanItem : EntityBase
+    public class VanItem : EntityBase
     {
         public string ProductId { get; private set; }
         public int Amount { get; private set; }
 
-        private ShoppingVanItem() { }
-        public ShoppingVanItem(string productId, int amount)
+        private VanItem() { }
+        public VanItem(string productId)
         {
             ProductId = productId;
-            Amount = amount;
+            Amount = 1;
         }
 
-        public void changeAmount(int amount)
+        public void ChangeAmount(int amount)
         {
             Amount = amount;
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Common.Interfaces;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductAggregate.Commands.DeleteUnit;
@@ -9,6 +10,7 @@ using Application.ProductCatalog.ProductAggregate.Commands.UpdateUnit;
 using Application.ProductCatalog.ProductAggregate.Queries.ProductById;
 using Application.ProductCatalog.Products.Commands.DeleteProduct;
 using Application.ProductCatalog.Products.Commands.UpdateProduct;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +19,21 @@ namespace API.Controllers.ProductCatalog
 {
     [EnableCors("AllowOrigin")]
     [Route("api/" + nameof(Contexts.ProductCatalog) + "/[controller]")]
+    //[Authorize]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class ProductsController : BaseController
     {
-
+        private readonly ICurrentUserService _currentUserService;
+        public ProductsController(ICurrentUserService currentUserService)
+        {
+            _currentUserService = currentUserService;
+        }
         [HttpGet("{productId}")]
         public async Task<IActionResult> GetById([FromQuery]ProductByIdQuery query)
         {
+            //var con = HttpContext.Request.Headers.FirstOrDefault(x => x.Key == "Authroization");
+            var user = User.IsInRole("Admin");
+            var userId = _currentUserService.UserId;
             var result = await Mediator.Send(query);
             return Ok(result);
         }

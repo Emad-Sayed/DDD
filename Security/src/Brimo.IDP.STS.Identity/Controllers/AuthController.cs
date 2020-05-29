@@ -100,7 +100,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
 
             //// discover endpoints from metadata
             //var client = new HttpClient();
-            //var disco = await client.GetDiscoveryDocumentAsync("http://localhost:5000");
+            //var disco = await client.GetDiscoveryDocumentAsync("http://brimo-dev-identity-sts.azurewebsites.net");
             //if (disco.IsError)
             //{
             //    Console.WriteLine(disco.Error);
