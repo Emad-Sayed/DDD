@@ -9,6 +9,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Data;
+using System.Collections.Generic;
 
 namespace Persistence.ProductCatalog
 {
@@ -40,6 +41,19 @@ namespace Persistence.ProductCatalog
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Brand>().HasData(new List<Brand>
+            {
+                new Brand("Brand 1"),
+                new Brand("Brand 2"),
+            });
+
+
+            modelBuilder.Entity<ProductCategory>().HasData(new List<ProductCategory>
+            {
+                new ProductCategory("ProductCategory 1"),
+                new ProductCategory("ProductCategory 2"),
+            });
+
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductCatalogContext).Assembly, type => type.FullName.Contains("ProductCatalog"));
         }
 

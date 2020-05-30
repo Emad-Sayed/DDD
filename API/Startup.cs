@@ -21,6 +21,8 @@ namespace API
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         private readonly List<IStartup> _assembliesStartup;
         public Startup(IConfiguration configuration)
         {
@@ -37,6 +39,14 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+                                  });
+            });
             services.AddControllers();
             services.AddMvcCore()
                 .AddAuthorization();
@@ -51,7 +61,6 @@ namespace API
             services.AddHttpContextAccessor();
 
             _assembliesStartup.ForEach(startup => startup.ConfigureServices(services));
-            services.AddCors(x => x.AddPolicy("AllowOrigin", o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
             services.AddAuthentication(options =>
             {
@@ -65,7 +74,7 @@ namespace API
             {
                 option.Authority = "http://localhost:5000";
                 option.Audience = "brimo_api";
-                
+
                 option.RequireHttpsMetadata = false;
             });
             //.AddIdentityServerAuthentication(options =>
@@ -90,10 +99,9 @@ namespace API
             });
 
             app.UseRouting();
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthentication();
-
-            app.UseCors("AllowOrigin");
 
             app.UseAuthorization();
 

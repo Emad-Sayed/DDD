@@ -17,21 +17,14 @@
   <a class="navbar-brand" href="#">
     <i class="fas fa-store"></i>
   </a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav">
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="javascript:void(0)">
           طلبات حديثة
           <span class="sr-only">(current)</span>
@@ -40,8 +33,8 @@
       <li class="nav-item">
         <a class="nav-link" href="javascript:void(0)">كل الطلبات</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="javascript:void(0)">المنتجات</a>
+      <li class="nav-item" routerLink="/products" routerLinkActive="active">
+        <a class="nav-link">المنتجات</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="javascript:void(0)">العملاء</a>

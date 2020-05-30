@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.ProductCatalog
 {
-    [EnableCors("AllowOrigin")]
+    [EnableCors()]
     [Route("api/" + nameof(Contexts.ProductCatalog) + "/[controller]")]
     public class BrandsController : BaseController
     {

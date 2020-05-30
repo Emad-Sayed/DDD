@@ -24,6 +24,8 @@ export class ProductsComponent implements OnInit {
     this.getProducts();
     this.productCatalogService.productEditor.subscribe(res => {
       this.openEditor = res.openEditor;
+      if(res.productRequestSuccess)
+          this.getProducts();
     })
   }
   getProducts() {
@@ -38,7 +40,7 @@ export class ProductsComponent implements OnInit {
     this.productCatalogService.productEditor.next({ openEditor: true, product: product });
   }
 
-  createProduct() {
+  openEditorToAddProduct() {
     this.productCatalogService.productEditor.next({ openEditor: true });
   }
 

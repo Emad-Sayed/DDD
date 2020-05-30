@@ -12,11 +12,13 @@ import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { JwtInterceptor } from './shared/interceptors/jwt-interceptor.service';
 import { LoadingInterceptor } from './shared/services/loading-interceptor.service';
 import { ToastrModule } from 'ngx-toastr';
+import { LayoutComponent } from './shared/components/layout/layout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent
+    NavbarComponent,
+    LayoutComponent
   ],
   imports: [
     BrowserModule,

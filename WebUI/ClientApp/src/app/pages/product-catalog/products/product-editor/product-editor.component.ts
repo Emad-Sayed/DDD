@@ -4,6 +4,7 @@ import { Brand } from 'src/app/shared/models/product-catalog/brand/brand.model';
 import { ProductCategory } from 'src/app/shared/models/product-catalog/product-category/product-category.model';
 import { Product } from 'src/app/shared/models/product-catalog/product/product.model';
 import { Unit } from 'src/app/shared/models/product-catalog/product/unit.model';
+import { CoreService } from 'src/app/shared/services/core.service';
 
 @Component({
   selector: 'app-product-editor',
@@ -18,7 +19,7 @@ export class ProductEditorComponent implements OnInit {
   product: Product = new Product();
   brands: Brand[] = [];
   productCategories: ProductCategory[] = [];
-  constructor(private productCatalogService: ProductCatalogService) { }
+  constructor(private productCatalogService: ProductCatalogService, private core: CoreService) { }
 
   ngOnInit() {
     this.getBrands();
@@ -87,7 +88,7 @@ export class ProductEditorComponent implements OnInit {
 
   createUnit(unit: Unit) {
     this.productCatalogService.createUnit(unit, this.product.id).subscribe(res => {
-      console.log('unit created');
+      this.core.showSuccessOperation();
     });
   }
 
@@ -103,14 +104,16 @@ export class ProductEditorComponent implements OnInit {
   createProduct() {
     this.product.photoUrl = 'photo.png';
     this.productCatalogService.createProduct(this.product).subscribe(res => {
-      console.log('product add succfuly', res);
+      this.productCatalogService.productEditor.next({ productRequestSuccess: true });
+      this.core.showSuccessOperation();
     });
   }
 
   updateProduct() {
     this.product.photoUrl = 'photo.png';
     this.productCatalogService.updateProduct(this.product).subscribe(res => {
-      console.log('product add succfuly', res);
+      this.productCatalogService.productEditor.next({ productRequestSuccess: true });
+      this.core.showSuccessOperation();
     });
   }
 

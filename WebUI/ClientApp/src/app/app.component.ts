@@ -7,7 +7,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AppComponent {
   title = 'app';
-  public constructor(private toastr: ToastrService) {
-    this.toastr.success('Hello world!', 'Toastr fun!');
+  public constructor() {
   }
 }

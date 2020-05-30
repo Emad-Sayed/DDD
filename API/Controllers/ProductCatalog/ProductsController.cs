@@ -18,10 +18,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.ProductCatalog
 {
-    [EnableCors("AllowOrigin")]
+    [EnableCors()]
     [Route("api/" + nameof(Contexts.ProductCatalog) + "/[controller]")]
-    //[Authorize]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class ProductsController : BaseController
     {
         private readonly ICurrentUserService _currentUserService;
