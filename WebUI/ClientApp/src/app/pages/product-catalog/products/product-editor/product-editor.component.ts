@@ -65,6 +65,10 @@ export class ProductEditorComponent implements OnInit {
   }
 
   saveUnit(unit: Unit) {
+    unit.price = +unit.price;
+    unit.weight = +unit.weight;
+    unit.contentCount = +unit.contentCount;
+    unit.count = +unit.count;
     if (unit.newAdded) {
       unit.productId = this.product.id;
       this.createUnit(unit);
@@ -94,7 +98,7 @@ export class ProductEditorComponent implements OnInit {
 
   updateUnit(unit: Unit) {
     this.productCatalogService.updateUnit(unit, this.product.id).subscribe(res => {
-      console.log('unit updated');
+      this.core.showSuccessOperation();
     });
   }
 

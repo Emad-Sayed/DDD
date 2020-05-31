@@ -1,0 +1,28 @@
+form{
+    .form-group{
+        position: relative;
+        .input{
+            border: 0;
+            padding: 1rem;
+        }
+        .input:focus{
+            outline: unset;
+        }
+        .fas{
+            color: #2d4b64;
+        }
+    }
+    .form-group::after{
+        content: "";
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: #bdbdbd;
+        position: absolute;
+        bottom: 0;
+    }
+    .login-btn{
+        background-color: #2d4b64;
+        color: #fff;
+    }
+}

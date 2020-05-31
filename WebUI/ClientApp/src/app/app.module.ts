@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -13,12 +13,28 @@ import { JwtInterceptor } from './shared/interceptors/jwt-interceptor.service';
 import { LoadingInterceptor } from './shared/services/loading-interceptor.service';
 import { ToastrModule } from 'ngx-toastr';
 import { LayoutComponent } from './shared/components/layout/layout.component';
+import { DeletePopupComponent } from './shared/components/popups/delete-popup/delete-popup.component';
+import { OAuthModule } from 'angular-oauth2-oidc';
+import { JwtModule } from '@auth0/angular-jwt';
+
+// import { ConfigurationService } from './shared/services/app.configuration.service';
+
+// const appInitializerFn = (appConfig: ConfigurationService) => {
+//   return () => {
+//     return appConfig.loadConfig();
+//   };
+// };
+
+export function tokenGetter() {
+  return localStorage.getItem('access_token');
+}
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    LayoutComponent
+    LayoutComponent,
+    DeletePopupComponent
   ],
   imports: [
     BrowserModule,
@@ -27,17 +43,26 @@ import { LayoutComponent } from './shared/components/layout/layout.component';
     FormsModule,
     BrowserAnimationsModule,
     NgxUiLoaderModule,
-    ToastrModule.forRoot() // ToastrModule added
-
+    ToastrModule.forRoot(),
+    OAuthModule.forRoot(),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+      }
+    })
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: JwtInterceptor,
-      multi: true
-    },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+    // ConfigurationService,
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: appInitializerFn,
+    //   multi: true,
+    //   deps: [ConfigurationService]
+    // }
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

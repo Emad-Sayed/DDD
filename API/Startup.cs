@@ -44,7 +44,12 @@ namespace API
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+                                      builder.WithOrigins(
+                                          "http://brimo-dev-identity-brimowebui.azurewebsites.net",
+                                          "http://localhost:4200",
+                                          "http://localhost:2021"
+                                          )
+                                      .AllowAnyHeader().AllowAnyMethod();
                                   });
             });
             services.AddControllers();
