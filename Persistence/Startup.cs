@@ -4,6 +4,8 @@ using Application.ProductCatalog;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Persistence.BlobStorage.AzureBS;
+using Persistence.BlobStorage.AzureBS.Repository;
 using Persistence.CustomerManagment;
 using Persistence.Order;
 using Persistence.ProductCatalog;
@@ -43,7 +45,11 @@ namespace Persistence
 
             services.AddScoped<ICustomerManagmentContext>(provider => provider.GetService<CustomerManagmentContext>());
 
+            AzureConfigurations azureConfigurations = new AzureConfigurations();
+            Configuration.Bind("AzureConfigurations", azureConfigurations);
+            services.AddSingleton(azureConfigurations);
 
+            services.AddSingleton<IPhotoRepository, PhotoRepository>();
         }
 
         public void Configure(IServiceProvider provider)

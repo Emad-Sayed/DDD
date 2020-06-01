@@ -4,15 +4,15 @@ using System.Text;
 
 namespace Application.Common.Models
 {
-    public class Document
+    public class Photo
     {
 
-        public Document()
+        public Photo()
         {
 
         }
 
-        public Document(byte[] content, string extension, Guid id = default)
+        public Photo(byte[] content, string extension, Guid id = default)
         {
             Content = content;
             Extension = extension;

@@ -5,6 +5,9 @@ import { ProductCategory } from 'src/app/shared/models/product-catalog/product-c
 import { Product } from 'src/app/shared/models/product-catalog/product/product.model';
 import { Unit } from 'src/app/shared/models/product-catalog/product/unit.model';
 import { CoreService } from 'src/app/shared/services/core.service';
+import { HttpEventType } from '@angular/common/http';
+import { UploadService } from 'src/app/shared/services/upload.service';
+import { Config } from 'src/app/shared/confing/config';
 
 @Component({
   selector: 'app-product-editor',
@@ -19,7 +22,12 @@ export class ProductEditorComponent implements OnInit {
   product: Product = new Product();
   brands: Brand[] = [];
   productCategories: ProductCategory[] = [];
-  constructor(private productCatalogService: ProductCatalogService, private core: CoreService) { }
+  BasePhotoUrl = Config.BasePhotoUrl;
+
+  constructor(
+    private productCatalogService: ProductCatalogService,
+    private uploadService: UploadService,
+    private core: CoreService) { }
 
   ngOnInit() {
     this.getBrands();
@@ -28,6 +36,8 @@ export class ProductEditorComponent implements OnInit {
       if (res.product) {
         this.isEditing = true;
         this.getProductById(res.product.id);
+      } else {
+        this.product = new Product();
       }
     })
   }
@@ -36,6 +46,7 @@ export class ProductEditorComponent implements OnInit {
     this.productCatalogService.getProductById(productId).subscribe(res => {
       this.product = res;
       this.product.id = productId;
+      this.imgURL = this.BasePhotoUrl +  this.product.photoUrl;
     });
   }
 
@@ -107,7 +118,6 @@ export class ProductEditorComponent implements OnInit {
 
   //#region Product
   createProduct() {
-    this.product.photoUrl = 'photo.png';
     this.productCatalogService.createProduct(this.product).subscribe(res => {
       this.productCatalogService.productEditor.next({ productRequestSuccess: true });
       this.core.showSuccessOperation();
@@ -115,7 +125,6 @@ export class ProductEditorComponent implements OnInit {
   }
 
   updateProduct() {
-    this.product.photoUrl = 'photo.png';
     this.productCatalogService.updateProduct(this.product).subscribe(res => {
       this.productCatalogService.productEditor.next({ productRequestSuccess: true });
       this.core.showSuccessOperation();
@@ -136,7 +145,7 @@ export class ProductEditorComponent implements OnInit {
   imgURL: any;
   public message: string;
 
-  preview(files) {
+  preview(files: string | any[]) {
     if (files.length === 0) return;
 
     var mimeType = files[0].type;
@@ -151,6 +160,14 @@ export class ProductEditorComponent implements OnInit {
     reader.onload = (_event) => {
       this.imgURL = reader.result;
     };
+
+    const formData = new FormData();
+    formData.append('photo', files[0]);
+    this.uploadService.upload(formData).subscribe(res => {
+      if (res.type == HttpEventType.Response) {
+        this.product.photoUrl = res.body.photoPath;
+      }
+    }, () => this.core.showErrorOperation());
   }
   //#endregion
 
