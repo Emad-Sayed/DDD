@@ -77,25 +77,20 @@ namespace API
             })
             .AddJwtBearer(option =>
             {
-                option.Authority = "http://localhost:5000";
+                option.Authority = Configuration["IdentityServerAddress"];
                 option.Audience = "brimo_api";
 
                 option.RequireHttpsMetadata = false;
             });
-            //.AddIdentityServerAuthentication(options =>
-            //{
-            //    options.Authority = "http://localhost:5000";
-            //    options.RequireHttpsMetadata = false;
-            //    options.ApiName = "brimo_api";
-            //});
         }
 
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //}
+            // TODO Add Developer Exception Page in Development enviroment only
+            app.UseDeveloperExceptionPage();
             _assembliesStartup.ForEach(x => x.Configure(app.ApplicationServices));
             app.UseSwagger();
             app.UseSwaggerUI(c =>

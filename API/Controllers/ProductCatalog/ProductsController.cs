@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers.ProductCatalog
 {
     [EnableCors()]
+    [Authorize]
     [Route("api/" + nameof(Contexts.ProductCatalog) + "/[controller]")]
     public class ProductsController : BaseController
     {

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.ShoppingVan;
 
 namespace Persistence.ShoppingVan.Migrations
 {
     [DbContext(typeof(ShoppingVanContext))]
-    partial class ShoppingVanContextModelSnapshot : ModelSnapshot
+    [Migration("20200531165321_AddigMoreDataToVanItem")]
+    partial class AddigMoreDataToVanItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +33,7 @@ namespace Persistence.ShoppingVan.Migrations
                     b.Property<string>("CustomerId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TotalItemsCount")
+                    b.Property<int>("TotalItems")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

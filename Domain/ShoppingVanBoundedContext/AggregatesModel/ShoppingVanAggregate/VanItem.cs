@@ -8,12 +8,25 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
     public class VanItem : EntityBase
     {
         public string ProductId { get; private set; }
+        public string UnitName { get; private set; }
+        public float UnitPrice { get; private set; }
+        public string PhotoUrl { get; private set; }
+        public float SellingPrice { get; private set; }
         public int Amount { get; private set; }
 
+        public string VanId { get; private set; }
+        public Van Van { get; private set; }
+
         private VanItem() { }
-        public VanItem(string productId)
+        public VanItem(string vanId, string productId, string unitName, float unitPrice, string photoUrl, float sellingPrice)
         {
             ProductId = productId;
+            VanId = vanId;
+            UnitName = unitName;
+            UnitPrice = unitPrice;
+            PhotoUrl = photoUrl;
+            SellingPrice = sellingPrice;
+
             Amount = 1;
         }
 

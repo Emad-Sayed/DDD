@@ -43,7 +43,7 @@ namespace Application.ShoppingVanBoundedContext.ShoppingVanAggregate.Commands.Re
 
                 await _shoppingVanRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
 
-                return van.TotalItems;
+                return van.TotalItemsCount;
             }
         }
     }

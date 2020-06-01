@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container pb-5 product-editor">
   <div class="row editor-header mb-4 pb-3 justify-content-between">
     <button class="btn btn-large" (click)="openClose()">
       <span class="fa fa-times fx-2"></span>
@@ -10,34 +10,17 @@
       <div class="col-7">
         <div class="row">
           <label for="brand-code" class="col-4 col-form-label">كود الصنف</label>
-          <input
-            type="text"
-            name="barcode"
-            [(ngModel)]="product.barcode"
-            id="brand-code"
-            class="col-8 form-control"
-            placeholder="كود الصنف"
-          />
+          <input type="text" name="barcode" [(ngModel)]="product.barcode" id="brand-code" class="col-8 form-control"
+            placeholder="كود الصنف" />
         </div>
         <div class="row mt-2">
           <label for="product-name" class="col-4 col-form-label">إسم الصنف</label>
-          <input
-            type="text"
-            id="product-name"
-            name="name"
-            [(ngModel)]="product.name"
-            class="col-8 form-control"
-            placeholder="إسم الصنف"
-          />
+          <input type="text" id="product-name" name="name" [(ngModel)]="product.name" class="col-8 form-control"
+            placeholder="إسم الصنف" />
         </div>
         <div class="row mt-2">
           <label for="select-brand" class="col-4 col-form-label">نوع الصنف</label>
-          <select
-            class="col-8 form-control"
-            id="select-brand"
-            name="brandId"
-            [(ngModel)]="product.brandId"
-          >
+          <select class="col-8 form-control" id="select-brand" name="brandId" [(ngModel)]="product.brandId">
             <option selected>إختر النوع</option>
             <option *ngFor="let brand of brands" [value]="brand.id">{{
               brand.name
@@ -46,19 +29,11 @@
         </div>
         <div class="row mt-2">
           <label for="select-brand" class="col-4 col-form-label">الشركة</label>
-          <select
-            class="col-8 form-control"
-            id="select-brand"
-            name="productCategoryId"
-            [(ngModel)]="product.productCategoryId"
-          >
+          <select class="col-8 form-control" id="select-brand" name="productCategoryId"
+            [(ngModel)]="product.productCategoryId">
             <option selected>إختر الشركة</option>
-            <option
-              *ngFor="let productCategory of productCategories"
-              [value]="productCategory.id"
-            >
-              {{ productCategory.name }}</option
-            >
+            <option *ngFor="let productCategory of productCategories" [value]="productCategory.id">
+              {{ productCategory.name }}</option>
           </select>
         </div>
         <div class="row mt-2 for-sale">
@@ -71,8 +46,12 @@
           </div>
         </div>
       </div>
-      <div class="col-5">
-        <img class="img-fluid" src="../../../../../assets/images/img.png" alt="">
+      <div class="col-5 product-img-wrapper">
+        <img [src]="imgURL" class="img-fluid" *ngIf="imgURL">
+        <label for="product-img" class="">
+          <i class="fas fa-image text-light"></i>
+        </label>
+        <input #file type="file" id="product-img" hidden accept='image/*' (change)="preview(file.files)" />
       </div>
     </div>
     <!-- item Units -->
@@ -81,88 +60,69 @@
         <h4 class="border-bottom w-100">وحدات الصنف :</h4>
       </div>
       <div class="row item-units-content">
-        <div class="col-1">
-          عدد
-        </div>
-        <div class="col-2">
-          إسم الوحدة
-        </div>
-        <div class="col-2">
-          محتوي الوحدة
-        </div>
-        <div class="col-2">
-          وزن الوحدة
-        </div>
-        <div class="col-2">
-          سعر الوحدة
-        </div>
-        <div class="col-1">
-          وحدة بيع
-        </div>
-        <div class="col-2">
-          <button class="btn text-secondary" (click)="addNewUnit()">
-            <i class="far fa-plus-square fa-2x text-secondary"></i>
-          </button>
+        <div class="unit d-flex w-100 justify-content-between px-3 text-center">
+          <div class="_num w-10">
+            عدد
+          </div>
+          <div class="_name w-20">
+            إسم الوحدة
+          </div>
+          <div class="_content w-10">
+            محتوي الوحدة
+          </div>
+          <div class="_weight w-10">
+            وزن الوحدة
+          </div>
+          <div class="_price w-10">
+            سعر الوحدة
+          </div>
+          <div class="_sale-price w-10">
+            سعر البيع
+          </div>
+          <div class="_sale w-10">
+            وحدة بيع
+          </div>
+          <div class="_add w-10">
+            <button class="btn text-secondary" (click)="addNewUnit()">
+              <i class="far fa-plus-square fa-2x text-secondary"></i>
+            </button>
+          </div>
         </div>
       </div>
       <div class="row" *ngFor="let unit of product.units; let i = index">
-        <div class="col-1">
-          <input
-            type="text"
-            name="count"
-            [(ngModel)]="unit.count"
-            class="form-control"
-          />
-        </div>
-        <div class="col-2">
-          <input
-            type="text"
-            name="name"
-            [(ngModel)]="unit.name"
-            class="form-control"
-          />
-        </div>
-        <div class="col-2">
-          <input
-            type="text"
-            name="contentCount"
-            [(ngModel)]="unit.contentCount"
-            class="form-control"
-          />
-        </div>
-        <div class="col-2">
-          <input
-            type="text"
-            name="weight"
-            [(ngModel)]="unit.weight"
-            class="form-control"
-          />
-        </div>
-        <div class="col-2">
-          <input
-            type="text"
-            name="price"
-            [(ngModel)]="unit.price"
-            class="form-control"
-          />
-        </div>
-        <div class="col-1">
-          <label class="checkbox checkbox-primary">
-            <input
-              type="checkbox"
-              name="isAvilable"
-              [(ngModel)]="unit.isAvilable"
-            />
-            <span class="checkmark mt-2"></span>
-          </label>
-        </div>
-        <div class="col-2 d-flex save-del-btn">
-          <button class="btn p-2" (click)="saveUnit(product.units[i])">
-            <i class="fas fa-save text-success"></i>
-          </button>
-          <button class="btn p-2" (click)="removeUnit(product.units[i], i)">
-            <i class="fas fa-trash-alt text-danger"></i>
-          </button>
+        <div class="unit d-flex w-100 justify-content-between px-3 text-center">
+          <div class="_num w-10">
+            <input type="text" name="count" [(ngModel)]="unit.count" class="form-control" />
+          </div>
+          <div class="_name w-20">
+            <input type="text" name="name" [(ngModel)]="unit.name" class="form-control" />
+          </div>
+          <div class="_content w-10">
+            <input type="text" name="contentCount" [(ngModel)]="unit.contentCount" class="form-control" />
+          </div>
+          <div class="_weight w-10">
+            <input type="text" name="weight" [(ngModel)]="unit.weight" class="form-control" />
+          </div>
+          <div class="_price w-10">
+            <input type="text" name="price" [(ngModel)]="unit.price" class="form-control" />
+          </div>
+          <div class="_sale-price w-10">
+            <input type="text" name="price" [(ngModel)]="unit.price" class="form-control" />
+          </div>
+          <div class="_sale w-10 d-flex justify-content-center">
+            <label class="checkbox checkbox-primary">
+              <input type="checkbox" name="isAvilable" [(ngModel)]="unit.isAvilable" />
+              <span class="checkmark mt-2"></span>
+            </label>
+          </div>
+          <div class="_add d-flex save-del-btn w-10">
+            <button class="btn p-2" (click)="saveUnit(product.units[i])">
+              <i class="fas fa-save text-success"></i>
+            </button>
+            <button class="btn p-2" (click)="removeUnit(product.units[i], i)">
+              <i class="fas fa-trash-alt text-danger"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>

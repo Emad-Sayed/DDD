@@ -207,7 +207,13 @@ namespace Brimo.IDP.STS.Identity.Helpers
                 .AddScoped<UserResolver<TUserIdentity>>()
                 .AddIdentity<TUserIdentity, TUserIdentityRole>(options =>
                 {
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireDigit = false;
                     options.User.RequireUniqueEmail = true;
+                    options.Tokens.ChangePhoneNumberTokenProvider = "Phone";
                 })
                 .AddEntityFrameworkStores<TIdentityDbContext>()
                 .AddDefaultTokenProviders();

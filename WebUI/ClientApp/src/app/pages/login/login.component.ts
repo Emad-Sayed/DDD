@@ -26,9 +26,9 @@ export class LoginComponent implements OnInit {
         this.oauthService.configure({
             requireHttps: false,
             skipIssuerCheck: true,
-            scope: "openid profile roles brimo_api ss",
-            clientId: "BrimoClientId",
-            dummyClientSecret: "BrimoClientSecret",
+            scope: "openid profile roles brimo_api",
+            clientId: "FlutterClientId",
+            dummyClientSecret: "FlutterClientSecret",
             oidc: false,
             responseType: "password"
         })

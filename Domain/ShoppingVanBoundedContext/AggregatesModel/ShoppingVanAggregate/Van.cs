@@ -12,7 +12,7 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
     {
         public ICollection<VanItem> ShoppingVanItems { get; private set; }
         public string CustomerId { get; private set; }
-        public int TotalItems { get; private set; }
+        public int TotalItemsCount { get; private set; }
 
         private Van()
         {
@@ -21,26 +21,28 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
         public Van(string customerId)
         {
             CustomerId = customerId;
+            TotalItemsCount = 0;
+            ShoppingVanItems = new List<VanItem>();
 
             // Add the ShoppingVanCreated to the domain events collection 
             // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]
             AddDomainEvent(new ShoppingVanCreated(this));
         }
 
-        public void AddItem(string productId)
+        public void AddItem(string productId, string unitName, float unitPrice, string photoUrl, float sellingPrice)
         {
             // Check if the product exist in the shopping van items or not if not will will add it with the required amount
             var vanItem = ShoppingVanItems.FirstOrDefault(x => x.ProductId == productId);
             if (vanItem == null)
             {
-                ShoppingVanItems.Add(new VanItem(productId));
+                ShoppingVanItems.Add(new VanItem(Id.ToString(), productId, unitName, unitPrice, photoUrl, sellingPrice));
             }
             else
             {
-                vanItem.ChangeAmount(1);
+                vanItem.ChangeAmount(vanItem.Amount + 1);
             }
 
-            TotalItems += 1;
+            TotalItemsCount += 1;
 
             AddDomainEvent(new ShoppingVanUpdated(this));
         }
@@ -50,7 +52,7 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
             var vanItem = ShoppingVanItems.FirstOrDefault(x => x.ProductId == productId);
             if (vanItem != null)
             {
-                TotalItems -= 1;
+                TotalItemsCount -= 1;
                 vanItem.ChangeAmount(-1);
 
                 // Check if the van item amount is less than or = to 0 then will remove this item from van

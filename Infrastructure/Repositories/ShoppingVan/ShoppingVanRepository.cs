@@ -51,15 +51,18 @@ namespace Infrastructure.Repositories.ShoppingVan
 
         public async Task<Van> GetCustomerShoppingVan(string customerId)
         {
-            var van = await _context.ShoppingVans.FirstOrDefaultAsync(x => x.CustomerId == customerId);
+            var van = await _context.ShoppingVans
+                .Include(x => x.ShoppingVanItems)
+                .FirstOrDefaultAsync(x => x.CustomerId == customerId);
             return van;
         }
 
         public async Task<Van> FindByCustomerIdAsync(string id)
         {
-            return await _context.ShoppingVans
-                  .Include(x => x.ShoppingVanItems)
-                  .FirstOrDefaultAsync(x => x.CustomerId.ToString() == id);
+            var customerVan = await _context.ShoppingVans
+              .Include(x => x.ShoppingVanItems)
+              .FirstOrDefaultAsync(x => x.CustomerId == id);
+            return customerVan;
         }
     }
 }

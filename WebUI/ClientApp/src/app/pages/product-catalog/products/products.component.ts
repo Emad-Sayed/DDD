@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject, forwardRef } from '@angular/core';
 import { ProductCatalogService } from '../product-catalog.service';
 import { Product } from 'src/app/shared/models/product-catalog/product/product.model';
+import { CoreService } from 'src/app/shared/services/core.service';
 
 
 @Component({
@@ -17,15 +18,15 @@ export class ProductsComponent implements OnInit {
   state: {
     refresh: Function;
   };
-  constructor(private productCatalogService: ProductCatalogService) {
+  constructor(private productCatalogService: ProductCatalogService, private core: CoreService) {
   }
 
   ngOnInit() {
     this.getProducts();
     this.productCatalogService.productEditor.subscribe(res => {
       this.openEditor = res.openEditor;
-      if(res.productRequestSuccess)
-          this.getProducts();
+      if (res.productRequestSuccess)
+        this.getProducts();
     })
   }
   getProducts() {
@@ -36,7 +37,6 @@ export class ProductsComponent implements OnInit {
   }
 
   openEditorToUpdateProduct(product: Product) {
-    console.log('openEditorToUpdateProduct', product)
     this.productCatalogService.productEditor.next({ openEditor: true, product: product });
   }
 
@@ -46,7 +46,8 @@ export class ProductsComponent implements OnInit {
 
   deleteProduct(productId: string) {
     this.productCatalogService.deleteProduct(productId).subscribe(res => {
-      console.log('product deleted');
+      this.productCatalogService.productEditor.next({ productRequestSuccess: true });
+      this.core.showSuccessOperation();
     })
   }
 }

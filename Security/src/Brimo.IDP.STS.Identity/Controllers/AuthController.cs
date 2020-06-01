@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Application.Common.Interfaces;
 using Brimo.IDP.Admin.EntityFramework.Shared.Entities.Identity;
+using Brimo.IDP.STS.Identity.Services;
 using Brimo.IDP.STS.Identity.ViewModels.Auth.Register;
-using IdentityModel.Client;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Brimo.IDP.STS.Identity.Controllers
@@ -22,11 +18,13 @@ namespace Brimo.IDP.STS.Identity.Controllers
     {
         private readonly UserManager<UserIdentity> _userManager;
         private readonly ISMSNotification _smsSender;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(UserManager<UserIdentity> userManager, ISMSNotification smsSender)
+        public AuthController(UserManager<UserIdentity> userManager, ISMSNotification smsSender, IConfiguration configuration)
         {
             _smsSender = smsSender;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
 
@@ -55,7 +53,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
             // Generate phone number code
             var code = await _userManager.GenerateChangePhoneNumberTokenAsync(userFromDb, userFromDb.PhoneNumber);
 
-            _smsSender.Send(new Application.Common.Models.SMSMessageModel
+            _smsSender.Send(new SMSMessageModel
             {
                 Message = $@"Your code is {code}",
 
@@ -73,7 +71,10 @@ namespace Brimo.IDP.STS.Identity.Controllers
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == model.PhoneNumber);
             if (user != null)
             {
-                var result = await _userManager.VerifyChangePhoneNumberTokenAsync(user, user.PhoneNumber, model.SmsCode);
+                var result = await _userManager.VerifyChangePhoneNumberTokenAsync(user, model.SmsCode, model.PhoneNumber);
+                user.PhoneNumberConfirmed = result;
+                await _userManager.UpdateAsync(user);
+
                 return Ok(new { codeVerifed = result });
             }
             return BadRequest();
@@ -85,7 +86,9 @@ namespace Brimo.IDP.STS.Identity.Controllers
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == model.PhoneNumber);
             if (user == null) return BadRequest("User with this phone number not found");
 
-            //if (!user.PhoneNumberConfirmed) return BadRequest("Please confirm your phone number first");
+            if (!user.PhoneNumberConfirmed) return BadRequest("Please confirm your phone number first");
+
+           var result = await _userManager.AddPasswordAsync(user, model.Password);
 
             var bussnessUserId = await CreateCustomer(model, user);
             user.BusinessUserId = bussnessUserId;
@@ -114,7 +117,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
             //    ClientId = "test",
             //    ClientSecret = "test",
             //    Scope = "brimo_api"
-                
+
             //});
 
             //if (tokenResponse.IsError)
@@ -137,7 +140,8 @@ namespace Brimo.IDP.STS.Identity.Controllers
 
             var json = JsonConvert.SerializeObject(body);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
-            var url = "http://localhost:53253/api/CustomerManagment/Customers";
+
+            var url = _configuration["BrimoAPIURL"] + "/api/CustomerManagment/Customers";
 
             var response = await apiClient.PostAsync(url, data);
 

@@ -8,6 +8,6 @@ namespace Application.ShoppingVanBoundedContext.ShoppingVanAggregate.ViewModels
     {
         public ICollection<ShoppingVanItemVM> ShoppingVanItems { get; private set; }
         public string CustomerId { get; private set; }
-        public int TotalItems { get; private set; }
+        public int TotalItemsCount { get; private set; }
     }
 }

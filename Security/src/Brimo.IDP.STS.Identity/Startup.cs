@@ -11,6 +11,8 @@ using Brimo.IDP.STS.Identity.Configuration;
 using Brimo.IDP.STS.Identity.Configuration.Constants;
 using Brimo.IDP.STS.Identity.Configuration.Interfaces;
 using Brimo.IDP.STS.Identity.Helpers;
+using Brimo.IDP.STS.Identity.Services;
+using System.Collections.Generic;
 
 namespace Brimo.IDP.STS.Identity
 {
@@ -24,14 +26,24 @@ namespace Brimo.IDP.STS.Identity
             Configuration = configuration;
             Environment = environment;
         }
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
             var rootConfiguration = CreateRootConfiguration();
             services.AddSingleton(rootConfiguration);
 
+            var twilioSMSConfigurations = Configuration.GetSection(nameof(TwilioSMSConfigurations)).Get<TwilioSMSConfigurations>();
+            services.AddSingleton(twilioSMSConfigurations);
+
+            services.AddTransient<ISMSNotification, TwilioSMSNotification>();
+
             // Register DbContexts for IdentityServer and Identity
             RegisterDbContexts(services);
+
 
             // Add email senders which is currently setup for SendGrid and SMTP
             services.AddEmailSenders(Configuration);

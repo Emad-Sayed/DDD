@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.ShoppingVan;
 
 namespace Persistence.ShoppingVan.Migrations
 {
     [DbContext(typeof(ShoppingVanContext))]
-    partial class ShoppingVanContextModelSnapshot : ModelSnapshot
+    [Migration("20200531162324_AddingTotalItem")]
+    partial class AddingTotalItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +33,7 @@ namespace Persistence.ShoppingVan.Migrations
                     b.Property<string>("CustomerId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TotalItemsCount")
+                    b.Property<int>("TotalItems")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -51,39 +53,24 @@ namespace Persistence.ShoppingVan.Migrations
                     b.Property<DateTime>("CreatedDateUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PhotoUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("SellingPrice")
-                        .HasColumnType("real");
-
-                    b.Property<string>("UnitName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("UnitPrice")
-                        .HasColumnType("real");
-
-                    b.Property<string>("VanId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("VanId1")
+                    b.Property<Guid?>("VanId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("VanId1");
+                    b.HasIndex("VanId");
 
                     b.ToTable("ShoppingVanItems");
                 });
 
             modelBuilder.Entity("Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate.VanItem", b =>
                 {
-                    b.HasOne("Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate.Van", "Van")
+                    b.HasOne("Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate.Van", null)
                         .WithMany("ShoppingVanItems")
-                        .HasForeignKey("VanId1");
+                        .HasForeignKey("VanId");
                 });
 #pragma warning restore 612, 618
         }
