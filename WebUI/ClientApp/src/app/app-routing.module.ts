@@ -11,6 +11,7 @@ const routes: Routes = [
     {
         path: '', component: LayoutComponent, canActivate: [AuthGuard],
         children: [
+            { path: 'orders', loadChildren: () => import('./pages/order-managment/order-managment.module').then(m => m.OrderManagmentModule) },
             { path: 'products', loadChildren: () => import('./pages/product-catalog/product-catalog.module').then(m => m.ProductCatalogModule) },
             { path: '**', redirectTo: '/products', pathMatch: 'full' },
         ]

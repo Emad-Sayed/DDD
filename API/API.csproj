@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Campaign\" />
-    <Folder Include="Controllers\Order\" />
   </ItemGroup>
 
 </Project>

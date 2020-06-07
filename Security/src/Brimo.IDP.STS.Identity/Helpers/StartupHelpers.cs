@@ -25,6 +25,12 @@ using Skoruba.IdentityServer4.Admin.EntityFramework.Interfaces;
 using Brimo.IDP.Admin.EntityFramework.Shared.Configuration;
 using Brimo.IDP.Admin.EntityFramework.SqlServer.Extensions;
 using Skoruba.IdentityServer4.Admin.EntityFramework.Helpers;
+using IdentityModel;
+using System.Security.Claims;
+using Brimo.IDP.Admin.EntityFramework.Shared.Entities.Identity;
+using System.Threading.Tasks;
+using IdentityServer4.Models;
+using IdentityServer4.Services;
 
 namespace Brimo.IDP.STS.Identity.Helpers
 {
@@ -140,7 +146,7 @@ namespace Brimo.IDP.STS.Identity.Helpers
             where TConfigurationDbContext : DbContext, IAdminConfigurationDbContext
         {
             var databaseProvider = configuration.GetSection(nameof(DatabaseProviderConfiguration)).Get<DatabaseProviderConfiguration>();
-            
+
             var identityConnectionString = configuration.GetConnectionString(ConfigurationConsts.IdentityDbConnectionStringKey);
             var configurationConnectionString = configuration.GetConnectionString(ConfigurationConsts.ConfigurationDbConnectionStringKey);
             var persistedGrantsConnectionString = configuration.GetConnectionString(ConfigurationConsts.PersistedGrantDbConnectionStringKey);
@@ -289,11 +295,12 @@ namespace Brimo.IDP.STS.Identity.Helpers
                 })
                 .AddConfigurationStore<TConfigurationDbContext>()
                 .AddOperationalStore<TPersistedGrantDbContext>()
-                .AddAspNetIdentity<TUserIdentity>();
+                .AddAspNetIdentity<TUserIdentity>()
+                // Adding this line to add user roles in the access token
+                .AddProfileService<ProfileService>();
 
             builder.AddCustomSigningCredential(configuration);
             builder.AddCustomValidationKey(configuration);
-
             return builder;
         }
 
@@ -349,9 +356,9 @@ namespace Brimo.IDP.STS.Identity.Helpers
             where TIdentityDbContext : DbContext
         {
             var configurationDbConnectionString = configuration.GetConnectionString(ConfigurationConsts.ConfigurationDbConnectionStringKey);
-            var persistedGrantsDbConnectionString = configuration.GetConnectionString(ConfigurationConsts.PersistedGrantDbConnectionStringKey);            
+            var persistedGrantsDbConnectionString = configuration.GetConnectionString(ConfigurationConsts.PersistedGrantDbConnectionStringKey);
             var identityDbConnectionString = configuration.GetConnectionString(ConfigurationConsts.IdentityDbConnectionStringKey);
-            
+
             var healthChecksBuilder = services.AddHealthChecks()
                 .AddDbContextCheck<TConfigurationDbContext>("ConfigurationDbContext")
                 .AddDbContextCheck<TPersistedGrantDbContext>("PersistedGrantsDbContext")
@@ -397,6 +404,36 @@ namespace Brimo.IDP.STS.Identity.Helpers
                         throw new NotImplementedException($"Health checks not defined for database provider {databaseProvider.ProviderType}");
                 }
             }
+        }
+    }
+
+    public class ProfileService : IProfileService
+    {
+        private readonly UserManager<UserIdentity> _userManager;
+
+        public ProfileService(UserManager<UserIdentity> userManager)
+        {
+            _userManager = userManager;
+        }
+        // this method for adding user info and roles in the access token
+        public async Task GetProfileDataAsync(ProfileDataRequestContext context)
+        {
+            context.IssuedClaims.AddRange(context.Subject.Claims);
+
+            var user = await _userManager.GetUserAsync(context.Subject);
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            foreach (var role in roles)
+            {
+                context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
+            }
+
+        }
+
+        public Task IsActiveAsync(IsActiveContext context)
+        {
+            return Task.CompletedTask;
         }
     }
 }

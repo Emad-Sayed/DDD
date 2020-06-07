@@ -14,7 +14,6 @@ const routes: Routes = [
   declarations: [ProductsComponent, ProductEditorComponent],
   imports: [
     RouterModule.forChild(routes),
-    // BrowserModule,
     CommonModule,
     SharedModuleModule
   ],

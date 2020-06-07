@@ -13,8 +13,11 @@ namespace API.Services
         public CurrentUserService(IHttpContextAccessor httpContextAccessor)
         {
             UserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            Address = httpContextAccessor.HttpContext?.User?.FindFirstValue("Address");
         }
 
         public string UserId { get; }
+
+        public string Address { get; }
     }
 }

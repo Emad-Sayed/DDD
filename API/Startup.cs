@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using API.Controllers;
+using API.Helpers;
 using API.Services;
 using Application.Common.Interfaces;
 using IdentityServer4.AccessTokenValidation;
@@ -53,9 +54,10 @@ namespace API
                                   });
             });
             services.AddControllers();
-            services.AddMvcCore()
-                .AddAuthorization();
+            services.AddMvcCore().AddAuthorization();
             // Note - this is on the IMvcBuilder, not the service collection
+            services.AddAuthorizationPolicies();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(Contexts.CustomerManagment, new OpenApiInfo { Title = Contexts.CustomerManagment, Version = "v1" });

@@ -10,6 +10,9 @@ export class Config {
   public static Products = `${Config.ProductCatalog}/Products`;
   public static Brands = `${Config.ProductCatalog}/Brands`;
   public static ProductCategories = `${Config.ProductCatalog}/ProductCategories`;
+  
+  public static Orders = 'Orders';
+
   public static PhotoUploader = `PhotoUploader`;
   public static BasePhotoUrl = `https://brimodevcdnendpoint.azureedge.net/images/`
 

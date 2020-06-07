@@ -1,18 +1,15 @@
 ﻿using Application.Common.Interfaces;
 using Application.CustomerManagment;
-using Application.ProductCatalog;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.BlobStorage.AzureBS;
 using Persistence.BlobStorage.AzureBS.Repository;
 using Persistence.CustomerManagment;
-using Persistence.Order;
+using Persistence.OrderManagment;
 using Persistence.ProductCatalog;
 using Persistence.ShoppingVan;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Persistence
 {

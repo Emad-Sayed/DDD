@@ -6,7 +6,7 @@ Add-Migration -Context ProductCatalogContext -OutputDir ProductCatalog/Migration
 Drop-Database -Context ProductCatalogContext -StartupProject API -Project Persistence
 Update-Database -Context ProductCatalogContext -StartupProject API -Project Persistence
 
-Add-Migration -Context OrderContext -OutputDir Order/Migrations -StartupProject API -Project Persistence
+Add-Migration -Context OrderContext -OutputDir OrderManagment/Migrations -StartupProject API -Project Persistence
 Drop-Database -Context OrderContext -StartupProject API -Project Persistence
 Update-Database -Context OrderContext -StartupProject API -Project Persistence
 

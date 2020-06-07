@@ -57,8 +57,14 @@ namespace Persistence.ShoppingVan.Migrations
                     b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<float>("SellingPrice")
                         .HasColumnType("real");
+
+                    b.Property<string>("UnitId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UnitName")
                         .HasColumnType("nvarchar(max)");

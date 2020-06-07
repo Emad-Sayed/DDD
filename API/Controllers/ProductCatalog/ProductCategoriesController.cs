@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Configuration;
 using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory;
 using Application.ProductCatalog.ProductCategoryAggregate.Queries.ProductCategoryList;
 using Microsoft.AspNetCore.Authorization;
@@ -24,6 +25,7 @@ namespace API.Controllers.ProductCatalog
         }
 
         [HttpPost]
+        [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
         public async Task<IActionResult> Post([FromBody]CreateProductCategoryCommand command)
         {
             var result = await Mediator.Send(command);

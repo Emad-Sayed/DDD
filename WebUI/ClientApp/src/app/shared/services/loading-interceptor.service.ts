@@ -19,13 +19,13 @@ export class LoadingInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         this.totalRequests++;
-        this.core.startLoading();
+        // this.core.startLoading();
 
         return next.handle(request).pipe(
             finalize(() => {
                 this.totalRequests--;
                 if (this.totalRequests === 0) {
-                    this.core.stopLoading();
+                    // this.core.stopLoading();
                 }
             })
         );

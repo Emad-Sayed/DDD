@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Configuration;
 using Application.Common.Interfaces;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
@@ -39,14 +40,12 @@ namespace API.Controllers.ProductCatalog
         [HttpGet("{productId}")]
         public async Task<IActionResult> GetById([FromQuery]ProductByIdQuery query)
         {
-            //var con = HttpContext.Request.Headers.FirstOrDefault(x => x.Key == "Authroization");
-            var user = User.IsInRole("Admin");
-            var userId = _currentUserService.UserId;
             var result = await Mediator.Send(query);
             return Ok(result);
         }
 
         [HttpPost]
+        [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
         public async Task<IActionResult> Post([FromBody]CreateProductCommand command)
         {
             var result = await Mediator.Send(command);
@@ -54,6 +53,7 @@ namespace API.Controllers.ProductCatalog
         }
 
         [HttpPut]
+        [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
         public async Task<IActionResult> Put([FromBody]UpdateProductCommand command)
         {
             var result = await Mediator.Send(command);
@@ -61,6 +61,7 @@ namespace API.Controllers.ProductCatalog
         }
 
         [HttpDelete]
+        [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
         public async Task<IActionResult> Delete([FromQuery]DeleteProductCommand command)
         {
             var result = await Mediator.Send(command);

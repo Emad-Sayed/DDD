@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Configuration;
 using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
 using Application.ProductCatalog.BrandAggregate.Queries.BrandList;
 using Microsoft.AspNetCore.Authorization;
@@ -24,6 +25,7 @@ namespace API.Controllers.ProductCatalog
         }
 
         [HttpPost]
+        [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
         public async Task<IActionResult> Post([FromBody]CreateBrandCommand command)
         {
             var result = await Mediator.Send(command);

@@ -11,10 +11,8 @@ namespace Domain.CustomerManagment.Customer.DomainModels
         public string ShopName { get; private set; }
         public string ShopAddress { get; private set; }
         public string LocationOnMap { get; private set; }
-
         private Customer()
         {
-
         }
         public Customer(string accountId,string shopName,string shopAddress, string locationOnMap, Guid id = default)
         {

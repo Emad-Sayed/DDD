@@ -26,7 +26,6 @@
     <Folder Include="Campaign\" />
     <Folder Include="CustomerManagment\Customer\ViewModels\" />
     <Folder Include="CustomerManagment\Customer\Queries\" />
-    <Folder Include="Order\" />
     <Folder Include="ProductCatalog\BrandAggregate\Commands\DeleteBrand\" />
     <Folder Include="ProductCatalog\BrandAggregate\Commands\UpdateBrand\" />
   </ItemGroup>
