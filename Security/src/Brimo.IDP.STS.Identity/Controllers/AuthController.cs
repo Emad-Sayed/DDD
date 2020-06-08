@@ -71,7 +71,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
                 // TODO Send SMS message to phone number
                 ToPhoneNumber = sendSMSCodeVM.PhoneNumber
             });
-            return Ok(new { verificationCode = code });
+            return Ok();
         }
 
 
