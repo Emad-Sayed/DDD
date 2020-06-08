@@ -2,6 +2,10 @@
 Drop-Database -Context CustomerManagmentContext -StartupProject API -Project Persistence
 Update-Database -Context CustomerManagmentContext -StartupProject API -Project Persistence
 
+Add-Migration -Context DistributorManagmentContext -OutputDir DistributorManagment/Migrations -StartupProject API -Project Persistence
+Drop-Database -Context DistributorManagmentContext -StartupProject API -Project Persistence
+Update-Database -Context DistributorManagmentContext -StartupProject API -Project Persistence
+
 Add-Migration -Context ProductCatalogContext -OutputDir ProductCatalog/Migrations -StartupProject API -Project Persistence
 Drop-Database -Context ProductCatalogContext -StartupProject API -Project Persistence
 Update-Database -Context ProductCatalogContext -StartupProject API -Project Persistence

@@ -1,19 +1,19 @@
 ﻿using Domain.Common.Interfaces;
-using Domain.CustomerManagment.AggregatesModel.CustomerAggregate;
+using Domain.DistributorManagment.AggregatesModel.DistributorAggregate;
 using Microsoft.EntityFrameworkCore;
-using Persistence.CustomerManagment;
+using Persistence.DistributorManagment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Repositories.CustomerManagment
+namespace Infrastructure.Repositories.DistributorManagment
 {
-    public class CustomerRepository
-    : ICustomerRepository
+    public class DistributorRepository
+    : IDistributorRepository
     {
-        private readonly CustomerManagmentContext _context;
+        private readonly DistributorManagmentContext _context;
 
         public IUnitOfWork UnitOfWork
         {
@@ -23,33 +23,33 @@ namespace Infrastructure.Repositories.CustomerManagment
             }
         }
 
-        public CustomerRepository(CustomerManagmentContext context)
+        public DistributorRepository(DistributorManagmentContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public Customer Add(Customer customer)
+        public Distributor Add(Distributor distributor)
         {
-            return _context.Customers
-                   .Add(customer)
+            return _context.Distributors
+                   .Add(distributor)
                    .Entity;
         }
 
-        public void Update(Customer customer)
+        public void Update(Distributor distributor)
         {
-            _context.Entry(customer).State = EntityState.Modified;
+            _context.Entry(distributor).State = EntityState.Modified;
         }
 
-        public async Task<Customer> FindByIdAsync(string id)
+        public async Task<Distributor> FindByIdAsync(string id)
         {
-            return await _context.Customers
+            return await _context.Distributors
                    .FirstOrDefaultAsync(x => x.Id.ToString() == id);
         }
 
-        public async Task<(int, List<Customer>)> GetAllAsync(int pageNumber, int pageSize, string keyWord)
+        public async Task<(int, List<Distributor>)> GetAllAsync(int pageNumber, int pageSize, string keyWord)
         {
-            var query = _context.Customers
-                //.Include(x => x.CustomerItems)
+            var query = _context.Distributors
+                //.Include(x => x.DistributorItems)
                 .AsQueryable();
 
             // fillter by keyword
@@ -67,14 +67,14 @@ namespace Infrastructure.Repositories.CustomerManagment
             return (count, products);
         }
 
-        public void Delete(Customer customer)
+        public void Delete(Distributor distributor)
         {
-            _context.Customers.Remove(customer);
+            _context.Distributors.Remove(distributor);
         }
 
-        public async Task<Customer> GetCustomerByAccountId(string id)
+        public async Task<Distributor> GetDistributorByAccountId(string id)
         {
-            return await _context.Customers
+            return await _context.Distributors
                    .FirstOrDefaultAsync(x => x.AccountId == id);
         }
     }

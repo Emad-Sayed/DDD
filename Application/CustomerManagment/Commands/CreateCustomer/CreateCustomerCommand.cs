@@ -41,8 +41,6 @@ namespace Application.CustomerManagment.Commands.CreateCustomer
 
                 await _customerRepository.UnitOfWork.SaveEntitiesAsync();
 
-
-                await _mediator.Publish(new CustomerCreated { CustomerId = entity.Id.ToString() }, cancellationToken);
                 return entity.Id.ToString();
             }
         }

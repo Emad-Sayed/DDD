@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Persistence.BlobStorage.AzureBS;
 using Persistence.BlobStorage.AzureBS.Repository;
 using Persistence.CustomerManagment;
+using Persistence.DistributorManagment;
 using Persistence.OrderManagment;
 using Persistence.ProductCatalog;
 using Persistence.ShoppingVan;
@@ -39,6 +40,10 @@ namespace Persistence
             services.AddDbContext<CustomerManagmentContext>(options =>
                    options.UseSqlServer(Configuration.GetConnectionString("BrimoDatabase"),
                    o => o.MigrationsHistoryTable("_CustomerManagment_MigrationHistory")));
+
+            services.AddDbContext<DistributorManagmentContext>(options =>
+                   options.UseSqlServer(Configuration.GetConnectionString("BrimoDatabase"),
+                   o => o.MigrationsHistoryTable("_DistributorManagment_MigrationHistory")));
 
 
             AzureConfigurations azureConfigurations = new AzureConfigurations();

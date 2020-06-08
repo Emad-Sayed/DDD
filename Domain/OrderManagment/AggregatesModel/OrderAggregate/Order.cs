@@ -11,6 +11,7 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
     public class Order : EntityBase, IAggregateRoot
     {
         public string CustomerId { get; private set; }
+        public string CustomerName { get; private set; }
         public string Address { get; private set; }
         public OrderStatus OrderStatus { get; private set; }
         public DateTime OrderPlacedDate { get; set; }
@@ -31,6 +32,7 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
         public Order(string customerId, string customerName, string address)
         {
             CustomerId = customerId;
+            CustomerName = customerName;
             Address = address;
             OrderStatus = OrderStatus.Placed;
             OrderPlacedDate = DateTime.UtcNow;
