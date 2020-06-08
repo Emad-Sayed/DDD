@@ -40,7 +40,6 @@ namespace Persistence
                    options.UseSqlServer(Configuration.GetConnectionString("BrimoDatabase"),
                    o => o.MigrationsHistoryTable("_CustomerManagment_MigrationHistory")));
 
-            services.AddScoped<ICustomerManagmentContext>(provider => provider.GetService<CustomerManagmentContext>());
 
             AzureConfigurations azureConfigurations = new AzureConfigurations();
             Configuration.Bind("AzureConfigurations", azureConfigurations);

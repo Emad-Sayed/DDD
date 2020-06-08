@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Application.ShoppingVanBoundedContext.ShoppingVanAggregate.Queries.CurrentCustomerVan
 {
-    public class CurrentCustomerVanQuery : IRequest<object>
+    public class CurrentCustomerVanQuery : IRequest<ShoppingVanVM>
     {
 
-        public class Handler : IRequestHandler<CurrentCustomerVanQuery, object>
+        public class Handler : IRequestHandler<CurrentCustomerVanQuery, ShoppingVanVM>
         {
             private readonly IShoppingVanRepository _shoppingVanRepository;
             private readonly ICurrentUserService _currentUserService;
@@ -27,13 +27,13 @@ namespace Application.ShoppingVanBoundedContext.ShoppingVanAggregate.Queries.Cur
                 _mapper = mapper;
             }
 
-            public async Task<object> Handle(CurrentCustomerVanQuery request, CancellationToken cancellationToken)
+            public async Task<ShoppingVanVM> Handle(CurrentCustomerVanQuery request, CancellationToken cancellationToken)
             {
                 var vanFromRepo = await _shoppingVanRepository.FindByCustomerIdAsync(_currentUserService.UserId);
 
                 var vanToReturn = _mapper.Map<ShoppingVanVM>(vanFromRepo);
 
-                return new { van = vanToReturn };
+                return vanToReturn;
             }
         }
     }

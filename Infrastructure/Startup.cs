@@ -1,10 +1,12 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Common.Interfaces;
+using Domain.CustomerManagment.AggregatesModel.CustomerAggregate;
 using Domain.OrderManagment.AggregatesModel.OrderAggregate;
 using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
 using Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate;
+using Infrastructure.Repositories.CustomerManagment;
 using Infrastructure.Repositories.OrderManagment;
 using Infrastructure.Repositories.ProductCatalog;
 using Infrastructure.Repositories.ShoppingVan;
@@ -40,6 +42,7 @@ namespace Infrastructure
             services.AddTransient<IProductCategoryRepository, ProductCategoryRepository>();
             services.AddTransient<IShoppingVanRepository, ShoppingVanRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
 
         }
 

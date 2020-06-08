@@ -17,13 +17,15 @@ namespace Brimo.IDP.STS.Identity.Controllers
     public class AuthController : Controller
     {
         private readonly UserManager<UserIdentity> _userManager;
+        private readonly RoleManager<UserIdentityRole> _roleManager;
         private readonly ISMSNotification _smsSender;
         private readonly IConfiguration _configuration;
 
-        public AuthController(UserManager<UserIdentity> userManager, ISMSNotification smsSender, IConfiguration configuration)
+        public AuthController(UserManager<UserIdentity> userManager, RoleManager<UserIdentityRole> roleManager, ISMSNotification smsSender, IConfiguration configuration)
         {
             _smsSender = smsSender;
             _userManager = userManager;
+            _roleManager = roleManager;
             _configuration = configuration;
         }
 
@@ -43,7 +45,16 @@ namespace Brimo.IDP.STS.Identity.Controllers
                 };
 
                 var result = await _userManager.CreateAsync(userFromDb);
-                if (!result.Succeeded)
+                if (result.Succeeded)
+                {
+                    // check if the customer role exist in the database or not if not will create it
+                    var customerRole = await _roleManager.FindByNameAsync("Customer");
+                    if (customerRole == null) await _roleManager.CreateAsync(new UserIdentityRole { Name = "Customer" });
+
+                    // add the curtomer to customer role
+                    await _userManager.AddToRoleAsync(userFromDb, "Customer");
+                }
+                else
                 {
                     ModelState.AddModelError(string.Empty, "Failed to verify phone number");
                     return BadRequest(ModelState);
@@ -58,7 +69,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
                 Message = $@"Your code is {code}",
 
                 // TODO Send SMS message to phone number
-                ToPhoneNumber = "+201005060016"
+                ToPhoneNumber = sendSMSCodeVM.PhoneNumber
             });
             return Ok(new { verificationCode = code });
         }
@@ -88,7 +99,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
 
             if (!user.PhoneNumberConfirmed) return BadRequest("Please confirm your phone number first");
 
-           var result = await _userManager.AddPasswordAsync(user, model.Password);
+            var result = await _userManager.AddPasswordAsync(user, model.Password);
 
             var bussnessUserId = await CreateCustomer(model, user);
             user.BusinessUserId = bussnessUserId;

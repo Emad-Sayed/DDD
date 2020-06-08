@@ -12,6 +12,8 @@ namespace Application.OrderManagment
         {
             CreateMap<Order, OrderVM>().ReverseMap();
             CreateMap<OrderItem, OrderItemVM>().ReverseMap();
+            CreateMap<VanVM, object>().ReverseMap();
+            CreateMap<VanItemVM, object>().ReverseMap();
         }
     }
 }

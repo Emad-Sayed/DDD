@@ -1,9 +1,10 @@
-﻿using FluentValidation;
+﻿using Application.CustomerManagment.Commands.CreateCustomer;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.CustomerManagment.Customer.Commands.CreateCustomer
+namespace Application.CustomerManagment.CreateCustomer
 {
     public class CreateCustomerCommandValidator : AbstractValidator<CreateCustomerCommand>
     {

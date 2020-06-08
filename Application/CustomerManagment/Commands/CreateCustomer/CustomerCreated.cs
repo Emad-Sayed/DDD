@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.CustomerManagment.Customer.Commands.CreateCustomer
+namespace Application.CustomerManagment.Commands.CreateCustomer
 {
     public class CustomerCreated : INotification
     {

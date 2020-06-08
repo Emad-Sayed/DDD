@@ -1,11 +1,11 @@
-﻿using MediatR;
+﻿using Domain.CustomerManagment.AggregatesModel.CustomerAggregate;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Domain.CustomerManagment.Customer.DomainModels;
-namespace Application.CustomerManagment.Customer.Commands.CreateCustomer
+namespace Application.CustomerManagment.Commands.CreateCustomer
 {
 
     public class CreateCustomerCommand : IRequest<string>
@@ -17,18 +17,19 @@ namespace Application.CustomerManagment.Customer.Commands.CreateCustomer
 
         public class Handler : IRequestHandler<CreateCustomerCommand, string>
         {
-            private readonly ICustomerManagmentContext _context;
+            private readonly ICustomerRepository _customerRepository;
+
             private readonly IMediator _mediator;
 
-            public Handler(ICustomerManagmentContext context, IMediator mediator)
+            public Handler(ICustomerRepository customerRepository, IMediator mediator)
             {
-                _context = context;
+                _customerRepository = customerRepository;
                 _mediator = mediator;
             }
 
             public async Task<string> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
             {
-                var entity = new Domain.CustomerManagment.Customer.DomainModels.Customer
+                var entity = new Customer
                     (
                     request.AccountId,
                     request.ShopName,
@@ -36,10 +37,9 @@ namespace Application.CustomerManagment.Customer.Commands.CreateCustomer
                     request.LocationOnMap
                     );
 
-                _context.Customers.Add(entity);
+                _customerRepository.Add(entity);
 
-
-                await _context.SaveChangesAsync(cancellationToken);
+                await _customerRepository.UnitOfWork.SaveEntitiesAsync();
 
 
                 await _mediator.Publish(new CustomerCreated { CustomerId = entity.Id.ToString() }, cancellationToken);

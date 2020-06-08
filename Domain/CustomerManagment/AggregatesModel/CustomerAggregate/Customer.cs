@@ -1,11 +1,12 @@
 ﻿using Domain.Base.Entity;
+using Domain.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.CustomerManagment.Customer.DomainModels
+namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
 {
-    public class Customer : EntityBase
+    public class Customer : EntityBase, IAggregateRoot
     {
         public string AccountId { get; private set; }
         public string ShopName { get; private set; }

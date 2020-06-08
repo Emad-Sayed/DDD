@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -16,6 +16,7 @@ import { LayoutComponent } from './shared/components/layout/layout.component';
 import { DeletePopupComponent } from './shared/components/popups/delete-popup/delete-popup.component';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { JwtModule } from '@auth0/angular-jwt';
+import { AuthInterceptor } from './shared/services/auth-interceptor.service';
 
 // import { ConfigurationService } from './shared/services/app.configuration.service';
 
@@ -52,15 +53,15 @@ export function tokenGetter() {
     })
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
-    // ConfigurationService,
-    // {
-    //   provide: APP_INITIALIZER,
-    //   useFactory: appInitializerFn,
-    //   multi: true,
-    //   deps: [ConfigurationService]
-    // }
+    {
+      provide: HTTP_INTERCEPTORS,
+      useFactory: function(router: Router) {
+        return new AuthInterceptor(router);
+      },
+      multi: true,
+      deps: [Router]
+   },
   ],
   bootstrap: [AppComponent]
 })
