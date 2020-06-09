@@ -14,6 +14,8 @@ namespace Application.CustomerManagment.Commands.CreateCustomer
         public string ShopName { get; set; }
         public string ShopAddress { get; set; }
         public string LocationOnMap { get; set; }
+        public string City { get; set; }
+        public string Region { get; set; }
 
         public class Handler : IRequestHandler<CreateCustomerCommand, string>
         {
@@ -32,6 +34,8 @@ namespace Application.CustomerManagment.Commands.CreateCustomer
                 var entity = new Customer
                     (
                     request.AccountId,
+                    request.City,
+                    request.Region,
                     request.ShopName,
                     request.ShopAddress,
                     request.LocationOnMap

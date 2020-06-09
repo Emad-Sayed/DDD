@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CustomerManagment\Migrations\20200609154757_FixInCustomerAddress.cs" />
+    <Compile Remove="CustomerManagment\Migrations\20200609154757_FixInCustomerAddress.Designer.cs" />
     <Compile Remove="ShoppingVan\Migrations\20200603214402_AddingProductNameWithUnit.cs" />
     <Compile Remove="ShoppingVan\Migrations\20200603214402_AddingProductNameWithUnit.Designer.cs" />
   </ItemGroup>

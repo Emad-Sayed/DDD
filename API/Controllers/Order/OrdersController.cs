@@ -4,6 +4,7 @@ using Application.OrderManagment.Commands.DeliverOrder;
 using Application.OrderManagment.Commands.PlaceOrder;
 using Application.OrderManagment.Commands.ShippOrder;
 using Application.OrderManagment.Commands.UpdateOrder;
+using Application.OrderManagment.Queries.CustomerOrders;
 using Application.OrderManagment.Queries.ListOrders;
 using Application.OrderManagment.Queries.OrderById;
 using Microsoft.AspNetCore.Authorization;
@@ -25,8 +26,15 @@ namespace API.Controllers.Order
             return Ok(result);
         }
 
-        [HttpGet("{orderId}")]
-        public async Task<IActionResult> GetById([FromQuery]OrderByIdQuery query)
+        [HttpGet("MyOrders")]
+        public async Task<IActionResult> Get([FromQuery]CustomerOrdersQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("OrderDetails/{OrderId}")]
+        public async Task<IActionResult> GetById(OrderByIdQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);
