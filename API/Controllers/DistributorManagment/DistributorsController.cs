@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DistributorManagment.Commands.CreateDistributor;
+using Application.DistributorManagment.Queries.ListCities;
 using Application.DistributorManagment.Queries.ListDistributors;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -22,10 +22,10 @@ namespace API.Controllers.DistributorManagment
             return Ok(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody]CreateDistributorCommand command)
+        [HttpGet("Cities")]
+        public async Task<IActionResult> GetAllCities([FromQuery]ListCitiesQuery query)
         {
-            var result = await Mediator.Send(command);
+            var result = await Mediator.Send(query);
             return Ok(result);
         }
     }

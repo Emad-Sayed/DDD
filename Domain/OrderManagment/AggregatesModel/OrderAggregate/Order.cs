@@ -38,6 +38,7 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             OrderPlacedDate = DateTime.UtcNow;
 
             OrderItems = new List<OrderItem>();
+
             // Add the OrderStarterDomainEvent to the domain events collection 
             // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]
             // Register Placing order event

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.DistributorManagment;
 
 namespace Persistence.DistributorManagment.Migrations
 {
     [DbContext(typeof(DistributorManagmentContext))]
-    partial class DistributorManagmentContextModelSnapshot : ModelSnapshot
+    [Migration("20200609053211_AddingCityAndRegion")]
+    partial class AddingCityAndRegion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,8 +92,8 @@ namespace Persistence.DistributorManagment.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CityId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("CityId1")
                         .HasColumnType("uniqueidentifier");

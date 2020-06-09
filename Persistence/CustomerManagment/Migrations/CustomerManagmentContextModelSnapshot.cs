@@ -19,7 +19,24 @@ namespace Persistence.CustomerManagment.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Domain.CustomerManagment.Customer.DomainModels.Customer", b =>
+            modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.City", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDateUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Customer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,6 +60,60 @@ namespace Persistence.CustomerManagment.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Region", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CityId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CityId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDateUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId1");
+
+                    b.ToTable("Regions");
+                });
+
+            modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Customer", b =>
+                {
+                    b.OwnsOne("Domain.SharedKernel.ValueObjects.Address", "Address", b1 =>
+                        {
+                            b1.Property<Guid>("CustomerId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("City")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Region")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("CustomerId");
+
+                            b1.ToTable("Customers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CustomerId");
+                        });
+                });
+
+            modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Region", b =>
+                {
+                    b.HasOne("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.City", "City")
+                        .WithMany("Regions")
+                        .HasForeignKey("CityId1");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,7 +12,7 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
         void Update(Distributor distributor);
         void Delete(Distributor distributor);
         Task<Distributor> FindByIdAsync(string id);
-        Task<Distributor> GetDistributorByAccountId(string id);
         Task<(int, List<Distributor>)> GetAllAsync(int pageNumber, int pageSize, string keyWord);
+        Task<(int, List<City>)> GetAllCitiesAsync(int pageNumber, int pageSize, string keyWord);
     }
 }

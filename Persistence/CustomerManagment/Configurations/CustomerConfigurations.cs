@@ -11,7 +11,7 @@ namespace Persistence.CustomerManagment.Configurations
     {
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
-
+            builder.OwnsOne(o => o.Address);
         }
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Persistence.OrderManagment.Configurations
 {
-    public class BrandConfigurations : IEntityTypeConfiguration<Order>
+    public class OrderConfigurations : IEntityTypeConfiguration<Order>
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {

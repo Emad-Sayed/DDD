@@ -11,6 +11,8 @@ namespace Application.CustomerManagment
         public CustomerMappingProfile()
         {
             CreateMap<Customer, CustomerVM>().ReverseMap();
+            CreateMap<City, CityVM>().ReverseMap();
+            CreateMap<Region, RegionVM>().ReverseMap();
         }
     }
 }

@@ -14,5 +14,6 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
         Task<Customer> FindByIdAsync(string id);
         Task<Customer> GetCustomerByAccountId(string id);
         Task<(int, List<Customer>)> GetAllAsync(int pageNumber, int pageSize, string keyWord);
+        Task<(int, List<City>)> GetAllCitiesAsync(int pageNumber, int pageSize, string keyWord);
     }
 }

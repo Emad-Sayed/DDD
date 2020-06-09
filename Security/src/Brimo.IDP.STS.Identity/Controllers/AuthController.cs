@@ -107,7 +107,42 @@ namespace Brimo.IDP.STS.Identity.Controllers
             return Ok();
         }
 
+        [HttpPost("RegisterDistributor")]
+        public async Task<IActionResult> RegisterDistributor(RegisterDistributorUserVM model)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
+            if (user != null) return BadRequest("user_with_this_email_found");
 
+            user = new UserIdentity { Email = model.Email, FullName = model.FullName };
+            var result = await _userManager.CreateAsync(user);
+
+            if (result.Succeeded)
+            {
+                // check if the Distributor role exist in the database or not if not will create it
+                var customerRole = await _roleManager.FindByNameAsync("Customer");
+                if (customerRole == null) await _roleManager.CreateAsync(new UserIdentityRole { Name = "Distributor" });
+
+                // add the curtomer to customer role
+                await _userManager.AddToRoleAsync(user, "Distributor");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Failed to verify phone number");
+                return BadRequest(ModelState);
+            }
+
+            await SendInvitationMail(user);
+
+            return Ok();
+        }
+
+        private async Task SendInvitationMail(UserIdentity user)
+        {
+            var token =  await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            // TODO Send Token To User Email
+
+        }
         private async Task<string> CreateCustomer(RegisterVM model, UserIdentity user)
         {
             // TODO Get Access token from identity server

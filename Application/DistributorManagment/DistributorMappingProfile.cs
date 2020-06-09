@@ -11,6 +11,8 @@ namespace Application.DistributorManagment
         public DistributorMappingProfile()
         {
             CreateMap<Distributor, DistributorVM>();
+            CreateMap<City, CityVM>().ReverseMap();
+            CreateMap<Region, RegionVM>().ReverseMap();
         }
     }
 }

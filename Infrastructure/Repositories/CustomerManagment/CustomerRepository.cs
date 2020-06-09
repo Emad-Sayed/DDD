@@ -77,5 +77,26 @@ namespace Infrastructure.Repositories.CustomerManagment
             return await _context.Customers
                    .FirstOrDefaultAsync(x => x.AccountId == id);
         }
+
+        public async Task<(int, List<City>)> GetAllCitiesAsync(int pageNumber, int pageSize, string keyWord)
+        {
+            var query = _context.Cities
+                .Include(x => x.Regions)
+                .AsQueryable();
+
+            // fillter by keyword
+            if (!string.IsNullOrEmpty(keyWord))
+            {
+                query = query.Where(x =>
+                x.Id.ToString().Contains(keyWord)
+                );
+            }
+
+            // apply pagination to cities
+            var cities = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            var count = query.Count();
+
+            return (count, cities);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Domain.Base.Entity;
 using Domain.Common.Interfaces;
+using Domain.SharedKernel.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +13,8 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
         public string ShopName { get; private set; }
         public string ShopAddress { get; private set; }
         public string LocationOnMap { get; private set; }
+        public Address Address { get; private set; }
+
         private Customer()
         {
         }
