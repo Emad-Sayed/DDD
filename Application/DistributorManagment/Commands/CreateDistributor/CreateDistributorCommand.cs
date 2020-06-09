@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DistributorManagment.Commands
+namespace Application.DistributorManagment.Commands.CreateDistributor
 {
     public class CreateDistributorCommand : IRequest<string>
     {

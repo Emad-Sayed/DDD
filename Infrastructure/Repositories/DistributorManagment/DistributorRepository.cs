@@ -43,6 +43,7 @@ namespace Infrastructure.Repositories.DistributorManagment
         public async Task<Distributor> FindByIdAsync(string id)
         {
             return await _context.Distributors
+                .Include(x => x.DistributorUsers)
                    .FirstOrDefaultAsync(x => x.Id.ToString() == id);
         }
 

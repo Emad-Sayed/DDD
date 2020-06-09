@@ -1,0 +1,243 @@
+/* ========================== Typohraphy ============================*/
+$font-default: "Cairo-Bold";
+$direction: rtl;
+$right: right;
+$left: left;
+
+body {
+    font-family: $font-default;
+    overflow-x: hidden;
+    direction: $direction;
+    text-align: $right !important;
+    background: #f1f1f1 !important;
+}
+
+.mr-auto,
+.mx-auto {
+    margin-#{$right}: auto!important;
+    margin-#{$left}: 0px !important;
+}
+
+a,
+a:focus,
+a:hover,
+a:visited,
+a:link {
+    outline: 0 !important;
+}
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+font,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+    background: transparent;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+    outline: none;
+    list-style: none;
+    -ms-text-shadow: none;
+    text-shadow: none;
+    font-family: $font-default;
+}
+
+input,
+button,
+select,
+textarea,
+input[type=button],
+input[type=reset],
+input[type=submit],
+button {
+    font-family: $font-default !important;
+}
+
+.center {
+    text-align: center;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+span.fa {
+    margin-#{$left}: 5px;
+    font-family: "Font Awesome 5 Free" !important;
+}
+
+button {
+    cursor: pointer;
+}
+
+a:hover,
+a:visited,
+a:link,
+a:active {
+    text-decoration: none;
+}
+
+ul,
+p {
+    margin: 0px;
+    padding: 0px;
+}
+
+.d-inline {
+    display: inline-block !important;
+}
+
+.col-lg-1,
+.col-lg-2,
+.col-lg-3,
+.col-lg-4,
+.col-lg-5,
+.col-lg-6,
+.col-lg-7,
+.col-lg-8,
+.col-lg-9,
+.col-lg-10,
+.col-lg-11,
+.col-lg-12,
+.col-md-1,
+.col-md-2,
+.col-md-3,
+.col-md-4,
+.col-md-5,
+.col-md-6,
+.col-md-7,
+.col-md-8,
+.col-md-9,
+.col-md-10,
+.col-md-11,
+.col-md-12,
+.col-xs-1,
+.col-xs-2,
+.col-xs-3,
+.col-xs-4,
+.col-xs-5,
+.col-xs-6,
+.col-xs-7,
+.col-xs-8,
+.col-xs-9,
+.col-xs-10,
+.col-xs-11,
+.col-xs-12,
+.col-sm-1,
+.col-sm-2,
+.col-sm-3,
+.col-sm-4,
+.col-sm-5,
+.col-sm-6,
+.col-sm-7,
+.col-sm-8,
+.col-sm-9,
+.col-sm-10,
+.col-sm-11,
+.col-sm-12 {
+    float: $right !important;
+}
+
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: none !important;
+    animation-fill-mode: none !important;
+}
+
+.btn.focus,
+.btn:focus {
+    box-shadow: none !important;
+}
+
+// .fa,
+// .far,
+// .fas,
+// .fab {
+//     font-family: "Font Awesome 5" !important;
+// }
+.main-title {
+    font-size: 26px;
+    margin: 40px 0;
+    color: #1E1C1C;
+    text-align: center;
+    font-weight: 600;
+    @media screen and (min-width: 1200px) {
+        font-size: 28px;
+    }
+    &.align-start {
+        text-align: $right;
+    }
+    &.white {
+        color: #fff;
+    }
+}
+
+.section-padding {
+    padding: 0px 0px 3rem;
+}
+
+// .container-fluid {
+//     padding-right: 70px;
+//     padding-left: 70px;
+//     @media screen and (max-width: 768px) {
+//         padding-right: 30px !important;
+//         padding-left: 30px !important;
+//     }
+// }

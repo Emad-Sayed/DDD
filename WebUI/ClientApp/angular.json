@@ -29,7 +29,7 @@
               "node_modules/ngx-toastr/toastr.css",
               "src/assets/css/font-awesome.min.css",
               "src/assets/css/fontawesome.min.css",
-              "src/assets/css/ar-SA/layout.css",
+              "src/assets/css/ar-SA/_layout.scss",
               "src/assets/css/all.css"
             ],
             "scripts": []
@@ -84,7 +84,7 @@
               "node_modules/ngx-toastr/toastr.css",
               "src/assets/css/font-awesome.min.css",
               "src/assets/css/fontawesome.min.css",
-              "src/assets/css/ar-SA/layout.css",
+              "src/assets/css/ar-SA/_layout.scss",
               "src/assets/css/all.css"
             ],
             "scripts": [],

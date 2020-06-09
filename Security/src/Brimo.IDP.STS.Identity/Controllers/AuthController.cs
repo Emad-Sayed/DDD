@@ -1,10 +1,13 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Brimo.IDP.Admin.EntityFramework.Shared.Entities.Identity;
 using Brimo.IDP.STS.Identity.Services;
 using Brimo.IDP.STS.Identity.ViewModels.Auth.Register;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,13 +23,21 @@ namespace Brimo.IDP.STS.Identity.Controllers
         private readonly RoleManager<UserIdentityRole> _roleManager;
         private readonly ISMSNotification _smsSender;
         private readonly IConfiguration _configuration;
+        private readonly IEmailSender _emailSender;
 
-        public AuthController(UserManager<UserIdentity> userManager, RoleManager<UserIdentityRole> roleManager, ISMSNotification smsSender, IConfiguration configuration)
+        public AuthController(
+            UserManager<UserIdentity> userManager,
+            RoleManager<UserIdentityRole> roleManager,
+            ISMSNotification smsSender,
+            IConfiguration configuration,
+             IEmailSender emailSender
+            )
         {
             _smsSender = smsSender;
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _emailSender = emailSender;
         }
 
 
@@ -107,23 +118,27 @@ namespace Brimo.IDP.STS.Identity.Controllers
             return Ok();
         }
 
+
         [HttpPost("RegisterDistributor")]
         public async Task<IActionResult> RegisterDistributor(RegisterDistributorUserVM model)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
             if (user != null) return BadRequest("user_with_this_email_found");
 
-            user = new UserIdentity { Email = model.Email, FullName = model.FullName };
+            user = new UserIdentity { Email = model.Email, FullName = model.FullName, UserName = model.Email };
             var result = await _userManager.CreateAsync(user);
 
             if (result.Succeeded)
             {
                 // check if the Distributor role exist in the database or not if not will create it
-                var customerRole = await _roleManager.FindByNameAsync("Customer");
+                var customerRole = await _roleManager.FindByNameAsync("Distributor");
                 if (customerRole == null) await _roleManager.CreateAsync(new UserIdentityRole { Name = "Distributor" });
 
                 // add the curtomer to customer role
                 await _userManager.AddToRoleAsync(user, "Distributor");
+
+                // send invitation to distributer user
+                await SendInvitationMail(user);
             }
             else
             {
@@ -131,18 +146,37 @@ namespace Brimo.IDP.STS.Identity.Controllers
                 return BadRequest(ModelState);
             }
 
-            await SendInvitationMail(user);
 
-            return Ok();
+            return Ok(user.Id);
         }
 
         private async Task SendInvitationMail(UserIdentity user)
         {
-            var token =  await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var fullConfirmationUrl = _configuration["BrimoWebURL"] + "/complete-registration" + "?email=" + user.Email + "&token=" + HttpUtility.UrlEncode(token);
 
             // TODO Send Token To User Email
+            await _emailSender.SendEmailAsync(user.Email, "Brimo Invitation", $"Brimo Team Please click the link to complete your rgistration <a href=\"{fullConfirmationUrl}\">link</a>");
 
         }
+
+
+        [HttpPost("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailVM model)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
+            if (user == null) return BadRequest("user_with_this_email_notfound");
+
+            var result = await _userManager.ConfirmEmailAsync(user, model.Token);
+
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+
+
+            return Ok(new { EmailConfirmed = user.EmailConfirmed });
+        }
+
         private async Task<string> CreateCustomer(RegisterVM model, UserIdentity user)
         {
             // TODO Get Access token from identity server

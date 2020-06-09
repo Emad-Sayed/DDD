@@ -15,7 +15,6 @@ export class HttpService {
     constructor(private http: HttpClient, private core: CoreService) { }
 
     getAll<T>(path: string, params: HttpParams = new HttpParams()): Observable<T> {
-        console.log('path', path)
         return this.http.get<T>(`${Config.apiUrl}${path}`, { params })
             .pipe(catchError(e => this.core.handleError(e)));
     }

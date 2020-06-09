@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.DistributorManagment.Commands
+namespace Application.DistributorManagment.Commands.CreateDistributor
 {
     public class CreateDistributorCommandValidator : AbstractValidator<CreateDistributorCommand>
     {

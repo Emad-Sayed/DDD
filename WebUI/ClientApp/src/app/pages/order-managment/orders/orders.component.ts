@@ -41,7 +41,6 @@ export class OrdersComponent implements OnInit {
   }
 
   openOrderDetails(order: Order) {
-    console.log(order)
     this.orderManagmentService.orderDetails.next({ openDetails: true, order: order });
   }
 

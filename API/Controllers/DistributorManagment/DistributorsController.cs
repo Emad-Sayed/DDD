@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DistributorManagment.Commands;
+using Application.DistributorManagment.Commands.CreateDistributor;
+using Application.DistributorManagment.Commands.CreateDistributorUser;
 using Application.DistributorManagment.Queries.ListCities;
 using Application.DistributorManagment.Queries.ListDistributors;
 using Microsoft.AspNetCore.Cors;
@@ -25,6 +26,13 @@ namespace API.Controllers.DistributorManagment
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateDistributorCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("AddUser")]
+        public async Task<IActionResult> Post([FromBody]CreateDistributorUserCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);

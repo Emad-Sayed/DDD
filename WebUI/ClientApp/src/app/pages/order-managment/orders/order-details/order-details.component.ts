@@ -45,12 +45,10 @@ export class OrderDetailsComponent implements OnInit {
 
   editOrderItem(orderItem: OrderItem) {
     orderItem.isEditing = true;
-    console.log(orderItem);
   }
 
   saveOrderItem(orderItem: OrderItem) {
     orderItem.isEditing = false;
-    console.log(orderItem);
   }
   //#endregion
 

@@ -24,11 +24,18 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
         {
             Name = name;
             Address = new Address(region, city);
+            DistributorUsers = new List<DistributorUser>();
 
-            // Add the OrderStarterDomainEvent to the domain events collection 
+            // Add the DistributorCreated to the domain events collection 
             // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]
             // Register Placing order event
             AddDomainEvent(new DistributorCreated(this));
+        }
+
+        public void CreateUser(string accountId, string fullName, string email)
+        {
+            var distributorUserToCreate = new DistributorUser(Id.ToString(), accountId, fullName, email);
+            DistributorUsers.Add(distributorUserToCreate);
         }
 
     }
