@@ -6,13 +6,13 @@
   </div>
   <div class="row">
     <div class="col-6 pt-3">
-      كود العميل : 8483
+      كود العميل : {{order?.customerId?.substr(0, 5)}}
     </div>
     <div class="col-6 pt-3">
-      خط السير : دمنهور
+      خط السير : {{order.address}}
     </div>
     <div class="col-6 pt-3">
-      إسم العميل : محمد احمد
+      إسم العميل : {{order.customerName}}
     </div>
     <div class="col-6 pt-3">
       <p>
@@ -46,14 +46,10 @@
         class="form-control" />
     </div>
     <div class="px-2">
-      <p *ngIf="!orderItem.isEditing">{{orderItem.productName}}</p>
-      <input type="text" *ngIf="orderItem.isEditing" name="productName" [(ngModel)]="orderItem.productName"
-        class="form-control" />
+      <p>{{orderItem.productName}}</p>
     </div>
     <div class="px-2">
-      <p *ngIf="!orderItem.isEditing">{{orderItem.unitPrice}}</p>
-      <input type="text" *ngIf="orderItem.isEditing" name="unitPrice" [(ngModel)]="orderItem.unitPrice"
-        class="form-control" />
+      <p>{{orderItem.unitPrice}}</p>
     </div>
     <div class="d-flex justify-content-around">
       <button class="btn p-2" *ngIf="orderItem.isEditing" (click)="saveOrderItem(orderItem)">

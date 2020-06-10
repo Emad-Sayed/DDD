@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Order } from 'src/app/shared/models/order-managment/order/order.model';
-import { OrderManagmentService } from '../../order-managment.service';
+import { OrderManagmentService } from '../order-managment.service';
 import { CoreService } from 'src/app/shared/services/core.service';
 import { OrderItem } from 'src/app/shared/models/order-managment/order/order-item.model';
 

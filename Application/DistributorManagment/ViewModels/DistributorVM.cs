@@ -10,5 +10,6 @@ namespace Application.DistributorManagment.ViewModels
         public string Id { get; set; }
         public string Name { get; private set; }
         public Address Address { get; set; }
+        public List<DistributorUserVM> DistributorUsers { get; set; }
     }
 }

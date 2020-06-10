@@ -1,9 +1,11 @@
 ﻿using Domain.Base.Entity;
+using Domain.Common.Exceptions;
 using Domain.Common.Interfaces;
 using Domain.DistributorManagment.Events;
 using Domain.SharedKernel.ValueObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
@@ -38,5 +40,40 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
             DistributorUsers.Add(distributorUserToCreate);
         }
 
+        // update distributor
+        public void UpdateDistributor(string name, string city, string region)
+        {
+            Name = name;
+            Address = new Address(region, city);
+
+            // rais distributor updated event
+            AddDomainEvent(new DistributorUpdated(this));
+        }
+
+        // Remove Distributor User from distributor
+        public void DeleteDistributorUser(string distributorUserId)
+        {
+            var distributorUser = DistributorUsers.FirstOrDefault(x => x.Id.ToString() == distributorUserId);
+            if (distributorUser == null)
+                throw new NotFoundException(nameof(DistributorUsers));
+
+            DistributorUsers.Remove(distributorUser);
+
+            // rais Distributor updated event
+            AddDomainEvent(new DistributorUpdated(this));
+        }
+
+        // update  Distributor User
+        public void UpdateDistributorUser(string distributorUserId, string fullName)
+        {
+            var distributorUserToUpdate = DistributorUsers.FirstOrDefault(x => x.Id.ToString() == distributorUserId);
+            if (distributorUserToUpdate == null)
+                throw new NotFoundException(nameof(DistributorUsers));
+
+            distributorUserToUpdate.Update(fullName);
+
+            // rais product updated event
+            AddDomainEvent(new DistributorUpdated(this));
+        }
     }
 }

@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.DistributorManagment.Commands.CreateDistributor;
 using Application.DistributorManagment.Commands.CreateDistributorUser;
+using Application.DistributorManagment.Commands.DeleteDistributorUser;
+using Application.DistributorManagment.Commands.UpdateDistributorUser;
+using Application.DistributorManagment.Queries.DistributorById;
 using Application.DistributorManagment.Queries.ListCities;
 using Application.DistributorManagment.Queries.ListDistributors;
 using Microsoft.AspNetCore.Cors;
@@ -13,12 +16,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers.DistributorManagment
 {
 
-    [EnableCors("AllowOrigin")]
+    [EnableCors()]
     [Route("api/" + nameof(Contexts.DistributorManagment) + "/[controller]")]
     public class DistributorsController : BaseController
     {
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery]ListDistributorsQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("{distributorId}")]
+        public async Task<IActionResult> GetById([FromQuery]DistributorByIdQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);
@@ -31,17 +41,31 @@ namespace API.Controllers.DistributorManagment
             return Ok(result);
         }
 
-        [HttpPost("AddUser")]
-        public async Task<IActionResult> Post([FromBody]CreateDistributorUserCommand command)
+        [HttpGet("Cities")]
+        public async Task<IActionResult> GetAllCities([FromQuery]ListCitiesQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpPost("{distributorId}/CreateDistributorUser")]
+        public async Task<IActionResult> CreateDistributorUserCommand([FromBody]CreateDistributorUserCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);
         }
 
-        [HttpGet("Cities")]
-        public async Task<IActionResult> GetAllCities([FromQuery]ListCitiesQuery query)
+        [HttpPut("{distributorId}/UpdateDistributorUser")]
+        public async Task<IActionResult> UpdateDistributorUser([FromBody]UpdateDistributorUserCommand command)
         {
-            var result = await Mediator.Send(query);
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpDelete("{distributorId}/DeleteDistributorUser")]
+        public async Task<IActionResult> DeleteDistributorUser([FromQuery]DeleteDistributorUserCommand command)
+        {
+            var result = await Mediator.Send(command);
             return Ok(result);
         }
     }

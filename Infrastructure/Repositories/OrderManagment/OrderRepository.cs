@@ -35,11 +35,14 @@ namespace Infrastructure.Repositories.OrderManagment
                    .Entity;
         }
 
-        public async Task<(int, List<Order>)> GetAllAsync(int pageNumber, int pageSize, string keyWord)
+        public async Task<(int, List<Order>)> GetAllAsync(List<OrderStatus> orderStatuses, int pageNumber, int pageSize, string keyWord)
         {
             var query = _context.Orders
                 //.Include(x => x.OrderItems)
                 .AsQueryable();
+
+            if (orderStatuses == null) orderStatuses = new List<OrderStatus> { OrderStatus.Placed };
+            query = query.Where(x => orderStatuses.Contains(x.OrderStatus));
 
             // fillter by keyword
             if (!string.IsNullOrEmpty(keyWord))

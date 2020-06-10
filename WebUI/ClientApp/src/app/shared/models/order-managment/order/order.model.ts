@@ -6,6 +6,7 @@ export class Order {
     public constructor(
         public id?: string,
         public customerId?: string,
+        public customerName?: string,
         public address?: string,
         public orderStatus?: OrderStatus,
         public orderPlacedDate?: Date,

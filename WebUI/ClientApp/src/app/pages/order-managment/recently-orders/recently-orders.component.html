@@ -1,0 +1,158 @@
+<ngb-tabset [destroyOnHide]="false">
+    <ngb-tab>
+        <ng-template ngbTabTitle>
+            <p>طلبات جديدة <span class="badge badge-primary">{{totalPlacedOrders}}</span></p>
+        </ng-template>
+        <ng-template ngbTabContent>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
+                            <div class="table-responsive">
+                                <table class="table table-dashboard mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="border-top-0"> رقم الطلب</th>
+                                            <th scope="col" class="border-top-0">حالة الطلب</th>
+                                            <th scope="col" class="border-top-0">إسم العميل</th>
+                                            <th scope="col" class="border-top-0">كود العميل</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let order of placedOrders; let i = index"
+                                            (click)="openOrderDetails(order)" rel="off-canvas" class="canvas-btn">
+                                            <th scope="row">{{ i + 1 }}</th>
+                                            <td>
+                                                <div [ngSwitch]="order.orderStatus">
+                                                    <span *ngSwitchCase="0"
+                                                        class="badge badge-pill badge-primary">جديد</span>
+                                                    <span *ngSwitchCase="1" class="badge badge-pill badge-info">تم
+                                                        التاكيد</span>
+                                                    <span *ngSwitchCase="2" class="badge badge-pill badge-warning">جاري
+                                                        الشحن</span>
+                                                    <span *ngSwitchCase="3" class="badge badge-pill badge-success">تم
+                                                        التوصيل</span>
+                                                    <span *ngSwitchCase="4" class="badge badge-pill badge-danger">تم
+                                                        الإلغاء</span>
+                                                </div>
+                                            </td>
+                                            <td> {{ order.customerName }} </td>
+                                            <td> {{order?.customerId?.substr(0, 5)}} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <app-order-details class="box" [ngClass]="{ active: openDetails }"></app-order-details>
+                </div>
+            </div>
+        </ng-template>
+    </ngb-tab>
+    <ngb-tab>
+        <ng-template ngbTabTitle>
+            <p>طلبات تحت التحميل <span class="badge badge-info">{{totalConfirmedOrders}}</span></p>
+        </ng-template>
+        <ng-template ngbTabContent>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
+                            <div class="table-responsive">
+                                <table class="table table-dashboard mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="border-top-0"> رقم الطلب</th>
+                                            <th scope="col" class="border-top-0">حالة الطلب</th>
+                                            <th scope="col" class="border-top-0">إسم العميل</th>
+                                            <th scope="col" class="border-top-0">كود العميل</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let order of confirmedOrders; let i = index"
+                                            (click)="openOrderDetails(order)" rel="off-canvas" class="canvas-btn">
+                                            <th scope="row">{{ i + 1 }}</th>
+                                            <td>
+                                                <div [ngSwitch]="order.orderStatus">
+                                                    <span *ngSwitchCase="0"
+                                                        class="badge badge-pill badge-primary">جديد</span>
+                                                    <span *ngSwitchCase="1" class="badge badge-pill badge-info">تم
+                                                        التاكيد</span>
+                                                    <span *ngSwitchCase="2" class="badge badge-pill badge-warning">جاري
+                                                        الشحن</span>
+                                                    <span *ngSwitchCase="3" class="badge badge-pill badge-success">تم
+                                                        التوصيل</span>
+                                                    <span *ngSwitchCase="4" class="badge badge-pill badge-danger">تم
+                                                        الإلغاء</span>
+                                                </div>
+                                            </td>
+                                            <td> {{ order.customerName }} </td>
+                                            <td> {{order?.customerId?.substr(0, 5)}} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <app-order-details class="box" [ngClass]="{ active: openDetails }"></app-order-details>
+                </div>
+            </div>
+        </ng-template>
+    </ngb-tab>
+    <ngb-tab>
+        <ng-template ngbTabTitle>
+            <p>في الطريق إلي العميل <span class="badge badge-warning">{{totalShippedOrders}}</span></p>
+        </ng-template>
+        <ng-template ngbTabContent>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
+                            <div class="table-responsive">
+                                <table class="table table-dashboard mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="border-top-0"> رقم الطلب</th>
+                                            <th scope="col" class="border-top-0">حالة الطلب</th>
+                                            <th scope="col" class="border-top-0">إسم العميل</th>
+                                            <th scope="col" class="border-top-0">كود العميل</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let order of shippedOrders; let i = index"
+                                            (click)="openOrderDetails(order)" rel="off-canvas" class="canvas-btn">
+                                            <th scope="row">{{ i + 1 }}</th>
+                                            <td>
+                                                <div [ngSwitch]="order.orderStatus">
+                                                    <span *ngSwitchCase="0"
+                                                        class="badge badge-pill badge-primary">جديد</span>
+                                                    <span *ngSwitchCase="1" class="badge badge-pill badge-info">تم
+                                                        التاكيد</span>
+                                                    <span *ngSwitchCase="2" class="badge badge-pill badge-warning">جاري
+                                                        الشحن</span>
+                                                    <span *ngSwitchCase="3" class="badge badge-pill badge-success">تم
+                                                        التوصيل</span>
+                                                    <span *ngSwitchCase="4" class="badge badge-pill badge-danger">تم
+                                                        الإلغاء</span>
+                                                </div>
+                                            </td>
+                                            <td> {{ order.customerName }} </td>
+                                            <td> {{order?.customerId?.substr(0, 5)}} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <app-order-details class="box" [ngClass]="{ active: openDetails }"></app-order-details>
+                </div>
+            </div>
+        </ng-template>
+    </ngb-tab>
+</ngb-tabset>

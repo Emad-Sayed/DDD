@@ -1,1 +1,66 @@
-<p>distributor-editor works!</p>
+<div class="container pb-5 product-editor">
+    <div class="row editor-header mb-4 pb-3 justify-content-between">
+        <button class="btn btn-large" (click)="openClose()">
+            <span class="fa fa-times fx-2"></span>
+        </button>
+        <button class="btn btn-primary save-edit-btn" (click)="saveData()">حفظ</button>
+    </div>
+    <div class="row mt-2">
+        <label for="dist-name" class="col-3 col-form-label">إسم الموزع</label>
+        <input type="text" name="name" [(ngModel)]="distributor.name" id="dist-name" class="col-8 form-control"
+            placeholder="إسم الموزع" />
+    </div>
+    <div class="row mt-2">
+        <label for="city" class="col-3 col-form-label">المدينة</label>
+        <input type="text" name="city" [(ngModel)]="distributor.address.city" id="city" class="col-8 form-control"
+            placeholder="المدينة" />
+    </div>
+    <div class="row mt-2">
+        <label for="region" class="col-3 col-form-label">المنطقة</label>
+        <input type="text" name="region" [(ngModel)]="distributor.address.region" id="region" class="col-8 form-control"
+            placeholder="المنطقة" />
+    </div>
+
+    <div class="row p-2">
+        <!-- item DistributorUsers -->
+        <div class="item-distributorUsers">
+            <div class="row mt-2 item-distributorUsers-header p-3">
+                <h4 class="border-bottom w-100"> المستخديمن :</h4>
+            </div>
+            <div class="row item-distributorUsers-content">
+                <div class="distributorUser d-flex w-100 justify-content-between px-3 text-center">
+                    <div class="_num w-45">
+                        الإسم
+                    </div>
+                    <div class="_name w-45">
+                        الإيميل
+                    </div>
+                    <div class="_add w-10">
+                        <button class="btn text-secondary" (click)="addNewDistributorUser()">
+                            <i class="far fa-plus-square fa-2x text-secondary"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngFor="let distributorUser of distributor.distributorUsers; let i = index">
+                <div class="distributorUser d-flex w-100 justify-content-between px-3 text-center">
+                    <div class="_num w-45">
+                        <input type="text" name="fullName" [(ngModel)]="distributorUser.fullName"
+                            class="form-control" />
+                    </div>
+                    <div class="_name w-45">
+                        <input type="text" name="email" [(ngModel)]="distributorUser.email" class="form-control" />
+                    </div>
+                    <div class="_add d-flex save-del-btn w-10">
+                        <button class="btn p-2" (click)="saveDistributorUser(distributor.distributorUsers[i])">
+                            <i class="fas fa-save text-success"></i>
+                        </button>
+                        <button class="btn p-2" (click)="removeDistributorUser(distributor.distributorUsers[i], i)">
+                            <i class="fas fa-trash-alt text-danger"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

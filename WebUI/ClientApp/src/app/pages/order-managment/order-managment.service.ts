@@ -20,7 +20,7 @@ export class OrderManagmentService {
 
     getOrderById(orderId: string): Observable<Order> {
         const params: any = { orderId: orderId }
-        return this.httpService.getById<Order>(`${Config.Orders}/${orderId}`, params)
+        return this.httpService.getById<Order>(`${Config.Orders}/OrderDetails/${orderId}`, params)
     }
 
     updateOrder(order: Order): Observable<any> {

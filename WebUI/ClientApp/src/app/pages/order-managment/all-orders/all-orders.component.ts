@@ -1,20 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderManagmentService } from '../order-managment.service';
-import { CoreService } from 'src/app/shared/services/core.service';
 import { Order } from 'src/app/shared/models/order-managment/order/order.model';
+import { OrderManagmentService } from '../order-managment.service';
 import { Router } from '@angular/router';
+import { CoreService } from 'src/app/shared/services/core.service';
 
 @Component({
-  selector: 'app-orders',
-  templateUrl: './orders.component.html',
-  styleUrls: ['./orders.component.scss']
+  selector: 'app-all-orders',
+  templateUrl: './all-orders.component.html',
+  styleUrls: ['./all-orders.component.scss']
 })
-export class OrdersComponent implements OnInit {
+export class AllOrdersComponent implements OnInit {
 
   orders: Order[] = [];
   isAllOrders = false;
   ordersTotalCount: number = 0;
 
+  query = { OrderStatuses: [0, 1, 2, 3, 4] }
 
   openDetails = true;
   constructor(
@@ -24,7 +25,6 @@ export class OrdersComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.router.url.includes('orders/all')) this.isAllOrders = true;
     this.getOrders();
     this.orderManagmentService.orderDetails.subscribe(res => {
       this.openDetails = res.openDetails;
@@ -34,7 +34,7 @@ export class OrdersComponent implements OnInit {
   }
 
   getOrders() {
-    this.orderManagmentService.getOrders().subscribe(res => {
+    this.orderManagmentService.getOrders(this.query).subscribe(res => {
       this.orders = res.data;
       this.ordersTotalCount = res.totalCount;
     })
@@ -43,5 +43,6 @@ export class OrdersComponent implements OnInit {
   openOrderDetails(order: Order) {
     this.orderManagmentService.orderDetails.next({ openDetails: true, order: order });
   }
+
 
 }

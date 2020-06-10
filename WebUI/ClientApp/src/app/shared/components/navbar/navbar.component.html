@@ -24,20 +24,23 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav">
-      <li class="nav-item"  routerLink="/orders/recently" routerLinkActive="active">
-        <a class="nav-link">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/orders/recently" routerLinkActive="active">
           طلبات حديثة
           <span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item" routerLink="/orders/all" routerLinkActive="active">
-        <a class="nav-link">كل الطلبات</a>
-      </li>
-      <li class="nav-item" routerLink="/products" routerLinkActive="active">
-        <a class="nav-link">المنتجات</a>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/orders/all" routerLinkActive="active">كل الطلبات</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link">العملاء</a>
+        <a class="nav-link" routerLink="/products" routerLinkActive="active">المنتجات</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/customers" routerLinkActive="active">العملاء</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/distributors" routerLinkActive="active">الموزعين</a>
       </li>
     </ul>
   </div>

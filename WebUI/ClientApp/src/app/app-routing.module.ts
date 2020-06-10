@@ -13,6 +13,7 @@ const routes: Routes = [
         path: '', component: LayoutComponent, canActivate: [AuthGuard],
         children: [
             { path: 'orders', loadChildren: () => import('./pages/order-managment/order-managment.module').then(m => m.OrderManagmentModule) },
+            { path: 'customers', loadChildren: () => import('./pages/customers-managment/customers-managment.module').then(m => m.CustomersManagmentModule) },
             { path: 'distributors', loadChildren: () => import('./pages/distributor-managment/distributor-managment.module').then(m => m.DistributorManagmentModule) },
             { path: 'products', loadChildren: () => import('./pages/product-catalog/product-catalog.module').then(m => m.ProductCatalogModule) },
             { path: '**', redirectTo: '/products', pathMatch: 'full' },

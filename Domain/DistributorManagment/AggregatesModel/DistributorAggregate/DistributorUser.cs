@@ -31,6 +31,9 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
             AddDomainEvent(new DistributorUserCreated(this));
         }
 
-
+        public void Update(string fullName)
+        {
+            FullName = fullName;
+        }
     }
 }
