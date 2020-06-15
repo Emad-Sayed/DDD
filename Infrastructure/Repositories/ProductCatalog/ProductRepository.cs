@@ -49,9 +49,9 @@ namespace Infrastructure.Repositories.ProductCatalog
                 .AsQueryable();
 
             // fillter by keyword
-            if(!string.IsNullOrEmpty(keyWord))
+            if (!string.IsNullOrEmpty(keyWord))
             {
-                query = query.Where(x => 
+                query = query.Where(x =>
                 x.Barcode.Contains(keyWord) ||
                 x.Id.ToString().Contains(keyWord) ||
                 x.Name.Contains(keyWord) ||
@@ -79,6 +79,12 @@ namespace Infrastructure.Repositories.ProductCatalog
         public void Delete(Product product)
         {
             _context.Products.Remove(product);
+        }
+
+        public async Task<List<Unit>> GetProductsUnits(List<string> productsIds)
+        {
+            var units = await _context.Units.Where(x => productsIds.Contains(x.ProductId.ToString())).ToListAsync();
+            return units;
         }
     }
 }

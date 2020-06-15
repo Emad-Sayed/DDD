@@ -47,8 +47,11 @@ namespace Infrastructure.Repositories.OrderManagment
             // fillter by keyword
             if (!string.IsNullOrEmpty(keyWord))
             {
+                keyWord = keyWord.ToLower();
                 query = query.Where(x =>
-                x.Id.ToString().Contains(keyWord)
+                x.Id.ToString().ToLower().Contains(keyWord) ||
+                x.CustomerId.ToLower().Contains(keyWord) ||
+                x.CustomerName.ToLower().Contains(keyWord)
                 );
             }
 

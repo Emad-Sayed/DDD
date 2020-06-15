@@ -5,6 +5,7 @@ import { CoreService } from 'src/app/shared/services/core.service';
 import { OrderItem } from 'src/app/shared/models/order-managment/order-item.model';
 import { ProductCatalogService } from '../../product-catalog/product-catalog.service';
 import { Product } from 'src/app/shared/models/product-catalog/product/product.model';
+import { Unit } from 'src/app/shared/models/product-catalog/product/unit.model';
 
 @Component({
   selector: 'app-order-details',
@@ -18,6 +19,7 @@ export class OrderDetailsComponent implements OnInit {
   isEditing = false;
   order: Order = new Order();
   product: Product = new Product();
+  units: Unit[] = [];
 
   constructor(
     private orderManagmentService: OrderManagmentService,
@@ -45,8 +47,14 @@ export class OrderDetailsComponent implements OnInit {
     if (orderId == this.order.id) return;
     this.orderManagmentService.getOrderById(orderId).subscribe(res => {
       this.order = res;
-      // this.getProductById(this.order.orderItems[0].productId);
+      this.productCatalogService.getUnitsByProductsIds(this.order.orderItems.map(x => x.productId)).subscribe(units => {
+        this.units = units;
+      });
     });
+  }
+
+  filterUnits(productId: string) {
+    return this.units.filter(x => x.productId == productId.toLowerCase());
   }
 
   openEditor() {

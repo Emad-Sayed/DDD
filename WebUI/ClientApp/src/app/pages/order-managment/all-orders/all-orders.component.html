@@ -6,11 +6,11 @@
                 <form class="ais-SearchBox-form w-100 form-group d-flex" novalidate>
                     <input class="ais-SearchBox-input form-control col-5" autocomplete="off" autocorrect="off"
                         autocapitalize="off" placeholder="رقم الطلب" spellcheck="false" maxlength="512" type="search"
-                        value="" />
-                    <a class="ais-SearchBox-submit card-link" type="submit" title="Submit the search query.">
+                        (keydown)="onKeyUp($event.target.value)" value="" />
+                    <!-- <a class="ais-SearchBox-submit card-link" type="submit" title="Submit the search query.">
                         <i class="fas fa-search ml-2"></i>
                         بحث
-                    </a>
+                    </a> -->
                 </form>
             </div>
         </div>

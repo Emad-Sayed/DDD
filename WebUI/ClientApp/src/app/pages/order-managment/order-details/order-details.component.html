@@ -51,7 +51,7 @@
       <select *ngIf="orderItem.isEditing" class="col-8 form-control" id="select-brand" name="productCategoryId"
         [(ngModel)]="orderItem.unitId">
         <option selected>إختر الوحدة</option>
-        <option *ngFor="let unit of product.units" [value]="unit.id">
+        <option *ngFor="let unit of filterUnits(orderItem.productId)" [value]="unit.id">
           {{ unit.name }}</option>
       </select>
     </div>

@@ -4,6 +4,8 @@ import { OrderManagmentService } from '../order-managment.service';
 import { Router } from '@angular/router';
 import { CoreService } from 'src/app/shared/services/core.service';
 import { Page } from 'src/app/shared/models/shared/page.model';
+import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-recently-orders',
@@ -11,6 +13,8 @@ import { Page } from 'src/app/shared/models/shared/page.model';
   styleUrls: ['./recently-orders.component.scss']
 })
 export class RecentlyOrdersComponent implements OnInit, OnDestroy {
+
+  private subject: Subject<string> = new Subject();
 
   placedOrders: Order[] = [];
   totalPlacedOrders: number = 0;
@@ -21,16 +25,17 @@ export class RecentlyOrdersComponent implements OnInit, OnDestroy {
   shippedOrders: Order[] = [];
   totalShippedOrders: number = 0;
 
-  placedOrdersQuery = { OrderStatuses: [0] };
+  placedOrdersQuery: any = { OrderStatuses: [0] };
   placedOrdersPage: Page = new Page();
 
-  confirmedOrdersQuery = { OrderStatuses: [1] };
+  confirmedOrdersQuery: any = { OrderStatuses: [1] };
   confirmedOrdersPage: Page = new Page();
 
-  shippedOrdersQuery = { OrderStatuses: [2] };
+  shippedOrdersQuery: any = { OrderStatuses: [2] };
   shippedOrdersPage: Page = new Page();
 
   openDetails = false;
+  active = 1;
 
   currentActiveTab = 0;
 
@@ -50,28 +55,27 @@ export class RecentlyOrdersComponent implements OnInit, OnDestroy {
     this.getShippedOrders();
     this.orderManagmentService.orderDetails.subscribe(res => {
       this.openDetails = res.openDetails;
-      if (res.orderId) {
-        switch (res.orderStatus) {
-          case 1:
-            let confirmedOrder = this.placedOrders.find(x => x.id == res.orderId);
-            confirmedOrder.orderStatus = res.orderStatus;
-            this.confirmedOrders.push(confirmedOrder);
-            ++this.totalConfirmedOrders;
-            this.placedOrders.splice(this.placedOrders.indexOf(confirmedOrder), 1);
-            this.active = 2;
-            break;
-          case 2:
-            let shippedOrder = this.confirmedOrders.find(x => x.id == res.orderId);
-            shippedOrder.orderStatus = res.orderStatus;
-            this.shippedOrders.push(shippedOrder);
-            ++this.totalShippedOrders;
-            this.confirmedOrders.splice(this.confirmedOrders.indexOf(shippedOrder), 1);
-            this.shippedOrders.find(x => x.id == res.orderId).orderStatus = res.orderStatus;
-            this.active = 3;
-            break;
-          default:
-            break;
-        }
+      if (res.orderId)
+        this.proccessOrder(res.orderId, res.orderStatus);
+
+    });
+
+    this.subject.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(res => {
+      switch (this.active) {
+        case 1:
+          this.searchInPlacedOrders(res);
+          break;
+        case 2:
+          this.searchInConfirmedOrders(res);
+          break;
+        case 3:
+          this.searchInShippedOrders(res);
+          break;
+        default:
+          break;
       }
     });
   }
@@ -83,7 +87,6 @@ export class RecentlyOrdersComponent implements OnInit, OnDestroy {
     })
   }
 
-  active = 1;
 
 
   getConfirmedOrders() {
@@ -120,6 +123,61 @@ export class RecentlyOrdersComponent implements OnInit, OnDestroy {
     this.shippedOrdersPage.pageNumber++;
     if ((this.shippedOrdersPage.pageNumber * this.shippedOrdersPage.pageSize) >= this.totalShippedOrders) return;
     this.getShippedOrders();
+  }
+
+  proccessOrder(orderId: string, orderStatus: number) {
+    switch (orderStatus) {
+      case 1:
+        let confirmedOrder = this.placedOrders.find(x => x.id == orderId);
+        confirmedOrder.orderStatus = orderStatus;
+        this.confirmedOrders.push(confirmedOrder);
+        ++this.totalConfirmedOrders;
+        this.placedOrders.splice(this.placedOrders.indexOf(confirmedOrder), 1);
+        this.active = 2;
+        break;
+      case 2:
+        let shippedOrder = this.confirmedOrders.find(x => x.id == orderId);
+        shippedOrder.orderStatus = orderStatus;
+        this.shippedOrders.push(shippedOrder);
+        ++this.totalShippedOrders;
+        this.confirmedOrders.splice(this.confirmedOrders.indexOf(shippedOrder), 1);
+        this.shippedOrders.find(x => x.id == orderId).orderStatus = orderStatus;
+        this.active = 3;
+        break;
+      case 3:
+        let dilveredOrder = this.shippedOrders.find(x => x.id == orderId);
+        --this.totalShippedOrders;
+        this.shippedOrders.splice(this.shippedOrders.indexOf(dilveredOrder), 1);
+        this.orderManagmentService.orderDetails.next({ openDetails: false });
+        break;
+      default:
+        break;
+    }
+  }
+
+  searchInPlacedOrders(value: any) {
+    this.placedOrders = [];
+    this.placedOrdersQuery.keyWord = value;
+    this.placedOrdersPage.pageNumber = 1;
+    this.getPlacedOrders();
+  }
+
+  searchInConfirmedOrders(value: any) {
+    this.confirmedOrders = [];
+    this.confirmedOrdersQuery.keyWord = value;
+    this.confirmedOrdersPage.pageNumber = 1;
+    this.getConfirmedOrders();
+  }
+
+  searchInShippedOrders(value: any) {
+    this.shippedOrders = [];
+    this.shippedOrdersQuery.keyWord = value;
+    this.shippedOrdersPage.pageNumber = 1;
+    this.getShippedOrders();
+  }
+
+  onKeyUp(searchTextValue: string) {
+    this.subject.next(searchTextValue);
   }
 
 }

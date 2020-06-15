@@ -11,17 +11,18 @@
             placeholder="إسم الموزع" />
     </div>
     <div class="row mt-2">
-        <select (change)="changeCurrentDisCity($event.target.value)" class="col-8 form-control" id="select-brand"
-            name="city" [(ngModel)]="distributor.city">
+        <label for="dist-city" class="col-3 col-form-label">إختر المدينة</label>
+        <select class="col-8 form-control" id="dist-city" name="city" [(ngModel)]="distributor.city">
             <option selected>إختر المدينة</option>
             <option *ngFor="let city of cities" [value]="city.name">
                 {{ city.name }}</option>
         </select>
     </div>
     <div class="row mt-2">
-        <select class="col-8 form-control" id="select-brand" name="area" [(ngModel)]="distributor.area">
+        <label for="dist-area" class="col-3 col-form-label">إختر المنطقة</label>
+        <select class="col-8 form-control" id="dist-area" name="area" [(ngModel)]="distributor.area">
             <option selected>إختر المنطقة</option>
-            <option *ngFor="let area of areaToDisplay" [value]="area.name">
+            <option *ngFor="let area of fillteredCities(distributor.city)" [value]="area.name">
                 {{ area.name }}</option>
         </select>
     </div>

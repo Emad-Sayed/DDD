@@ -14,7 +14,8 @@ namespace Application.DistributorManagment.Commands.UpdateDistributor
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public Address Address { get; set; }
+        public string City { get; set; }
+        public string Area { get; set; }
 
         public class Handler : IRequestHandler<UpdateDistributorCommand>
         {
@@ -30,7 +31,7 @@ namespace Application.DistributorManagment.Commands.UpdateDistributor
                 var distributorFromRepo = await _distributorRepository.FindByIdAsync(request.Id);
                 if (distributorFromRepo == null) throw new NotFoundException(nameof(distributorFromRepo));
 
-                distributorFromRepo.UpdateDistributor(request.Name, request.Address.City, request.Address.Area);
+                distributorFromRepo.UpdateDistributor(request.Name, request.City, request.Area);
 
                 _distributorRepository.Update(distributorFromRepo);
 

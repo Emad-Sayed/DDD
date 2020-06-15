@@ -52,6 +52,11 @@ export class ProductCatalogService {
     //#endregion
 
     //#region Unit
+    getUnitsByProductsIds(productIds: string[]): Observable<Unit[]> {
+        const query: any = { productsIds: productIds };
+        return this.httpService.getAll<Unit[]>(`${Config.Products}/GetUnitsByProductsIds`, query)
+    }
+
     createUnit(unit: Unit, productId: string): Observable<any> {
         return this.httpService.post(`${Config.Products}/${productId}/AddUnit`, unit);
     }

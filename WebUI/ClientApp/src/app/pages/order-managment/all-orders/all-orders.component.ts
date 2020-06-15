@@ -4,6 +4,8 @@ import { OrderManagmentService } from '../order-managment.service';
 import { Router } from '@angular/router';
 import { CoreService } from 'src/app/shared/services/core.service';
 import { Page } from 'src/app/shared/models/shared/page.model';
+import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-all-orders',
@@ -17,6 +19,7 @@ export class AllOrdersComponent implements OnInit, OnDestroy {
   ordersTotalCount: number = 0;
   page: Page = new Page();
   query: any = { OrderStatuses: [0, 1, 2, 3, 4] }
+  private subject: Subject<string> = new Subject();
 
   openDetails = false;
   constructor(
@@ -36,7 +39,14 @@ export class AllOrdersComponent implements OnInit, OnDestroy {
       this.openDetails = res.openDetails;
       if (res.orderId)
         this.orders.find(x => x.id == res.orderId).orderStatus = res.orderStatus;
-    })
+    });
+
+    this.subject.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(res => {
+      this.searchInOrders(res);
+    });
   }
 
   getOrders() {
@@ -52,7 +62,16 @@ export class AllOrdersComponent implements OnInit, OnDestroy {
     this.orderManagmentService.orderDetails.next({ openDetails: true, order: order });
   }
 
+  searchInOrders(value: any) {
+    this.orders = [];
+    this.query.keyWord = value;
+    this.page.pageNumber = 1;
+    this.getOrders();
+  }
 
+  onKeyUp(searchTextValue: string) {
+    this.subject.next(searchTextValue);
+  }
 
   onScroll() {
     this.page.pageNumber++;

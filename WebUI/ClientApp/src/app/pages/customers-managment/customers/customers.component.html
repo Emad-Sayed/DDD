@@ -1,8 +1,23 @@
 <div class="row">
+    <!-- search box -->
+    <div class="w-100 card mb-3">
+        <div class="ais-SearchBox card-search">
+            <form class="ais-SearchBox-form w-100 form-group d-flex" novalidate>
+                <input class="ais-SearchBox-input form-control col-5" autocomplete="off" autocorrect="off"
+                    autocapitalize="off" placeholder="رقم العميل / الإسم" spellcheck="false" maxlength="512"
+                    type="search" value="" (keydown)="onKeyUp($event.target.value)" />
+                <!-- <a class="ais-SearchBox-submit card-link" type="submit" title="Submit the search query.">
+                    <i class="fas fa-search ml-2"></i>
+                    بحث
+                </a> -->
+            </form>
+        </div>
+    </div>
     <div class="col-12">
         <div class="card">
             <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
-                <div class="table-responsive">
+                <div class="table-responsive" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+                    (scrolled)="onScroll()" [scrollWindow]="false">
                     <table class="table table-dashboard mb-0">
                         <thead>
                             <tr>

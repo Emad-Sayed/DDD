@@ -38,6 +38,7 @@ export class DistributorEditorComponent implements OnInit {
   getDistributorById(distributorId: string) {
     this.distributorManagmentService.getDistributorById(distributorId).subscribe(res => {
       this.distributor = res;
+      console.log(this.distributor);
       this.distributor.id = distributorId;
     });
   }
@@ -51,6 +52,11 @@ export class DistributorEditorComponent implements OnInit {
     this.distributorManagmentService.getCities().subscribe(res => {
       this.cities = res.data;
     })
+  }
+
+  fillteredCities(cityName: string) {
+    const city = this.cities.find(x => x.name == cityName);
+    if (city) return city.areas;
   }
 
   openEditor() {
@@ -106,14 +112,14 @@ export class DistributorEditorComponent implements OnInit {
   //#region Distributor
   createDistributor() {
     this.distributorManagmentService.createDistributor(this.distributor).subscribe(res => {
-      this.distributorManagmentService.distributorEditor.next({ distributorRequestSuccess: true });
+      // this.distributorManagmentService.distributorEditor.next({ distributorRequestSuccess: true });
       this.core.showSuccessOperation();
     });
   }
 
   updateDistributor() {
     this.distributorManagmentService.updateDistributor(this.distributor).subscribe(res => {
-      this.distributorManagmentService.distributorEditor.next({ distributorRequestSuccess: true });
+      // this.distributorManagmentService.distributorEditor.next({ distributorRequestSuccess: true });
       this.core.showSuccessOperation();
     });
   }
