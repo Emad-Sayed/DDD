@@ -12,7 +12,7 @@ namespace Application.CustomerManagment
         {
             CreateMap<Customer, CustomerVM>().ReverseMap();
             CreateMap<City, CityVM>().ReverseMap();
-            CreateMap<Region, RegionVM>().ReverseMap();
+            CreateMap<Area, AreaVM>().ReverseMap();
         }
     }
 }

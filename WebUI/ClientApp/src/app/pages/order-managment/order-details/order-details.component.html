@@ -40,10 +40,20 @@
       <input type="text" *ngIf="orderItem.isEditing" name="unitCount" [(ngModel)]="orderItem.unitCount"
         class="form-control" />
     </div>
-    <div class="px-2">
+    <!-- <div class="px-2">
       <p *ngIf="!orderItem.isEditing">{{orderItem.unitName}}</p>
       <input type="text" *ngIf="orderItem.isEditing" name="unitName" [(ngModel)]="orderItem.unitName"
         class="form-control" />
+
+    </div> -->
+    <div class="px-2">
+      <p *ngIf="!orderItem.isEditing">{{orderItem.unitName}}</p>
+      <select *ngIf="orderItem.isEditing" class="col-8 form-control" id="select-brand" name="productCategoryId"
+        [(ngModel)]="orderItem.unitId">
+        <option selected>إختر الوحدة</option>
+        <option *ngFor="let unit of product.units" [value]="unit.id">
+          {{ unit.name }}</option>
+      </select>
     </div>
     <div class="px-2">
       <p>{{orderItem.productName}}</p>
@@ -52,7 +62,7 @@
       <p>{{orderItem.unitPrice}}</p>
     </div>
     <div class="d-flex justify-content-around">
-      <button class="btn p-2" *ngIf="orderItem.isEditing" (click)="saveOrderItem(orderItem)">
+      <button class="btn p-2" *ngIf="orderItem.isEditing" (click)="updateOrderItem(orderItem)">
         <i class="fas fa-save text-success"></i>
       </button>
       <button class="btn p-2" *ngIf="!orderItem.isEditing" (click)="editOrderItem(orderItem)">
@@ -69,7 +79,7 @@
       المجموع
     </div>
     <div class="col-3 text-left">
-      949 ج م
+     {{order.totalPrice}}
     </div>
   </div>
   <div class="row pt-3">
@@ -77,7 +87,7 @@
       القيمةالمضافة
     </div>
     <div class="col-3 text-left">
-      949 ج م
+      14 %
     </div>
   </div>
   <div class="row border-top mt-3 pt-2">

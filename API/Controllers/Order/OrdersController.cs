@@ -1,4 +1,5 @@
-﻿using Application.OrderManagment.Commands.CancelOrder;
+﻿using Application.Common.Interfaces;
+using Application.OrderManagment.Commands.CancelOrder;
 using Application.OrderManagment.Commands.ConfirmOrder;
 using Application.OrderManagment.Commands.DeliverOrder;
 using Application.OrderManagment.Commands.PlaceOrder;
@@ -19,6 +20,11 @@ namespace API.Controllers.Order
     [Route("api/[controller]")]
     public class OrdersController : BaseController
     {
+        private readonly ICurrentUserService _currentUserService;
+        public OrdersController(ICurrentUserService currentUserService)
+        {
+            _currentUserService = currentUserService;
+        }
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery]ListOrdersQuery query)
         {
@@ -26,12 +32,21 @@ namespace API.Controllers.Order
             return Ok(result);
         }
 
-        [HttpGet("MyOrders")]
-        public async Task<IActionResult> Get([FromQuery]CustomerOrdersQuery query)
+        [HttpGet("CustomerOrders/{customerId}")]
+        public async Task<IActionResult> GetCustomerOrders([FromQuery]CustomerOrdersQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);
         }
+
+        [HttpGet("MyOrders")]
+        public async Task<IActionResult> GetMyOrders([FromQuery]CustomerOrdersQuery query)
+        {
+            query.CustomerId = _currentUserService.UserId;
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
 
         [HttpGet("OrderDetails/{OrderId}")]
         public async Task<IActionResult> GetById(OrderByIdQuery query)
@@ -39,6 +54,7 @@ namespace API.Controllers.Order
             var result = await Mediator.Send(query);
             return Ok(result);
         }
+
 
         [HttpPut]
         public async Task<IActionResult> Put([FromBody]UpdateOrderCommand command)

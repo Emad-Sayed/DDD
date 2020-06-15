@@ -25,14 +25,14 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         public float Weight { get; private set; }
 
         // Is this unit enabled and can be used
-        public bool IsAvilable { get; private set; }
+        public bool IsAvailable { get; private set; }
 
         public Guid ProductId { get; private set; }
         public Product Product { get; private set; }
 
         private Unit() { }
 
-        public Unit(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvilable, Guid productId)
+        public Unit(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable, Guid productId)
         {
             Name = name;
             Count = count;
@@ -40,11 +40,11 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             Price = price;
             SellingPrice = sellingPrice;
             Weight = weight;
-            IsAvilable = isAvilable;
+            IsAvailable = isAvailable;
             ProductId = productId;
         }
 
-        public void Update(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvilable)
+        public void Update(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable)
         {
             Name = name;
             Count = count;
@@ -52,7 +52,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             Price = price;
             SellingPrice = sellingPrice;
             Weight = weight;
-            IsAvilable = isAvilable;
+            IsAvailable = isAvailable;
         }
     }
 }

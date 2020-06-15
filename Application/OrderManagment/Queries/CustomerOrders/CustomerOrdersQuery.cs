@@ -17,24 +17,23 @@ namespace Application.OrderManagment.Queries.CustomerOrders
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         public string KeyWord { get; set; }
+        public string CustomerId { get; set; }
         public List<OrderStatus> OrderStatuses { get; set; }
 
         public class Handler : IRequestHandler<CustomerOrdersQuery, ListEntityVM<OrderVM>>
         {
             private readonly IOrderRepository _ordersRepository;
-            private readonly ICurrentUserService _currentUserService;
             private readonly IMapper _mapper;
 
-            public Handler(IOrderRepository brandRepository, IMapper mapper, ICurrentUserService currentUserService)
+            public Handler(IOrderRepository brandRepository, IMapper mapper)
             {
                 _ordersRepository = brandRepository;
                 _mapper = mapper;
-                _currentUserService = currentUserService;
             }
 
             public async Task<ListEntityVM<OrderVM>> Handle(CustomerOrdersQuery request, CancellationToken cancellationToken)
             {
-                var customerOrdersFromRepo = await _ordersRepository.GetCustomerOrders(_currentUserService.UserId, request.OrderStatuses, request.PageNumber, request.PageSize, request.KeyWord);
+                var customerOrdersFromRepo = await _ordersRepository.GetCustomerOrders(request.CustomerId, request.OrderStatuses, request.PageNumber, request.PageSize, request.KeyWord);
 
                 var ordersToReturn = _mapper.Map<List<OrderVM>>(customerOrdersFromRepo.Item2);
 

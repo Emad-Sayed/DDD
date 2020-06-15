@@ -81,7 +81,7 @@ namespace Infrastructure.Repositories.CustomerManagment
         public async Task<(int, List<City>)> GetAllCitiesAsync(int pageNumber, int pageSize, string keyWord)
         {
             var query = _context.Cities
-                .Include(x => x.Regions)
+                .Include(x => x.Areas)
                 .AsQueryable();
 
             // fillter by keyword

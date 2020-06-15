@@ -1,7 +1,7 @@
 
 export class Address {
     public constructor(
-        public region?: string,
+        public area?: string,
         public city?: string
     ) { }
 }

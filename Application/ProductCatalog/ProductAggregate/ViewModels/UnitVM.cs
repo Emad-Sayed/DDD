@@ -26,7 +26,7 @@ namespace Application.ProductCatalog.ProductAggregate.ViewModels
         public float Weight { get; private set; }
 
         // Is this unit enabled and can be used
-        public bool IsAvilable { get; private set; }
+        public bool IsAvailable { get; private set; }
 
         public string ProductId { get; private set; }
 

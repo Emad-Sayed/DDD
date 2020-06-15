@@ -17,6 +17,7 @@ namespace Application.OrderManagment.ViewModels
         public DateTime OrderShippedDate { get; set; }
         public DateTime OrderDeliveredDate { get; set; }
         public DateTime OrderCanceledDate { get; set; }
+        public float TotalPrice { get; set; }
         public ICollection<OrderItemVM> OrderItems { get; set; }
     }
 }

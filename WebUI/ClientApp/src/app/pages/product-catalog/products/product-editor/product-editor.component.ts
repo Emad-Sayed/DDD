@@ -38,6 +38,7 @@ export class ProductEditorComponent implements OnInit {
         this.getProductById(res.product.id);
       } else {
         this.product = new Product();
+        this.imgURL = null;
       }
     })
   }
@@ -46,7 +47,7 @@ export class ProductEditorComponent implements OnInit {
     this.productCatalogService.getProductById(productId).subscribe(res => {
       this.product = res;
       this.product.id = productId;
-      this.imgURL = this.BasePhotoUrl +  this.product.photoUrl;
+      this.imgURL = this.BasePhotoUrl + this.product.photoUrl;
     });
   }
 
@@ -78,6 +79,7 @@ export class ProductEditorComponent implements OnInit {
 
   saveUnit(unit: Unit) {
     unit.price = +unit.price;
+    unit.sellingPrice = +unit.sellingPrice;
     unit.weight = +unit.weight;
     unit.contentCount = +unit.contentCount;
     unit.count = +unit.count;
@@ -119,14 +121,14 @@ export class ProductEditorComponent implements OnInit {
   //#region Product
   createProduct() {
     this.productCatalogService.createProduct(this.product).subscribe(res => {
-      this.productCatalogService.productEditor.next({ productRequestSuccess: true });
+      // this.productCatalogService.productEditor.next({ productRequestSuccess: true });
       this.core.showSuccessOperation();
     });
   }
 
   updateProduct() {
     this.productCatalogService.updateProduct(this.product).subscribe(res => {
-      this.productCatalogService.productEditor.next({ productRequestSuccess: true });
+      // this.productCatalogService.productEditor.next({ productRequestSuccess: true });
       this.core.showSuccessOperation();
     });
   }

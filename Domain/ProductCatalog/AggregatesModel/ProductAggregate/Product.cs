@@ -72,9 +72,9 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         }
 
         // add unit to product
-        public void AddUnitToProduct(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvilable)
+        public void AddUnitToProduct(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable)
         {
-            var newProductUnit = new Unit(name, count, contentCount, price, sellingPrice, weight, isAvilable, this.Id);
+            var newProductUnit = new Unit(name, count, contentCount, price, sellingPrice, weight, isAvailable, this.Id);
             Units.Add(newProductUnit);
 
             // rais product updated event
@@ -82,13 +82,13 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         }
 
         // update unit product
-        public void UpdateProductUnit(string unitId, string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvilable)
+        public void UpdateProductUnit(string unitId, string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable)
         {
             var unitToUpdate = Units.FirstOrDefault(x => x.Id.ToString() == unitId);
             if (unitToUpdate == null)
                 throw new NotFoundException(nameof(Unit));
 
-            unitToUpdate.Update(name, count, contentCount, price, sellingPrice, weight, isAvilable);
+            unitToUpdate.Update(name, count, contentCount, price, sellingPrice, weight, isAvailable);
 
             // rais product updated event
             AddDomainEvent(new ProductUpdated(this));

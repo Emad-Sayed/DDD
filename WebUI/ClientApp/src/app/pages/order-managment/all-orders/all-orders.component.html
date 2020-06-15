@@ -13,13 +13,13 @@
                     </a>
                 </form>
             </div>
-
         </div>
     </div>
     <div class="col-12">
         <div class="card">
             <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
-                <div class="table-responsive">
+                <div class="table-responsive" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+                    (scrolled)="onScroll()" [scrollWindow]="false">
                     <table class="table table-dashboard mb-0">
                         <thead>
                             <tr>
@@ -36,15 +36,20 @@
                                 <td>
                                     <div [ngSwitch]="order.orderStatus">
                                         <span *ngSwitchCase="0" class="badge badge-pill badge-primary">جديد</span>
-                                        <span *ngSwitchCase="1" class="badge badge-pill badge-info">تم التاكيد</span>
-                                        <span *ngSwitchCase="2" class="badge badge-pill badge-warning">جاري الشحن</span>
-                                        <span *ngSwitchCase="3" class="badge badge-pill badge-success">تم التوصيل</span>
-                                        <span *ngSwitchCase="4" class="badge badge-pill badge-danger">تم الإلغاء</span>
+                                        <span *ngSwitchCase="1" class="badge badge-pill badge-info">تم
+                                            التاكيد</span>
+                                        <span *ngSwitchCase="2" class="badge badge-pill badge-warning">جاري
+                                            الشحن</span>
+                                        <span *ngSwitchCase="3" class="badge badge-pill badge-success">تم
+                                            التوصيل</span>
+                                        <span *ngSwitchCase="4" class="badge badge-pill badge-danger">تم
+                                            الإلغاء</span>
                                     </div>
                                 </td>
                                 <td> {{ order.customerName }} </td>
                                 <td> {{order?.customerId.substr(0, 5)}} </td>
                             </tr>
+
                         </tbody>
                     </table>
                 </div>

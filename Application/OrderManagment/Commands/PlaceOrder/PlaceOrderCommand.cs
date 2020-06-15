@@ -1,7 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.CustomerManagment.Queries.CustomerByAccountId;
 using Application.OrderManagment.ViewModels;
-using Application.ShoppingVanBoundedContext.ShoppingVanAggregate.Queries.CurrentCustomerVan;
+using Application.ShoppingVan.Queries.CurrentCustomerVan;
 using AutoMapper;
 using Domain.OrderManagment.AggregatesModel.OrderAggregate;
 using Domain.OrderManagment.Exceptions;
@@ -47,7 +47,7 @@ namespace Application.OrderManagment.Commands.PlaceOrder
                 string orderAddress = string.IsNullOrEmpty(request.Address) ? customerDetailsFromQuery.ShopAddress : request.Address;
 
                 // create new order
-                var orderToPlace = new Order(_currentUserService.UserId, customerDetailsFromQuery.ShopName, orderAddress);
+                var orderToPlace = new Order(_currentUserService.UserId, customerDetailsFromQuery.ShopName, orderAddress, customerVanFromQuery.TotalPrice);
 
                 _orderRepository.Add(orderToPlace);
                 await _orderRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync();

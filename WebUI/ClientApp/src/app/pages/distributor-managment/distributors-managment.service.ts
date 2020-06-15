@@ -5,6 +5,7 @@ import { ApiResponse } from 'src/app/shared/models/api-response/api-response.mod
 import { Config } from 'src/app/shared/confing/config';
 import { Distributor } from 'src/app/shared/models/distributor-managment/distributor.model';
 import { DistributorUser } from 'src/app/shared/models/distributor-managment/distributor-user.model';
+import { City } from 'src/app/shared/models/distributor-managment/city.model';
 
 @Injectable({
     providedIn: 'root'
@@ -54,5 +55,9 @@ export class DistributorsManagmentService {
     }
     //#endregion
 
-
+    //#region Cities 
+    getCities(query: any = {}): Observable<ApiResponse<City>> {
+        return this.httpService.getAll<ApiResponse<City>>(`${Config.Distributors}/Cities`, query)
+    }
+    //#endregion
 }

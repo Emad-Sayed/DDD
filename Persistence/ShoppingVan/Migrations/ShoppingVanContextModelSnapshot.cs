@@ -34,6 +34,9 @@ namespace Persistence.ShoppingVan.Migrations
                     b.Property<int>("TotalItemsCount")
                         .HasColumnType("int");
 
+                    b.Property<float>("TotalPrice")
+                        .HasColumnType("real");
+
                     b.HasKey("Id");
 
                     b.ToTable("ShoppingVans");

@@ -1,41 +1,49 @@
-import { Component, OnInit } from '@angular/core';
-import { Order } from 'src/app/shared/models/order-managment/order/order.model';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Order } from 'src/app/shared/models/order-managment/order.model';
 import { OrderManagmentService } from '../order-managment.service';
 import { Router } from '@angular/router';
 import { CoreService } from 'src/app/shared/services/core.service';
+import { Page } from 'src/app/shared/models/shared/page.model';
 
 @Component({
   selector: 'app-all-orders',
   templateUrl: './all-orders.component.html',
   styleUrls: ['./all-orders.component.scss']
 })
-export class AllOrdersComponent implements OnInit {
+export class AllOrdersComponent implements OnInit, OnDestroy {
 
   orders: Order[] = [];
   isAllOrders = false;
   ordersTotalCount: number = 0;
+  page: Page = new Page();
+  query: any = { OrderStatuses: [0, 1, 2, 3, 4] }
 
-  query = { OrderStatuses: [0, 1, 2, 3, 4] }
-
-  openDetails = true;
+  openDetails = false;
   constructor(
     private orderManagmentService: OrderManagmentService,
     private router: Router,
     private core: CoreService) {
   }
 
+  ngOnDestroy(): void {
+    this.orderManagmentService.orderDetails.next({ openDetails: false });
+    // this.orderManagmentService.orderDetails.unsubscribe();
+  }
+
   ngOnInit() {
     this.getOrders();
     this.orderManagmentService.orderDetails.subscribe(res => {
       this.openDetails = res.openDetails;
-      if (res.orderRequestSuccess)
-        this.getOrders();
+      if (res.orderId)
+        this.orders.find(x => x.id == res.orderId).orderStatus = res.orderStatus;
     })
   }
 
   getOrders() {
+    this.query.pageNumber = this.page.pageNumber;
+    this.query.pageSize = this.page.pageSize;
     this.orderManagmentService.getOrders(this.query).subscribe(res => {
-      this.orders = res.data;
+      this.orders.push(...res.data);
       this.ordersTotalCount = res.totalCount;
     })
   }
@@ -45,4 +53,10 @@ export class AllOrdersComponent implements OnInit {
   }
 
 
+
+  onScroll() {
+    this.page.pageNumber++;
+    if ((this.page.pageNumber * this.page.pageSize) >= this.ordersTotalCount) return;
+    this.getOrders();
+  }
 }

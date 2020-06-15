@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.ShoppingVanBoundedContext.ShoppingVanAggregate.Commands.RemoveItemFromVan
+namespace Application.ShoppingVan.Commands.RemoveItemFromVan
 {
     public class RemoveItemFromVanCommandValidator : AbstractValidator<RemoveItemFromVanCommand>
     {

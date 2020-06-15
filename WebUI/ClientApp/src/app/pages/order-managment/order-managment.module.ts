@@ -6,6 +6,7 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
 import { AllOrdersComponent } from './all-orders/all-orders.component';
 import { RecentlyOrdersComponent } from './recently-orders/recently-orders.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 const routes: Routes = [
   { path: 'all', component: AllOrdersComponent },
@@ -19,7 +20,8 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     SharedModuleModule,
-    NgbModule
+    NgbModule,
+    InfiniteScrollModule
   ]
 })
 export class OrderManagmentModule { }

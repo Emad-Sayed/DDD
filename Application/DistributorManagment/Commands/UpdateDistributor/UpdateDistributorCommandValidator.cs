@@ -10,8 +10,7 @@ namespace Application.DistributorManagment.Commands.UpdateDistributor
         public UpdateDistributorCommandValidator()
         {
             RuleFor(x => x.Name).NotEmpty();
-            RuleFor(x => x.City).NotEmpty();
-            RuleFor(x => x.Region).NotEmpty();
+            RuleFor(x => x.Address).NotEmpty();
         }
     }
 }

@@ -6,8 +6,9 @@ export class Unit {
         public count?: number,
         public contentCount?: number,
         public price?: number,
+        public sellingPrice?: number,
         public weight?: number,
-        public isAvilable?: boolean,
+        public isAvailable?: boolean,
         public productId?: string,
     ) { }
 }

@@ -11,7 +11,7 @@ namespace Application.DistributorManagment.Commands.CreateDistributor
         {
             RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.City).NotEmpty();
-            RuleFor(x => x.Region).NotEmpty();
+            RuleFor(x => x.Area).NotEmpty();
         }
     }
 }

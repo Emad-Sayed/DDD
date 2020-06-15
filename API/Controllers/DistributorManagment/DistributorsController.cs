@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.DistributorManagment.Commands.CreateDistributor;
 using Application.DistributorManagment.Commands.CreateDistributorUser;
 using Application.DistributorManagment.Commands.DeleteDistributorUser;
+using Application.DistributorManagment.Commands.UpdateDistributor;
 using Application.DistributorManagment.Commands.UpdateDistributorUser;
 using Application.DistributorManagment.Queries.DistributorById;
 using Application.DistributorManagment.Queries.ListCities;
@@ -40,6 +41,15 @@ namespace API.Controllers.DistributorManagment
             var result = await Mediator.Send(command);
             return Ok(result);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody]UpdateDistributorCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+
 
         [HttpGet("Cities")]
         public async Task<IActionResult> GetAllCities([FromQuery]ListCitiesQuery query)

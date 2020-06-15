@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
 {
-    public class Region: EntityBase
+    public class Area: EntityBase
     {
         public string Name { get; private set; }
 

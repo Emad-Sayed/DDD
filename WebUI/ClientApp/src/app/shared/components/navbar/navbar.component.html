@@ -39,8 +39,11 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/customers" routerLinkActive="active">العملاء</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="isAdmin">
         <a class="nav-link" routerLink="/distributors" routerLinkActive="active">الموزعين</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="logout()">تسجيل الخروج</a>
       </li>
     </ul>
   </div>

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.ShoppingVanBoundedContext.ShoppingVanAggregate.Commands.RemoveItemFromVan
+namespace Application.ShoppingVan.Commands.RemoveItemFromVan
 {
     public class RemoveItemFromVanCommand : IRequest<int>
     {

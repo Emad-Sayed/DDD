@@ -29,7 +29,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.AddUnit
         public float Weight { get; set; }
 
         // Is this unit enabled and can be used
-        public bool IsAvilable { get; set; }
+        public bool IsAvailable { get; set; }
 
         public string ProductId { get; set; }
 
@@ -49,7 +49,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.AddUnit
                 var productFromRepo = await _productRepository.FindByIdAsync(request.ProductId);
 
                 // add unit to product
-                productFromRepo.AddUnitToProduct(request.Name, request.Count, request.ContentCount, request.Price, request.SellingPrice, request.Weight, request.IsAvilable);
+                productFromRepo.AddUnitToProduct(request.Name, request.Count, request.ContentCount, request.Price, request.SellingPrice, request.Weight, request.IsAvailable);
 
                 // update product with the new unit created
                 _productRepository.Update(productFromRepo);

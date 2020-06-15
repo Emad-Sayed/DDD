@@ -5,8 +5,9 @@ export class Distributor {
     public constructor(
         public id?: string,
         public name?: string,
-        public address?: Address,
         public distributorUsers?: DistributorUser[],
-
+        // public address: Address = new Address('', ''),
+        public area?: string,
+        public city?: string
     ) { }
 }

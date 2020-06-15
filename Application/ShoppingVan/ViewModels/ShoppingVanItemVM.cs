@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.ShoppingVanBoundedContext.ShoppingVanAggregate.ViewModels
+namespace Application.ShoppingVan.ViewModels
 {
     public class ShoppingVanItemVM
     {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.ShoppingVanBoundedContext.ShoppingVanAggregate.Commands.AddItemToVan
+namespace Application.ShoppingVan.Commands.AddItemToVan
 {
     public class AddItemToVanCommandValidator : AbstractValidator<AddItemToVanCommand>
     {

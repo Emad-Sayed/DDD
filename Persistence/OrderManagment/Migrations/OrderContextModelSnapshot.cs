@@ -55,6 +55,9 @@ namespace Persistence.OrderManagment.Migrations
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
+                    b.Property<float>("TotalPrice")
+                        .HasColumnType("real");
+
                     b.HasKey("Id");
 
                     b.ToTable("Orders");

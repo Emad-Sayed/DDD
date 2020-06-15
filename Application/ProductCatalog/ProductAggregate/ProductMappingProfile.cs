@@ -17,7 +17,7 @@ namespace Application.ProductCatalog.ProductAggregate
                 .ReverseMap();
 
             CreateMap<Unit, AlgoliaUnitVM>()
-                .ForMember(pro => pro.Unit, op => op.MapFrom(y => y.Name))
+                .ForMember(pro => pro.ConsumerPrice, op => op.MapFrom(y => y.SellingPrice))
                 .ReverseMap();
 
             CreateMap<Product, ProductVM>().ReverseMap();

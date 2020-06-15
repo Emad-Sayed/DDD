@@ -19,6 +19,31 @@ namespace Persistence.DistributorManagment.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Area", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CityId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CityId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDateUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId1");
+
+                    b.ToTable("Areas");
+                });
+
             modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.City", b =>
                 {
                     b.Property<Guid>("Id")
@@ -84,29 +109,11 @@ namespace Persistence.DistributorManagment.Migrations
                     b.ToTable("DistributorUser");
                 });
 
-            modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Region", b =>
+            modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Area", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CityId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CityId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDateUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId1");
-
-                    b.ToTable("Regions");
+                    b.HasOne("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.City", "City")
+                        .WithMany("Areas")
+                        .HasForeignKey("CityId1");
                 });
 
             modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Distributor", b =>
@@ -116,10 +123,10 @@ namespace Persistence.DistributorManagment.Migrations
                             b1.Property<Guid>("DistributorId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("City")
+                            b1.Property<string>("Area")
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("Region")
+                            b1.Property<string>("City")
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("DistributorId");
@@ -136,13 +143,6 @@ namespace Persistence.DistributorManagment.Migrations
                     b.HasOne("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Distributor", "Distributor")
                         .WithMany("DistributorUsers")
                         .HasForeignKey("DistributorId1");
-                });
-
-            modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Region", b =>
-                {
-                    b.HasOne("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.City", "City")
-                        .WithMany("Regions")
-                        .HasForeignKey("CityId1");
                 });
 #pragma warning restore 612, 618
         }

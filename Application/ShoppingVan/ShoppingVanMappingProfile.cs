@@ -1,10 +1,10 @@
-﻿using Application.ShoppingVanBoundedContext.ShoppingVanAggregate.ViewModels;
+﻿using Application.ShoppingVan.ViewModels;
 using Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.ShoppingVanBoundedContext.ShoppingVanAggregate
+namespace Application.ShoppingVan
 {
     public class ShoppingVanMappingProfile : AutoMapper.Profile
     {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { CoreService } from 'src/app/shared/services/core.service';
 
 @Component({
   selector: 'app-complete-registration',
@@ -10,11 +11,18 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 export class CompleteRegistrationComponent implements OnInit {
 
   isEmailConfirmed = false;
+  userEmail = '';
+  passwordVM: any = {};
 
-  constructor(private activatedRoute: ActivatedRoute, private authService: AuthService) { }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private core: CoreService,
+    private authService: AuthService) { }
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(res => {
+      this.userEmail = res.email;
       this.checkMailConfirmtion(res.email, res.token);
     });
   }
@@ -22,6 +30,13 @@ export class CompleteRegistrationComponent implements OnInit {
   checkMailConfirmtion(email: string, token: string): void {
     this.authService.confirmEmail(email, token).subscribe(res => {
       this.isEmailConfirmed = res.confirmEmail;
+    })
+  }
+
+  resetPassword(): void {
+    this.authService.resetPassword(this.userEmail, this.passwordVM.password).subscribe(res => {
+      this.core.showSuccessOperation()
+      this.router.navigate(['/login']);
     })
   }
 

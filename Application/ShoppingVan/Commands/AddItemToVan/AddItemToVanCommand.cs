@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.ShoppingVanBoundedContext.ShoppingVanAggregate.Commands.AddItemToVan
+namespace Application.ShoppingVan.Commands.AddItemToVan
 {
     public class AddItemToVanCommand : IRequest<int>
     {

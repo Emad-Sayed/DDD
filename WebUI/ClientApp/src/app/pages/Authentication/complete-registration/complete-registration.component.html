@@ -2,15 +2,19 @@
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <!-- Start form -->
-            <form>
+            <form #passwordForm>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                    <input type="password" class="form-control" required [(ngModel)]="passwordVM.password"
+                        name="password" id="password" placeholder="Password">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Confirm Password</label>
-                    <input type="password" class="form-control" name="confirm" id="confirm" placeholder="Confirm">
+                    <input type="password" class="form-control" required [(ngModel)]="passwordVM.confirmPassword"
+                        name="confirmPassword" id="confirmPassword" placeholder="Confirm Password">
                 </div>
+
+                <button type="submit" class="btn btn-success" (click)="resetPassword()">Reset Password</button>
             </form>
             <!-- End form -->
         </div>

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
-using Application.ShoppingVanBoundedContext.ShoppingVanAggregate.Commands.AddItemToVan;
-using Application.ShoppingVanBoundedContext.ShoppingVanAggregate.Commands.RemoveItemFromVan;
-using Application.ShoppingVanBoundedContext.ShoppingVanAggregate.Queries.CurrentCustomerVan;
+using Application.ShoppingVan.Commands.AddItemToVan;
+using Application.ShoppingVan.Commands.RemoveItemFromVan;
+using Application.ShoppingVan.Queries.CurrentCustomerVan;
+using Application.ShoppingVan.Queries.CurrentVanPricenfo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +16,7 @@ namespace API.Controllers.ShoppingVan
 {
     [Authorize]
     [EnableCors("AllowOrigin")]
-    [Route("api/" + nameof(Contexts.ShoppingVan) + "/[controller]")]
+    [Route("api/[controller]")]
     public class ShoppingVanController : BaseController
     {
         private readonly ICurrentUserService _currentUserService;
@@ -23,8 +24,16 @@ namespace API.Controllers.ShoppingVan
         {
             _currentUserService = currentUserService;
         }
+
         [HttpGet]
         public async Task<IActionResult> Get(CurrentCustomerVanQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("CheckOut")]
+        public async Task<IActionResult> CheckOut(CurrentVanPriceInfoQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);

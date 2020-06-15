@@ -39,7 +39,7 @@
         <div class="row mt-2 for-sale">
           <div class="col">
             <label class="checkbox checkbox-primary pr-0">
-              <input type="checkbox" />
+              <input type="checkbox" name="availableToSell" [(ngModel)]="product.availableToSell" />
               <span>قابل للبيع</span>
               <span class="checkmark"></span>
             </label>
@@ -107,11 +107,11 @@
             <input type="text" name="price" [(ngModel)]="unit.price" class="form-control" />
           </div>
           <div class="_sale-price w-10">
-            <input type="text" name="price" [(ngModel)]="unit.price" class="form-control" />
+            <input type="text" name="sellingPrice" [(ngModel)]="unit.sellingPrice" class="form-control" />
           </div>
           <div class="_sale w-10 d-flex justify-content-center">
             <label class="checkbox checkbox-primary">
-              <input type="checkbox" name="isAvilable" [(ngModel)]="unit.isAvilable" />
+              <input type="checkbox" name="isAvailable" [(ngModel)]="unit.isAvailable" />
               <span class="checkmark mt-2"></span>
             </label>
           </div>

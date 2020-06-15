@@ -12,7 +12,7 @@ namespace Application.DistributorManagment.Commands.CreateDistributor
     {
         public string Name { get; set; }
         public string City { get; set; }
-        public string Region { get; set; }
+        public string Area { get; set; }
 
         public class Handler : IRequestHandler<CreateDistributorCommand, string>
         {
@@ -26,7 +26,7 @@ namespace Application.DistributorManagment.Commands.CreateDistributor
 
             public async Task<string> Handle(CreateDistributorCommand request, CancellationToken cancellationToken)
             {
-                var entity = new Distributor(request.Name, request.City, request.Region);
+                var entity = new Distributor(request.Name, request.City, request.Area);
 
                 _distributorRepository.Add(entity);
 

@@ -1,5 +1,6 @@
 ﻿using Application.Common.Exceptions;
 using Domain.DistributorManagment.AggregatesModel.DistributorAggregate;
+using Domain.SharedKernel.ValueObjects;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,7 @@ namespace Application.DistributorManagment.Commands.UpdateDistributor
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string City { get; set; }
-        public string Region { get; set; }
+        public Address Address { get; set; }
 
         public class Handler : IRequestHandler<UpdateDistributorCommand>
         {
@@ -30,7 +30,7 @@ namespace Application.DistributorManagment.Commands.UpdateDistributor
                 var distributorFromRepo = await _distributorRepository.FindByIdAsync(request.Id);
                 if (distributorFromRepo == null) throw new NotFoundException(nameof(distributorFromRepo));
 
-                distributorFromRepo.UpdateDistributor(request.Name, request.City, request.Region);
+                distributorFromRepo.UpdateDistributor(request.Name, request.Address.City, request.Address.Area);
 
                 _distributorRepository.Update(distributorFromRepo);
 

@@ -41,6 +41,18 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             UnitName = unitName;
         }
 
+        public void Update(string unitId, string unitName, int unitCount = 1)
+        {
+            if (unitCount <= 0)
+            {
+                throw new OrderingDomainException("Invalid number of units");
+            }
+
+            UnitCount = unitCount;
+            UnitId = unitId;
+            UnitName = unitName;
+        }
+
         public void AddUnits(int units)
         {
             if (units < 0)

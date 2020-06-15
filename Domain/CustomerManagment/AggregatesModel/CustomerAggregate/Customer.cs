@@ -18,13 +18,13 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
         private Customer()
         {
         }
-        public Customer(string accountId, string city, string region, string shopName, string shopAddress, string locationOnMap, Guid id = default)
+        public Customer(string accountId, string city, string area, string shopName, string shopAddress, string locationOnMap, Guid id = default)
         {
             AccountId = accountId;
             ShopName = shopName;
             ShopAddress = shopAddress;
             LocationOnMap = locationOnMap;
-            Address = new Address(region, city);
+            Address = new Address(area, city);
 
             Id = id == default ? Guid.NewGuid() : id;
         }

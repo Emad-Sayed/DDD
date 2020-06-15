@@ -6,9 +6,10 @@ namespace Application.OrderManagment.ViewModels
 {
     public class VanVM
     {
-        public ICollection<VanItemVM> ShoppingVanItems { get; private set; }
-        public string CustomerId { get; private set; }
-        public int TotalItemsCount { get; private set; }
+        public ICollection<VanItemVM> ShoppingVanItems { get;  set; }
+        public string CustomerId { get;  set; }
+        public int TotalItemsCount { get;  set; }
+        public float TotalPrice { get; set; }
     }
 
 }

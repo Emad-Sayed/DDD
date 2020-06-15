@@ -31,7 +31,7 @@ namespace Persistence.DistributorManagment
 
         public DbSet<Distributor> Distributors { get; set; }
         public DbSet<City> Cities { get; set; }
-        public DbSet<Region> Regions { get; set; }
+        public DbSet<Area> Areas { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

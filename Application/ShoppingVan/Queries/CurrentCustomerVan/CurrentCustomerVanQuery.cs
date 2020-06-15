@@ -1,5 +1,5 @@
 ﻿using Application.Common.Interfaces;
-using Application.ShoppingVanBoundedContext.ShoppingVanAggregate.ViewModels;
+using Application.ShoppingVan.ViewModels;
 using AutoMapper;
 using Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate;
 using MediatR;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.ShoppingVanBoundedContext.ShoppingVanAggregate.Queries.CurrentCustomerVan
+namespace Application.ShoppingVan.Queries.CurrentCustomerVan
 {
     public class CurrentCustomerVanQuery : IRequest<ShoppingVanVM>
     {

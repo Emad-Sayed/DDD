@@ -177,6 +177,22 @@ namespace Brimo.IDP.STS.Identity.Controllers
             return Ok(new { EmailConfirmed = user.EmailConfirmed });
         }
 
+
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordVM model)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
+            if (user == null) return BadRequest("user_with_this_email_notfound");
+
+            if (!user.EmailConfirmed) throw new Exception("Please confirm your mail first");
+
+            var result = await _userManager.AddPasswordAsync(user, model.Password);
+
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            return Ok();
+        }
+
         private async Task<string> CreateCustomer(RegisterVM model, UserIdentity user)
         {
             // TODO Get Access token from identity server

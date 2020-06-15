@@ -1,4 +1,7 @@
-﻿using Domain.OrderManagment.Events;
+﻿using Application.ShoppingVan.Commands.DeleteCurrentCustomerVan;
+using Application.ShoppingVan.Queries.CurrentCustomerVan;
+using Domain.OrderManagment.Events;
+using Domain.OrderManagment.Exceptions;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,14 +14,18 @@ namespace Application.OrderManagment.DomainEventHandlers.OrderPlacedDomainEventH
     public class OrderPlacedDomainEventHandler : INotificationHandler<OrderPlaced>
     {
 
-        public OrderPlacedDomainEventHandler()
+        private readonly IMediator _mediator;
+
+        public OrderPlacedDomainEventHandler(
+            IMediator mediator)
         {
+            _mediator = mediator;
         }
 
-        public Task Handle(OrderPlaced notification, CancellationToken cancellationToken)
+        public async Task Handle(OrderPlaced notification, CancellationToken cancellationToken)
         {
-
-            return Task.CompletedTask;
+            var customerVanFromQuery = await _mediator.Send(new CurrentCustomerVanQuery { }, cancellationToken);
+            if (customerVanFromQuery != null) await _mediator.Send(new DeleteCurrentCustomerVanCommand { }, cancellationToken);
         }
     }
 }

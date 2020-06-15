@@ -6,21 +6,21 @@ namespace Domain.SharedKernel.ValueObjects
 {
     public class Address : ValueObject
     {
-        public string Region { get; private set; }
+        public string Area { get; private set; }
         public string City { get; private set; }
 
         private Address() { }
 
-        public Address(string region, string city)
+        public Address(string area, string city)
         {
-            Region = region;
+            Area = area;
             City = city;
         }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
             // Using a yield return statement to return each element one at a time
-            yield return Region;
+            yield return Area;
             yield return City;
         }
     }

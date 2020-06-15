@@ -3,6 +3,8 @@ import { DistributorUser } from 'src/app/shared/models/distributor-managment/dis
 import { Distributor } from 'src/app/shared/models/distributor-managment/distributor.model';
 import { DistributorsManagmentService } from '../../distributors-managment.service';
 import { CoreService } from 'src/app/shared/services/core.service';
+import { City } from 'src/app/shared/models/distributor-managment/city.model';
+import { Area } from 'src/app/shared/models/distributor-managment/area.model';
 
 @Component({
   selector: 'app-distributor-editor',
@@ -15,13 +17,15 @@ export class DistributorEditorComponent implements OnInit {
 
   isEditing = false;
   distributor: Distributor = new Distributor();
-
+  cities: City[] = [];
+  areaToDisplay: Area[] = [];
   constructor(
-    private distributorCatalogService: DistributorsManagmentService,
+    private distributorManagmentService: DistributorsManagmentService,
     private core: CoreService) { }
 
   ngOnInit() {
-    this.distributorCatalogService.distributorEditor.subscribe(res => {
+    this.getCities();
+    this.distributorManagmentService.distributorEditor.subscribe(res => {
       if (res.distributor) {
         this.isEditing = true;
         this.getDistributorById(res.distributor.id);
@@ -32,19 +36,30 @@ export class DistributorEditorComponent implements OnInit {
   }
 
   getDistributorById(distributorId: string) {
-    this.distributorCatalogService.getDistributorById(distributorId).subscribe(res => {
+    this.distributorManagmentService.getDistributorById(distributorId).subscribe(res => {
       this.distributor = res;
       this.distributor.id = distributorId;
     });
   }
 
+  changeCurrentDisCity(cityName: string) {
+    console.log(cityName)
+    this.areaToDisplay = this.cities.find(x => x.name == cityName).areas;
+  }
+
+  getCities() {
+    this.distributorManagmentService.getCities().subscribe(res => {
+      this.cities = res.data;
+    })
+  }
+
   openEditor() {
     this.distributor = new Distributor();
-    this.distributorCatalogService.distributorEditor.next({ openEditor: true });
+    this.distributorManagmentService.distributorEditor.next({ openEditor: true });
   }
 
   openClose() {
-    this.distributorCatalogService.distributorEditor.next({ openEditor: false });
+    this.distributorManagmentService.distributorEditor.next({ openEditor: false });
   }
 
   //#region DistributorUsers
@@ -68,20 +83,20 @@ export class DistributorEditorComponent implements OnInit {
   }
 
   deleteDistributorUser(distributorUser: DistributorUser) {
-    this.distributorCatalogService.deleteDistributorUser(distributorUser, this.distributor.id).subscribe(res => {
+    this.distributorManagmentService.deleteDistributorUser(distributorUser, this.distributor.id).subscribe(res => {
       this.distributor.distributorUsers.splice(this.distributor.distributorUsers.indexOf(distributorUser), 1);
     });
   }
 
   createDistributorUser(distributorUser: DistributorUser) {
     distributorUser.distributorId = this.distributor.id;
-    this.distributorCatalogService.createDistributorUser(distributorUser, this.distributor.id).subscribe(res => {
+    this.distributorManagmentService.createDistributorUser(distributorUser, this.distributor.id).subscribe(res => {
       this.core.showSuccessOperation();
     });
   }
 
   updateDistributorUser(distributorUser: DistributorUser) {
-    this.distributorCatalogService.updateDistributorUser(distributorUser, this.distributor.id).subscribe(res => {
+    this.distributorManagmentService.updateDistributorUser(distributorUser, this.distributor.id).subscribe(res => {
       this.core.showSuccessOperation();
     });
   }
@@ -90,15 +105,15 @@ export class DistributorEditorComponent implements OnInit {
 
   //#region Distributor
   createDistributor() {
-    this.distributorCatalogService.createDistributor(this.distributor).subscribe(res => {
-      this.distributorCatalogService.distributorEditor.next({ distributorRequestSuccess: true });
+    this.distributorManagmentService.createDistributor(this.distributor).subscribe(res => {
+      this.distributorManagmentService.distributorEditor.next({ distributorRequestSuccess: true });
       this.core.showSuccessOperation();
     });
   }
 
   updateDistributor() {
-    this.distributorCatalogService.updateDistributor(this.distributor).subscribe(res => {
-      this.distributorCatalogService.distributorEditor.next({ distributorRequestSuccess: true });
+    this.distributorManagmentService.updateDistributor(this.distributor).subscribe(res => {
+      this.distributorManagmentService.distributorEditor.next({ distributorRequestSuccess: true });
       this.core.showSuccessOperation();
     });
   }

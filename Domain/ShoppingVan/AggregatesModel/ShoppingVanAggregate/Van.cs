@@ -13,6 +13,7 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
         public ICollection<VanItem> ShoppingVanItems { get; private set; }
         public string CustomerId { get; private set; }
         public int TotalItemsCount { get; private set; }
+        public float TotalPrice { get; private set; }
 
         private Van()
         {
@@ -35,7 +36,8 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
             var vanItem = ShoppingVanItems.FirstOrDefault(x => x.ProductId == productId);
             if (vanItem == null)
             {
-                ShoppingVanItems.Add(new VanItem(Id.ToString(), productId, productName, unitId, unitName, unitPrice, photoUrl, sellingPrice));
+                vanItem = new VanItem(Id.ToString(), productId, productName, unitId, unitName, unitPrice, photoUrl, sellingPrice);
+                ShoppingVanItems.Add(vanItem);
             }
             else
             {
@@ -43,6 +45,7 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
             }
 
             TotalItemsCount += 1;
+            TotalPrice += vanItem.UnitPrice;
 
             AddDomainEvent(new ShoppingVanUpdated(this));
         }
@@ -54,6 +57,7 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
             {
                 TotalItemsCount -= 1;
                 vanItem.ChangeAmount(vanItem.Amount - 1);
+                TotalPrice -= vanItem.UnitPrice;
 
                 // Check if the van item amount is less than or = to 0 then will remove this item from van
                 if (vanItem.Amount <= 0) ShoppingVanItems.Remove(vanItem);

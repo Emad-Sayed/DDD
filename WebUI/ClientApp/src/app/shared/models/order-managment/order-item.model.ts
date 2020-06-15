@@ -1,5 +1,6 @@
 export class OrderItem {
     public constructor(
+        public id?: string,
         public orderId?: string,
         public photoUrl?: string,
         public productId?: string,

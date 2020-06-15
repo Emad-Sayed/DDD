@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Application.DistributorManagment.ViewModels
 {
-    public class RegionVM
+    public class AreaVM
     {
         public string Id { get; set; }
         public string Name { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Domain.Base.Entity;
+using Domain.Common.Exceptions;
 using Domain.Common.Interfaces;
 using Domain.OrderManagment.Events;
 using System;
@@ -14,13 +15,13 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
         public string CustomerName { get; private set; }
         public string Address { get; private set; }
         public OrderStatus OrderStatus { get; private set; }
-        public DateTime OrderPlacedDate { get; set; }
-        public DateTime OrderConfirmedDate { get; set; }
-        public DateTime OrderShippedDate { get; set; }
-        public DateTime OrderDeliveredDate { get; set; }
-        public DateTime OrderCanceledDate { get; set; }
-
-        public ICollection<OrderItem> OrderItems { get; set; }
+        public DateTime OrderPlacedDate { get; private set; }
+        public DateTime OrderConfirmedDate { get; private set; }
+        public DateTime OrderShippedDate { get; private set; }
+        public DateTime OrderDeliveredDate { get; private set; }
+        public DateTime OrderCanceledDate { get; private set; }
+        public float TotalPrice { get; private set; }
+        public ICollection<OrderItem> OrderItems { get; private set; }
 
 
 
@@ -29,13 +30,14 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             OrderItems = new List<OrderItem>();
         }
 
-        public Order(string customerId, string customerName, string address)
+        public Order(string customerId, string customerName, string address,float totalPrice)
         {
             CustomerId = customerId;
             CustomerName = customerName;
             Address = address;
             OrderStatus = OrderStatus.Placed;
             OrderPlacedDate = DateTime.UtcNow;
+            TotalPrice = totalPrice;
 
             OrderItems = new List<OrderItem>();
 
@@ -67,6 +69,16 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
                 var orderItem = new OrderItem(Id.ToString(), productId, productName, unitPrice, photoUrl, unitId, unitName, unitCount);
                 OrderItems.Add(orderItem);
             }
+        }
+
+        public void UpdateOrderItem(string orderItemId, string unitId, string unitName, int unitCount)
+        {
+            var orderItemToUpdate = OrderItems.FirstOrDefault(x => x.Id == new Guid(orderItemId));
+            if (orderItemToUpdate == null) new NotFoundException("cannot_found_order_item");
+
+            orderItemToUpdate.Update(unitId, unitName, unitCount);
+
+            AddDomainEvent(new OrderUpdated(this));
         }
 
         public void ConfirmOrder()

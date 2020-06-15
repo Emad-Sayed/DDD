@@ -8,6 +8,7 @@ export class Order {
         public customerId?: string,
         public customerName?: string,
         public address?: string,
+        public totalPrice?: number,
         public orderStatus?: OrderStatus,
         public orderPlacedDate?: Date,
         public orderConfirmedDate?: Date,

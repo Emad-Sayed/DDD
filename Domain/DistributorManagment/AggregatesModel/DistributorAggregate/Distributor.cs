@@ -22,10 +22,10 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
         {
         }
 
-        public Distributor(string name, string city, string region)
+        public Distributor(string name, string city, string area)
         {
             Name = name;
-            Address = new Address(region, city);
+            Address = new Address(area, city);
             DistributorUsers = new List<DistributorUser>();
 
             // Add the DistributorCreated to the domain events collection 
@@ -41,10 +41,10 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
         }
 
         // update distributor
-        public void UpdateDistributor(string name, string city, string region)
+        public void UpdateDistributor(string name, string city, string area)
         {
             Name = name;
-            Address = new Address(region, city);
+            Address = new Address(area, city);
 
             // rais distributor updated event
             AddDomainEvent(new DistributorUpdated(this));

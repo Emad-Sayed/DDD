@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Order } from 'src/app/shared/models/order-managment/order/order.model';
+import { Order } from 'src/app/shared/models/order-managment/order.model';
 import { OrderManagmentService } from '../order-managment.service';
 import { CoreService } from 'src/app/shared/services/core.service';
-import { OrderItem } from 'src/app/shared/models/order-managment/order/order-item.model';
+import { OrderItem } from 'src/app/shared/models/order-managment/order-item.model';
+import { ProductCatalogService } from '../../product-catalog/product-catalog.service';
+import { Product } from 'src/app/shared/models/product-catalog/product/product.model';
 
 @Component({
   selector: 'app-order-details',
@@ -15,9 +17,11 @@ export class OrderDetailsComponent implements OnInit {
   editingOrder = false;
   isEditing = false;
   order: Order = new Order();
+  product: Product = new Product();
 
   constructor(
     private orderManagmentService: OrderManagmentService,
+    private productCatalogService: ProductCatalogService,
     private core: CoreService) { }
 
   ngOnInit() {
@@ -29,9 +33,19 @@ export class OrderDetailsComponent implements OnInit {
     })
   }
 
+  getProductById(productId: string) {
+    console.log('get product by id');
+    this.productCatalogService.getProductById(productId).subscribe(res => {
+      this.product = res;
+    });
+  }
+
   getOrderById(orderId: string) {
+    console.log('get order by id');
+    if (orderId == this.order.id) return;
     this.orderManagmentService.getOrderById(orderId).subscribe(res => {
       this.order = res;
+      // this.getProductById(this.order.orderItems[0].productId);
     });
   }
 
@@ -47,34 +61,48 @@ export class OrderDetailsComponent implements OnInit {
     orderItem.isEditing = true;
   }
 
-  saveOrderItem(orderItem: OrderItem) {
-    orderItem.isEditing = false;
+  updateOrderItem(orderItem: OrderItem) {
+    const body = {
+      orderId: this.order.id,
+      orderItemId: orderItem.id,
+      unitId: orderItem.unitId,
+      unitName: orderItem.unitName,
+      unitCount: +orderItem.unitCount
+    };
+    this.orderManagmentService.updateOrder(body).subscribe(x => {
+      this.core.showSuccessOperation();
+    });
   }
+
   //#endregion
 
   //#region Order States 
   confirmOrder() {
     this.orderManagmentService.confirmOrder(this.order.id).subscribe(res => {
-      this.orderManagmentService.orderDetails.next({ orderRequestSuccess: true, openDetails: true });
+      this.order.orderStatus = this.order.orderStatus + 1;
+      this.orderManagmentService.orderDetails.next({ openDetails: true, orderId: this.order.id, orderStatus: this.order.orderStatus });
       this.core.showSuccessOperation();
     }, err => this.core.showErrorOperation());
   }
   shippOrder() {
     this.orderManagmentService.shippOrder(this.order.id).subscribe(res => {
-      this.orderManagmentService.orderDetails.next({ orderRequestSuccess: true, openDetails: true });
+      this.order.orderStatus = this.order.orderStatus + 1;
+      this.orderManagmentService.orderDetails.next({ openDetails: true, orderId: this.order.id, orderStatus: this.order.orderStatus });
       this.core.showSuccessOperation();
     }, err => this.core.showErrorOperation());
   }
   orderDeliver() {
     this.orderManagmentService.deliverOrder(this.order.id).subscribe(res => {
-      this.orderManagmentService.orderDetails.next({ orderRequestSuccess: true, openDetails: true });
+      this.order.orderStatus = this.order.orderStatus + 1;
+      this.orderManagmentService.orderDetails.next({ openDetails: true, orderId: this.order.id, orderStatus: this.order.orderStatus });
       this.core.showSuccessOperation();
     }, err => this.core.showErrorOperation());
   }
 
   cancelOrder() {
     this.orderManagmentService.cancelOrder(this.order.id).subscribe(res => {
-      this.orderManagmentService.orderDetails.next({ orderRequestSuccess: true, openDetails: true });
+      this.order.orderStatus = this.order.orderStatus + 1;
+      this.orderManagmentService.orderDetails.next({ openDetails: true, orderId: this.order.id, orderStatus: this.order.orderStatus });
       this.core.showSuccessOperation();
     }, err => this.core.showErrorOperation());
   }

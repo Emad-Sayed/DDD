@@ -12,7 +12,7 @@ namespace Application.DistributorManagment
         {
             CreateMap<Distributor, DistributorVM>();
             CreateMap<City, CityVM>().ReverseMap();
-            CreateMap<Region, RegionVM>().ReverseMap();
+            CreateMap<Area, AreaVM>().ReverseMap();
             CreateMap<DistributorUser, DistributorUserVM>().ReverseMap();
         }
     }
