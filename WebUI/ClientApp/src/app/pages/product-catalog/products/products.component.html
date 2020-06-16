@@ -34,18 +34,17 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let product of products; let i = index" (click)="openEditorToUpdateProduct(product)"
-                rel="off-canvas" class="canvas-btn">
+              <tr *ngFor="let product of products; let i = index" rel="off-canvas" class="canvas-btn">
                 <th scope="row">{{ i + 1 }}</th>
-                <td>
+                <td (click)="openEditorToUpdateProduct(product)">
                   {{ product?.barcode }}
                 </td>
-                <td>
+                <td (click)="openEditorToUpdateProduct(product)">
                   {{ product?.name }}
                 </td>
-                <td>{{ product?.brand?.name }}</td>
+                <td (click)="openEditorToUpdateProduct(product)">{{ product?.brand?.name }}</td>
                 <td class="text-center">
-                  <button (click)="deleteProduct(product.id)" class="btn p-0">
+                  <button (click)="showDeleteProductPopup(product)" class="btn p-0">
                     <i class="fas fa-trash-alt text-danger"></i>
                   </button>
                 </td>

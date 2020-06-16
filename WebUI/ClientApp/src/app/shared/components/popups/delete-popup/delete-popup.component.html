@@ -1,1 +1,28 @@
-<p>delete-popup works!</p>
+<div class="add-popup">
+    <h6 class="title-popup text-primary">{{data.title}}</h6>
+    <p class="mt-2 mb-2 text-warning">{{ viewLoading ? 'جار الحذف ......' : data.description}}</p>
+    <div class="title-info" *ngIf="data.element">
+        <p>{{data.element.name}}</p>
+    </div>
+    <div class="buttons-popup mt-4">
+        <div class="row">
+            <div class="col-6">
+                <button [disabled]="viewLoading" id="deleteButton" class="btn btn-danger" (click)="onYesClick()">
+                    <span *ngIf="!viewLoading" class="text-white">
+                        <i class="fas fa-trash-alt text-white"></i>
+                        حذف
+                    </span>
+                    <i *ngIf="viewLoading" class="fas fa-spinner fa-pulse"></i>
+
+                </button>
+                <button class="btn btn-info close-popup ml-1" (click)="onNoClick()">
+                    <i class="fas fa-times-circle"></i>
+                    إلغاء
+                </button>
+            </div>
+            <div class="col">
+
+            </div>
+        </div>
+    </div>
+</div>

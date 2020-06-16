@@ -1,9 +1,11 @@
 ﻿using Application.Common.Interfaces;
+using Domain.Common.Exceptions;
 using Domain.OrderManagment.AggregatesModel.OrderAggregate;
 using Domain.OrderManagment.Exceptions;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +27,8 @@ namespace Application.OrderManagment.Commands.CancelOrder
             public async Task<Unit> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
             {
                 var orderToCancel = await _orderRepository.GetByIdAsync(request.OrderId);
-                if (orderToCancel == null) throw new OrderingDomainException("order_not_found");
+                if (orderToCancel == null) throw new RestException(HttpStatusCode.NotFound, new { Order = $"Order with id {request.OrderId} not found ", code = "order_notfound" });
+
 
                 orderToCancel.CancelOrder();
 

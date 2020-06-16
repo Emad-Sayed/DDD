@@ -121,14 +121,14 @@ export class ProductEditorComponent implements OnInit {
   //#region Product
   createProduct() {
     this.productCatalogService.createProduct(this.product).subscribe(res => {
-      // this.productCatalogService.productEditor.next({ productRequestSuccess: true });
+      this.productCatalogService.productEditor.next({ productRequestSuccess: true, openEditor: true });
       this.core.showSuccessOperation();
     });
   }
 
   updateProduct() {
     this.productCatalogService.updateProduct(this.product).subscribe(res => {
-      // this.productCatalogService.productEditor.next({ productRequestSuccess: true });
+      this.productCatalogService.productEditor.next({ productRequestSuccess: true, openEditor: true });
       this.core.showSuccessOperation();
     });
   }

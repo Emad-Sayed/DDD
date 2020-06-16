@@ -3,6 +3,8 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { LoginModel } from 'src/app/shared/models/login/login.model';
 import { Config } from 'src/app/shared/confing/config';
 import { Router } from '@angular/router';
+import { ErrorsKey } from 'src/app/shared/errors/errors.key';
+import { CoreService } from 'src/app/shared/services/core.service';
 
 @Component({
     selector: 'app-login',
@@ -13,7 +15,7 @@ export class LoginComponent implements OnInit {
 
     loginModel: LoginModel = new LoginModel
 
-    constructor(private oauthService: OAuthService, private router: Router) { }
+    constructor(private oauthService: OAuthService, private core: CoreService, private router: Router) { }
 
     ngOnInit() {
     }
@@ -50,6 +52,8 @@ export class LoginComponent implements OnInit {
                 this.router.navigate(['/products'])
                 // console.log('claims', claims);
                 // if (claims) console.debug('given_name', claims.given_name);
+            }).catch(error => {
+                this.core.showErrorOperation(ErrorsKey[error.error.error_description]);
             });
         });
 

@@ -5,6 +5,7 @@ import { Distributor } from 'src/app/shared/models/distributor-managment/distrib
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Page } from 'src/app/shared/models/shared/page.model';
+import { PopupServiceService } from 'src/app/shared/services/popup-service.service';
 
 @Component({
   selector: 'app-distributors',
@@ -25,7 +26,9 @@ export class DistributorsComponent implements OnInit, OnDestroy {
 
   constructor(
     private distributorManagmentService: DistributorsManagmentService,
-    private core: CoreService) {
+    private core: CoreService,
+    private popupService: PopupServiceService
+    ) {
   }
 
   ngOnDestroy(): void {
@@ -87,5 +90,16 @@ export class DistributorsComponent implements OnInit, OnDestroy {
     this.page.pageNumber++;
     if ((this.page.pageNumber * this.page.pageSize) >= this.distributorsTotalCount) return;
     this.getDistributors();
+  }
+
+  showDeleteDistributorPopup(distributor: Distributor): void {
+    const dialogRef = this.popupService.deleteElement('حذف الموزع', ' هل انت متاكد؟ سيتم حذف الموزع', {
+      category: '',
+      name: distributor.name
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) return;
+      this.deleteDistributor(distributor.id);
+    });
   }
 }

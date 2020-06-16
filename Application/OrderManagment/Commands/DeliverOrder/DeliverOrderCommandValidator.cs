@@ -9,6 +9,7 @@ namespace Application.OrderManagment.Commands.DeliverOrder
     {
         public DeliverOrderCommandValidator()
         {
+            RuleFor(x => x.OrderId).NotEmpty();
         }
     }
 }

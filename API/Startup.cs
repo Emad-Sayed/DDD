@@ -7,6 +7,7 @@ using API.Controllers;
 using API.Helpers;
 using API.Services;
 using Application.Common.Interfaces;
+using Application.Common.Middlewares;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -88,11 +89,7 @@ namespace API
 
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
-            //if (env.IsDevelopment())
-            //{
-            //}
-            // TODO Add Developer Exception Page in Development enviroment only
-            app.UseDeveloperExceptionPage();
+            app.UseMiddleware<ErrorHandlingMiddleware>();
             _assembliesStartup.ForEach(x => x.Configure(app.ApplicationServices));
             app.UseSwagger();
             app.UseSwaggerUI(c =>

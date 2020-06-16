@@ -5,6 +5,7 @@ import { CoreService } from 'src/app/shared/services/core.service';
 import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { Page } from 'src/app/shared/models/shared/page.model';
+import { PopupServiceService } from 'src/app/shared/services/popup-service.service';
 
 @Component({
   selector: 'app-customers',
@@ -25,7 +26,9 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
   constructor(
     private customerManagmentService: CustomersManagmentService,
-    private core: CoreService) {
+    private core: CoreService,
+    private popupService: PopupServiceService
+    ) {
   }
 
   ngOnDestroy(): void {
@@ -86,6 +89,17 @@ export class CustomersComponent implements OnInit, OnDestroy {
     this.page.pageNumber++;
     if ((this.page.pageNumber * this.page.pageSize) >= this.customersTotalCount) return;
     this.getCustomers();
+  }
+
+  showDeleteCustomerPopup(customer: Customer): void {
+    const dialogRef = this.popupService.deleteElement('حذف العميل', 'هل انت متاكد؟ سيتم حذف العميل', {
+      category: '',
+      name: customer.shopName
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) return;
+      this.deleteCustomer(customer.id);
+    });
   }
 
 }

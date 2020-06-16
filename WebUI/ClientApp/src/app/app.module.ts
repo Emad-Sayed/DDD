@@ -17,6 +17,7 @@ import { DeletePopupComponent } from './shared/components/popups/delete-popup/de
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { JwtModule } from '@auth0/angular-jwt';
 import { AuthInterceptor } from './shared/services/auth-interceptor.service';
+import { MatDialogModule } from '@angular/material/dialog';
 
 // import { ConfigurationService } from './shared/services/app.configuration.service';
 
@@ -41,6 +42,7 @@ export function tokenGetter() {
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    MatDialogModule,
     FormsModule,
     BrowserAnimationsModule,
     NgxUiLoaderModule,
@@ -62,6 +64,9 @@ export function tokenGetter() {
       multi: true,
       deps: [Router]
    },
+  ],
+  entryComponents: [
+    DeletePopupComponent
   ],
   bootstrap: [AppComponent]
 })

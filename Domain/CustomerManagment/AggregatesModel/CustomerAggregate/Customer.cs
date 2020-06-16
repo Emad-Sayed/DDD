@@ -1,5 +1,6 @@
 ﻿using Domain.Base.Entity;
 using Domain.Common.Interfaces;
+using Domain.CustomerManagment.Events;
 using Domain.SharedKernel.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,13 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
             Address = new Address(area, city);
 
             Id = id == default ? Guid.NewGuid() : id;
+        }
+
+        // delete customer
+        public void Delete()
+        {
+            // rais product deleted event
+            AddDomainEvent(new CustomerDeleted(this));
         }
     }
 }

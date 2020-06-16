@@ -1,9 +1,11 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Domain.Common.Exceptions;
 using Domain.OrderManagment.AggregatesModel.OrderAggregate;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,8 +32,8 @@ namespace Application.OrderManagment.Commands.UpdateOrder
             public async Task<Unit> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
             {
                 var orderFromRepo = await _orderRepository.GetByIdAsync(request.OrderId);
-                if (orderFromRepo == null) throw new NotFoundException(nameof(orderFromRepo));
-
+                if (orderFromRepo == null) throw new RestException(HttpStatusCode.NotFound, new { Order = $"Order with id {request.OrderId} not found ", code = "order_notfound" });
+                
                 orderFromRepo.UpdateOrderItem(request.OrderItemId, request.UnitId, request.UnitName, request.UnitCount);
 
                 _orderRepository.Update(orderFromRepo);

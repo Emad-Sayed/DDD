@@ -5,6 +5,7 @@ import { CoreService } from 'src/app/shared/services/core.service';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Page } from 'src/app/shared/models/shared/page.model';
+import { PopupServiceService } from 'src/app/shared/services/popup-service.service';
 
 
 @Component({
@@ -23,8 +24,11 @@ export class ProductsComponent implements OnInit, OnDestroy {
   openEditor = true;
   query: any = {};
 
-  constructor(private productCatalogService: ProductCatalogService, private core: CoreService) {
-  }
+  constructor(
+    private productCatalogService: ProductCatalogService,
+    private core: CoreService,
+    private popupService: PopupServiceService
+  ) { }
 
   ngOnDestroy(): void {
     this.productCatalogService.productEditor.next({ openEditor: false });
@@ -86,5 +90,17 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.page.pageNumber++;
     if ((this.page.pageNumber * this.page.pageSize) >= this.productsTotalCount) return;
     this.getProducts();
+  }
+
+
+  showDeleteProductPopup(product: Product): void {
+    const dialogRef = this.popupService.deleteElement('حذف المنتج', 'هل انت متاكد؟ سيتم حذف المنتج', {
+      category: '',
+      name: product.name
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) return;
+      this.deleteProduct(product.id);
+    });
   }
 }

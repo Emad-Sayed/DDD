@@ -38,7 +38,6 @@ namespace Application
 
         public void Configure(IServiceProvider provider)
         {
-
         }
     }
 }

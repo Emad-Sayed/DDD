@@ -1,4 +1,5 @@
-﻿using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
+﻿using Domain.Common.Exceptions;
+using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.UpdateUnit
             {
                 // get product by id
                 var productFromRepo = await _productRepository.FindByIdAsync(request.ProductId);
+                if (productFromRepo == null) throw new RestException(System.Net.HttpStatusCode.BadRequest, new { Product = $"Product with id {request.Id} not found ", code = "product_notfound" });
 
                 // update unit to product
                 productFromRepo.UpdateProductUnit(request.Id, request.Name, request.Count, request.ContentCount, request.Price, request.SellingPrice, request.Weight, request.IsAvailable);

@@ -9,6 +9,7 @@ namespace Application.OrderManagment.Commands.ShippOrder
     {
         public ShippOrderCommandValidator()
         {
+            RuleFor(x => x.OrderId).NotEmpty();
         }
     }
 }

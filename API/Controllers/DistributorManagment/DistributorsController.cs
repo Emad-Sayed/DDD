@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Configuration;
 using Application.DistributorManagment.Commands.CreateDistributor;
 using Application.DistributorManagment.Commands.CreateDistributorUser;
+using Application.DistributorManagment.Commands.DeleteDistributor;
 using Application.DistributorManagment.Commands.DeleteDistributorUser;
 using Application.DistributorManagment.Commands.UpdateDistributor;
 using Application.DistributorManagment.Commands.UpdateDistributorUser;
 using Application.DistributorManagment.Queries.DistributorById;
 using Application.DistributorManagment.Queries.ListCities;
 using Application.DistributorManagment.Queries.ListDistributors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +52,13 @@ namespace API.Controllers.DistributorManagment
             return Ok(result);
         }
 
-
+        [HttpDelete]
+        [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
+        public async Task<IActionResult> Delete([FromQuery]DeleteDistributorCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
 
         [HttpGet("Cities")]
         public async Task<IActionResult> GetAllCities([FromQuery]ListCitiesQuery query)

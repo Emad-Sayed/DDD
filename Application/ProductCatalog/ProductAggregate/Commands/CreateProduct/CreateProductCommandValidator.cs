@@ -11,7 +11,6 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.CreateProduct
         {
             RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.Barcode).NotEmpty();
-            RuleFor(x => x.PhotoUrl).NotEmpty();
             RuleFor(x => x.BrandId).NotEmpty();
             RuleFor(x => x.ProductCategoryId).NotEmpty();
         }

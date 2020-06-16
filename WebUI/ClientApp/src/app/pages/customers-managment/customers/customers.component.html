@@ -27,17 +27,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let customer of customers; let i = index"
-                                (click)="openEditorToUpdateCustomer(customer)" rel="off-canvas" class="canvas-btn">
-                                <th scope="row">{{ i + 1 }}</th>
-                                <td>
+                            <tr *ngFor="let customer of customers; let i = index" rel="off-canvas" class="canvas-btn">
+                                <th (click)="openEditorToUpdateCustomer(customer)" scope="row">{{ i + 1 }}</th>
+                                <td (click)="openEditorToUpdateCustomer(customer)">
                                     {{ customer?.id?.substr(0, 5) }}
                                 </td>
-                                <td>
+                                <td (click)="openEditorToUpdateCustomer(customer)">
                                     {{ customer?.shopName }}
                                 </td>
                                 <td class="text-center">
-                                    <button (click)="deleteCustomer(customer.id)" class="btn p-0">
+                                    <button (click)="showDeleteCustomerPopup(customer)" class="btn p-0">
                                         <i class="fas fa-trash-alt text-danger"></i>
                                     </button>
                                 </td>

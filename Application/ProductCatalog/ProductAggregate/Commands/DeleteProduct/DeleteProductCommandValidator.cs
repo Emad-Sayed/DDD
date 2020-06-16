@@ -9,7 +9,7 @@ namespace Application.ProductCatalog.Products.Commands.DeleteProduct
     {
         public DeleteProductCommandValidator()
         {
-
+            RuleFor(x => x.ProductId).NotEmpty();
         }
     }
 }

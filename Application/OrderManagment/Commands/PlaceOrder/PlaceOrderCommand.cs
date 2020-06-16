@@ -3,11 +3,13 @@ using Application.CustomerManagment.Queries.CustomerByAccountId;
 using Application.OrderManagment.ViewModels;
 using Application.ShoppingVan.Queries.CurrentCustomerVan;
 using AutoMapper;
+using Domain.Common.Exceptions;
 using Domain.OrderManagment.AggregatesModel.OrderAggregate;
 using Domain.OrderManagment.Exceptions;
 using MediatR;
 using System;
 using System.Globalization;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,11 +38,13 @@ namespace Application.OrderManagment.Commands.PlaceOrder
             {
                 // Get Current Open shopping van for the current logged in customer
                 var customerVanFromQuery = await _mediator.Send(new CurrentCustomerVanQuery { }, cancellationToken);
-                if (customerVanFromQuery == null) throw new OrderingDomainException("customer_shopping_van_can_notbe_empty");
+                if (customerVanFromQuery == null) throw new RestException(HttpStatusCode.BadRequest, new { ShoppingVan = $"Shopping Van must not be empty to place the order ", code = "empty_shoppingvan" });
+
 
                 // Get Current Customer form the current logged in customer
                 var customerDetailsFromQuery = await _mediator.Send(new CustomerByAccountIdQuery { AccountId = _currentUserService.UserId }, cancellationToken);
-                if (customerDetailsFromQuery == null) throw new OrderingDomainException("customer_can_notbe_null");
+                if (customerDetailsFromQuery == null) throw new RestException(HttpStatusCode.NotFound, new { Customer = $"Customer with id {_currentUserService.UserId} not found ", code = "customer_notfound" });
+
 
 
                 // If the Address sent then we will skip the customer address and make the order address equle this address

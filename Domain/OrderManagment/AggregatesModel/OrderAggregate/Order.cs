@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 
 namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
 {
@@ -74,7 +75,8 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
         public void UpdateOrderItem(string orderItemId, string unitId, string unitName, int unitCount)
         {
             var orderItemToUpdate = OrderItems.FirstOrDefault(x => x.Id == new Guid(orderItemId));
-            if (orderItemToUpdate == null) new NotFoundException("cannot_found_order_item");
+            if (orderItemToUpdate == null) throw new RestException(HttpStatusCode.NotFound, new { OrderItem = $"Order item with id {orderItemId} not found ", code = "order_item_notfound" });
+
 
             orderItemToUpdate.Update(unitId, unitName, unitCount);
 

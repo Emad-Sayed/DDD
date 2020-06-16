@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Domain.Common.Exceptions;
 using Domain.DistributorManagment.AggregatesModel.DistributorAggregate;
 using Domain.SharedKernel.ValueObjects;
 using MediatR;
@@ -29,7 +30,8 @@ namespace Application.DistributorManagment.Commands.UpdateDistributor
             public async Task<Unit> Handle(UpdateDistributorCommand request, CancellationToken cancellationToken)
             {
                 var distributorFromRepo = await _distributorRepository.FindByIdAsync(request.Id);
-                if (distributorFromRepo == null) throw new NotFoundException(nameof(distributorFromRepo));
+                if (distributorFromRepo == null) if (distributorFromRepo == null) throw new RestException(System.Net.HttpStatusCode.BadRequest, new { Distributor = $"Distributor with id {request.Id} not found ", code = "distributor_notfound" });
+
 
                 distributorFromRepo.UpdateDistributor(request.Name, request.City, request.Area);
 

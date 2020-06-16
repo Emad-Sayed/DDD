@@ -118,6 +118,19 @@ namespace Brimo.IDP.STS.Identity.Controllers
             return Ok();
         }
 
+        [HttpDelete("DeleteUser")]
+        public async Task<IActionResult> DeleteUser([FromQuery]string userId)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            if (user == null) return BadRequest("User with this id not found");
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            return Ok();
+        }
+
 
         [HttpPost("RegisterDistributor")]
         public async Task<IActionResult> RegisterDistributor(RegisterDistributorUserVM model)

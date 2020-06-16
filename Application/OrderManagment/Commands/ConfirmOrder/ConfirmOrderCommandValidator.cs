@@ -9,6 +9,7 @@ namespace Application.OrderManagment.Commands.ConfirmOrder
     {
         public ConfirmOrderCommandValidator()
         {
+            RuleFor(x => x.OrderId).NotEmpty();
         }
     }
 }

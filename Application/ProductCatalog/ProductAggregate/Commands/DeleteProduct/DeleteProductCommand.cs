@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Domain.Common.Exceptions;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using MediatR;
 using System.Threading;
@@ -25,8 +26,8 @@ namespace Application.ProductCatalog.Products.Commands.DeleteProduct
             {
                 // get product by id
                 var productFromRepo = await _productRepository.FindByIdAsync(request.ProductId);
-                if (productFromRepo == null)
-                    throw new NotFoundException(nameof(productFromRepo));
+                if (productFromRepo == null) throw new RestException(System.Net.HttpStatusCode.BadRequest, new { Product = $"Product with id {request.ProductId} not found ", code = "product_notfound" });
+
 
                 // we call delete product to rase delete product event to sync with algolia
                 productFromRepo.DeleteProduct();

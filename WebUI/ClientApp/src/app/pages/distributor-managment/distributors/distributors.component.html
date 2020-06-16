@@ -30,18 +30,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let distributor of distributors; let i = index"
-                                (click)="openEditorToUpdateDistributor(distributor)" rel="off-canvas"
+                            <tr *ngFor="let distributor of distributors; let i = index" rel="off-canvas"
                                 class="canvas-btn">
-                                <th scope="row">{{ i + 1 }}</th>
-                                <td>
+                                <th scope="row" (click)="openEditorToUpdateDistributor(distributor)">{{ i + 1 }}</th>
+                                <td (click)="openEditorToUpdateDistributor(distributor)" >
                                     {{ distributor?.id?.substr(0, 5) }}
                                 </td>
-                                <td>
+                                <td (click)="openEditorToUpdateDistributor(distributor)">
                                     {{ distributor?.name }}
                                 </td>
                                 <td class="text-center">
-                                    <button (click)="deleteDistributor(distributor.id)" class="btn p-0">
+                                    <button (click)="showDeleteDistributorPopup(distributor)" class="btn p-0">
                                         <i class="fas fa-trash-alt text-danger"></i>
                                     </button>
                                 </td>

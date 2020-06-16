@@ -1,4 +1,5 @@
-﻿using Domain.DistributorManagment.AggregatesModel.DistributorAggregate;
+﻿using Domain.Common.Exceptions;
+using Domain.DistributorManagment.AggregatesModel.DistributorAggregate;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -25,7 +26,7 @@ namespace Application.DistributorManagment.Commands.CreateDistributorUser
             private readonly IConfiguration _configuration;
 
 
-            public Handler(IDistributorRepository distributorRepository,IConfiguration configuration)
+            public Handler(IDistributorRepository distributorRepository, IConfiguration configuration)
             {
                 _distributorRepository = distributorRepository;
                 _configuration = configuration;
@@ -34,12 +35,13 @@ namespace Application.DistributorManagment.Commands.CreateDistributorUser
             public async Task<Unit> Handle(CreateDistributorUserCommand request, CancellationToken cancellationToken)
             {
                 var distributor = await _distributorRepository.FindByIdAsync(request.DistributorId);
-                if (distributor == null) throw new Exception("can't find Distributor");
+                if (distributor == null) if (distributor == null) throw new RestException(System.Net.HttpStatusCode.BadRequest, new { Distributor = $"Distributor with id {request.DistributorId} not found ", code = "distributor_notfound" });
+
 
                 var accountId = await CreateUserAccountAsync(request);
-                if (accountId == null) throw new Exception("Error while createing user account");
 
-                 distributor.CreateUser(accountId, request.FullName, request.Email);
+
+                distributor.CreateUser(accountId, request.FullName, request.Email);
 
                 _distributorRepository.Update(distributor);
 
@@ -63,8 +65,8 @@ namespace Application.DistributorManagment.Commands.CreateDistributorUser
                 var url = _configuration["IdentityServerAddress"] + "/api/Auth/RegisterDistributor";
 
                 var response = await apiClient.PostAsync(url, data);
-                if (response.StatusCode != System.Net.HttpStatusCode.OK) throw new Exception("error while creating the account");
                 var responseString = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != System.Net.HttpStatusCode.OK) throw new RestException(System.Net.HttpStatusCode.BadRequest, new { Distributor = $"An error occurs while creating distributor account /" + responseString, code = "distributor_account_error" });
                 return responseString;
             }
         }
