@@ -27,7 +27,6 @@ namespace Application
 
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionMiddleware<,>));
 
             services.AddScoped<UnitOfWork>();

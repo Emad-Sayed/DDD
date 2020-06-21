@@ -25,11 +25,6 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
 
         public OrderItem(string orderId, string productId, string productName, float unitPrice, string photoUrl, string unitId, string unitName, int unitCount = 1)
         {
-            if (unitCount <= 0)
-            {
-                throw new OrderingDomainException("Invalid number of units");
-            }
-
             OrderId = orderId;
             ProductId = productId;
 
@@ -43,11 +38,6 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
 
         public void Update(string unitId, string unitName, int unitCount = 1)
         {
-            if (unitCount <= 0)
-            {
-                throw new OrderingDomainException("Invalid number of units");
-            }
-
             UnitCount = unitCount;
             UnitId = unitId;
             UnitName = unitName;
@@ -55,11 +45,6 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
 
         public void AddUnits(int units)
         {
-            if (units < 0)
-            {
-                throw new OrderingDomainException("Invalid units");
-            }
-
             UnitCount += units;
         }
     }

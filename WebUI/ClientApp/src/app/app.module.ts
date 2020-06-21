@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { NgxUiLoaderModule, NgxUiLoaderService } from 'ngx-ui-loader';
 import { JwtInterceptor } from './shared/interceptors/jwt-interceptor.service';
 import { LoadingInterceptor } from './shared/services/loading-interceptor.service';
 import { ToastrModule } from 'ngx-toastr';
@@ -18,6 +18,7 @@ import { OAuthModule } from 'angular-oauth2-oidc';
 import { JwtModule } from '@auth0/angular-jwt';
 import { AuthInterceptor } from './shared/services/auth-interceptor.service';
 import { MatDialogModule } from '@angular/material/dialog';
+import { CoreService } from './shared/services/core.service';
 
 // import { ConfigurationService } from './shared/services/app.configuration.service';
 
@@ -64,6 +65,8 @@ export function tokenGetter() {
       multi: true,
       deps: [Router]
    },
+   CoreService,
+   NgxUiLoaderService
   ],
   entryComponents: [
     DeletePopupComponent

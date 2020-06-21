@@ -1,5 +1,6 @@
 ﻿using Domain.Common.Exceptions;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
+using Domain.ProductCatalog.Exceptions;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -49,7 +50,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.AddUnit
             {
                 // get product by id
                 var productFromRepo = await _productRepository.FindByIdAsync(request.ProductId);
-                if (productFromRepo == null) throw new RestException(HttpStatusCode.NotFound, new { Product = $"Product with id {request.ProductId} not found ", code = "product_notfound" });
+                if (productFromRepo == null) throw new ProductNotFoundException(request.ProductId);
 
                 // add unit to product
                 productFromRepo.AddUnitToProduct(request.Name, request.Count, request.ContentCount, request.Price, request.SellingPrice, request.Weight, request.IsAvailable);

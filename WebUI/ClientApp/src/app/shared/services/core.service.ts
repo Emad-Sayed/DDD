@@ -45,19 +45,24 @@ export class CoreService {
         // if(error.status == 400) {
         //     console.log('hello 400 errors')
         // }
-        const serverError = error.error;
-        if (serverError) {
-            for (const key in serverError) {
-                if (serverError.hasOwnProperty(key)) {
-                    if (key != 'isTrusted') {
-                        console.log('error', serverError[key]);
+        // const serverError = error.error;
+        // console.log(error);
+        // if (serverError) {
+        //     for (const key in serverError) {
+        //         if (serverError.hasOwnProperty(key)) {
+        //             if (key != 'isTrusted') {
+        //                 console.log('error', serverError[key]);
 
-                        this.showErrorOperation(ErrorsKey[serverError.errors.code])
-                    }
-                }
-            }
-        }
-        return throwError(serverError);
+        //                 this.showErrorOperation(ErrorsKey[serverError.errors.code])
+        //             }
+        //         }
+        //     }
+        // }
+        console.log(error.error)
+        error.error.Errors.forEach(err => {
+            this.showErrorOperation(err.ErrorMessage);
+        });
+        return throwError(error);
     }
 
 }

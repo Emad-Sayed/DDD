@@ -1,6 +1,6 @@
-﻿using Application.Common.Exceptions;
-using Domain.Common.Exceptions;
+﻿using Domain.Common.Exceptions;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
+using Domain.ProductCatalog.Exceptions;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.DeleteUnit
             {
                 // get product by id
                 var productFromRepo = await _productRepository.FindByIdAsync(request.ProductId);
-                if (productFromRepo == null) throw new RestException(System.Net.HttpStatusCode.BadRequest, new { Product = $"Product with id {request.ProductId} not found ", code = "product_notfound" });
+                if (productFromRepo == null) throw new ProductNotFoundException(request.ProductId);
 
                 // delete unit to product
                 productFromRepo.DeleteProductUnit(request.UnitId);

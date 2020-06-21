@@ -1,11 +1,13 @@
 ﻿using Domain.Common.Exceptions;
 using Domain.DistributorManagment.AggregatesModel.DistributorAggregate;
+using Domain.DistributorManagment.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -35,7 +37,7 @@ namespace Application.DistributorManagment.Commands.CreateDistributorUser
             public async Task<Unit> Handle(CreateDistributorUserCommand request, CancellationToken cancellationToken)
             {
                 var distributor = await _distributorRepository.FindByIdAsync(request.DistributorId);
-                if (distributor == null) if (distributor == null) throw new RestException(System.Net.HttpStatusCode.BadRequest, new { Distributor = $"Distributor with id {request.DistributorId} not found ", code = "distributor_notfound" });
+                if (distributor == null) throw new DistributorNotFoundException(request.DistributorId);
 
 
                 var accountId = await CreateUserAccountAsync(request);
@@ -66,7 +68,7 @@ namespace Application.DistributorManagment.Commands.CreateDistributorUser
 
                 var response = await apiClient.PostAsync(url, data);
                 var responseString = await response.Content.ReadAsStringAsync();
-                if (response.StatusCode != System.Net.HttpStatusCode.OK) throw new RestException(System.Net.HttpStatusCode.BadRequest, new { Distributor = $"An error occurs while creating distributor account /" + responseString, code = "distributor_account_error" });
+                if (response.StatusCode != HttpStatusCode.OK) throw new BusinessException(HttpStatusCode.BadRequest, $"An error occurs while creating distributor account /" + responseString, "distributor_account_error");
                 return responseString;
             }
         }

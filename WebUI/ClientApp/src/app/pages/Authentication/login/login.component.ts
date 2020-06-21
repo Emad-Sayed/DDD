@@ -5,6 +5,7 @@ import { Config } from 'src/app/shared/confing/config';
 import { Router } from '@angular/router';
 import { ErrorsKey } from 'src/app/shared/errors/errors.key';
 import { CoreService } from 'src/app/shared/services/core.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-login',
@@ -44,7 +45,7 @@ export class LoginComponent implements OnInit {
         // Using such a dummy secret is as safe as using no secret.
 
         // Load Discovery Document and then try to login the user
-        let url = Config.IdentityServerUrl + '.well-known/openid-configuration';
+        let url = environment.identityServerUrl + '.well-known/openid-configuration';
         this.oauthService.loadDiscoveryDocument(url).then(() => {
             // Do what ever you want here
             this.oauthService.fetchTokenUsingPasswordFlowAndLoadUserProfile(this.loginModel.email, this.loginModel.password).then(() => {

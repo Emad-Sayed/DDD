@@ -28,7 +28,7 @@ namespace Application.OrderManagment.Commands.ConfirmOrder
             public async Task<Unit> Handle(ConfirmOrderCommand request, CancellationToken cancellationToken)
             {
                 var orderToConfirm = await _orderRepository.GetByIdAsync(request.OrderId);
-                if (orderToConfirm == null) throw new RestException(HttpStatusCode.NotFound, new { Order = $"Order with id {request.OrderId} not found ", code = "order_notfound" });
+                if (orderToConfirm == null) throw new OrderNotFoundException(request.OrderId);
 
                 orderToConfirm.ConfirmOrder();
 

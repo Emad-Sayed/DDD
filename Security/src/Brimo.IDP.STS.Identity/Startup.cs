@@ -41,6 +41,8 @@ namespace Brimo.IDP.STS.Identity
 
             services.AddTransient<ISMSNotification, TwilioSMSNotification>();
 
+            services.AddApplicationInsightsTelemetry();
+
             // Register DbContexts for IdentityServer and Identity
             RegisterDbContexts(services);
 

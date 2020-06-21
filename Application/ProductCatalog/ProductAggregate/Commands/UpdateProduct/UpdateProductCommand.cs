@@ -1,6 +1,6 @@
-﻿using Application.Common.Exceptions;
-using Domain.Common.Exceptions;
+﻿using Domain.Common.Exceptions;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
+using Domain.ProductCatalog.Exceptions;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +29,7 @@ namespace Application.ProductCatalog.Products.Commands.UpdateProduct
             public async Task<MediatR.Unit> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
             {
                 var productFromRepo = await _productRepository.FindByIdAsync(request.Id);
-                if (productFromRepo == null) throw new RestException(System.Net.HttpStatusCode.BadRequest, new { Product = $"Product with id {request.Id} not found ", code = "product_notfound" });
+                if (productFromRepo == null) throw new ProductNotFoundException(request.Id);
 
                 productFromRepo.UpdateProduct(request.Name, request.Barcode, request.PhotoUrl, request.AvailableToSell, request.BrandId, request.ProductCategoryId);
 

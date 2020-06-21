@@ -4,8 +4,10 @@ using Application.OrderManagment.ViewModels;
 using Application.ShoppingVan.Queries.CurrentCustomerVan;
 using AutoMapper;
 using Domain.Common.Exceptions;
+using Domain.CustomerManagment.Exceptions;
 using Domain.OrderManagment.AggregatesModel.OrderAggregate;
 using Domain.OrderManagment.Exceptions;
+using Domain.ShoppingVan.Exceptions;
 using MediatR;
 using System;
 using System.Globalization;
@@ -38,12 +40,12 @@ namespace Application.OrderManagment.Commands.PlaceOrder
             {
                 // Get Current Open shopping van for the current logged in customer
                 var customerVanFromQuery = await _mediator.Send(new CurrentCustomerVanQuery { }, cancellationToken);
-                if (customerVanFromQuery == null) throw new RestException(HttpStatusCode.BadRequest, new { ShoppingVan = $"Shopping Van must not be empty to place the order ", code = "empty_shoppingvan" });
+                if (customerVanFromQuery == null) throw new EmptyShoppingVanException();
 
 
                 // Get Current Customer form the current logged in customer
                 var customerDetailsFromQuery = await _mediator.Send(new CustomerByAccountIdQuery { AccountId = _currentUserService.UserId }, cancellationToken);
-                if (customerDetailsFromQuery == null) throw new RestException(HttpStatusCode.NotFound, new { Customer = $"Customer with id {_currentUserService.UserId} not found ", code = "customer_notfound" });
+                if (customerDetailsFromQuery == null) throw new CustomerNotFoundException(_currentUserService.UserId);
 
 
 

@@ -28,7 +28,7 @@ namespace Application.OrderManagment.Commands.DeliverOrder
             public async Task<Unit> Handle(DeliverOrderCommand request, CancellationToken cancellationToken)
             {
                 var orderToDeliver = await _orderRepository.GetByIdAsync(request.OrderId);
-                if (orderToDeliver == null) throw new RestException(HttpStatusCode.NotFound, new { Order = $"Order with id {request.OrderId} not found ", code = "order_notfound" });
+                if (orderToDeliver == null) throw new OrderNotFoundException(request.OrderId);
 
 
                 orderToDeliver.DeliverOrder();

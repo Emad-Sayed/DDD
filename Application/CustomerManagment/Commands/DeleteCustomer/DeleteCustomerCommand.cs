@@ -1,5 +1,6 @@
 ﻿using Domain.Common.Exceptions;
 using Domain.CustomerManagment.AggregatesModel.CustomerAggregate;
+using Domain.CustomerManagment.Exceptions;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace Application.CustomerManagment.Commands.DeleteCustomer
             public async Task<Unit> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
             {
                 var customerFromRepo = await _customerRepository.FindByIdAsync(request.CustomerId);
-                if (customerFromRepo == null) throw new RestException(HttpStatusCode.NotFound, new { Customer = $"Customer with id {request.CustomerId} not found ", code = "cusotmer_notfound" });
+                if (customerFromRepo == null) throw new CustomerNotFoundException(request.CustomerId);
 
                 customerFromRepo.Delete();
 

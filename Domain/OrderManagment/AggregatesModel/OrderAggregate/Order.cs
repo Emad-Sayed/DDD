@@ -2,6 +2,7 @@
 using Domain.Common.Exceptions;
 using Domain.Common.Interfaces;
 using Domain.OrderManagment.Events;
+using Domain.OrderManagment.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -75,7 +76,7 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
         public void UpdateOrderItem(string orderItemId, string unitId, string unitName, int unitCount)
         {
             var orderItemToUpdate = OrderItems.FirstOrDefault(x => x.Id == new Guid(orderItemId));
-            if (orderItemToUpdate == null) throw new RestException(HttpStatusCode.NotFound, new { OrderItem = $"Order item with id {orderItemId} not found ", code = "order_item_notfound" });
+            if (orderItemToUpdate == null) throw new OrderItemNotFoundException(orderItemId);
 
 
             orderItemToUpdate.Update(unitId, unitName, unitCount);

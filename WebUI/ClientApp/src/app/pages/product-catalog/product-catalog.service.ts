@@ -44,7 +44,6 @@ export class ProductCatalogService {
         return this.httpService.put(`${Config.Products}`, product);
     }
 
-
     deleteProduct(productId: string): Observable<any> {
         const params: any = { productId: productId + '/' }
         return this.httpService.delete(`${Config.Products}`, params);

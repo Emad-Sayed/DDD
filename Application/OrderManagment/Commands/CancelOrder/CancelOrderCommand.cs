@@ -27,7 +27,7 @@ namespace Application.OrderManagment.Commands.CancelOrder
             public async Task<Unit> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
             {
                 var orderToCancel = await _orderRepository.GetByIdAsync(request.OrderId);
-                if (orderToCancel == null) throw new RestException(HttpStatusCode.NotFound, new { Order = $"Order with id {request.OrderId} not found ", code = "order_notfound" });
+                if (orderToCancel == null) throw new OrderNotFoundException(request.OrderId);
 
 
                 orderToCancel.CancelOrder();

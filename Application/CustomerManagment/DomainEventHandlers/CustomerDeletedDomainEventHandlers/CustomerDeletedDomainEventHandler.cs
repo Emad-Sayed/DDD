@@ -34,7 +34,7 @@ namespace Application.CustomerManagment.DomainEventHandlers.CustomerDeletedDomai
 
             var response = await apiClient.DeleteAsync(url);
 
-            if (response.StatusCode != HttpStatusCode.OK) throw new RestException(HttpStatusCode.ServiceUnavailable, new { Customer = "Error while deleting customer account", code = "delete_customer_account_error" });
+            if (response.StatusCode != HttpStatusCode.OK) throw new BusinessException(HttpStatusCode.ServiceUnavailable, "Error while deleting customer account", "delete_customer_account_error");
         }
     }
 }

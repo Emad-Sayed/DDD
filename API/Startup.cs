@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.AzureAppServices;
 using Microsoft.OpenApi.Models;
 
 namespace API
@@ -69,6 +70,10 @@ namespace API
             services.AddHttpContextAccessor();
 
             _assembliesStartup.ForEach(startup => startup.ConfigureServices(services));
+
+            services.Configure<AzureFileLoggerOptions>(Configuration.GetSection("AzureLogging"));
+
+            services.AddApplicationInsightsTelemetry();
 
             services.AddAuthentication(options =>
             {

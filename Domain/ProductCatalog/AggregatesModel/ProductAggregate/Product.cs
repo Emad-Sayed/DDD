@@ -4,6 +4,7 @@ using Domain.Common.Interfaces;
 using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
 using Domain.ProductCatalog.Events;
+using Domain.ProductCatalog.Exceptions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -86,7 +87,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         public void UpdateProductUnit(string unitId, string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable)
         {
             var unitToUpdate = Units.FirstOrDefault(x => x.Id.ToString() == unitId);
-            if (unitToUpdate == null) throw new RestException(HttpStatusCode.NotFound, new { Unit = $"Unit with id {unitId} not found ", code = "unit_notfound" });
+            if (unitToUpdate == null) throw new UnitNotFoundException(unitId);
 
 
             unitToUpdate.Update(name, count, contentCount, price, sellingPrice, weight, isAvailable);
@@ -99,7 +100,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         public void DeleteProductUnit(string unitId)
         {
             var unitToDelete = Units.FirstOrDefault(x => x.Id.ToString() == unitId);
-            if (unitToDelete == null) throw new RestException(HttpStatusCode.BadRequest, new { Unit = $"Unit with id {unitId} not found ", code = "unit_notfound" });
+            if (unitToDelete == null) throw new UnitNotFoundException(unitId);
 
 
             Units.Remove(unitToDelete);

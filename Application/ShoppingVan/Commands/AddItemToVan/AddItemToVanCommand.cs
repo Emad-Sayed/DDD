@@ -1,7 +1,7 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces;
 using Domain.Common.Exceptions;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
+using Domain.ProductCatalog.Exceptions;
 using Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate;
 using MediatR;
 using System;
@@ -47,11 +47,11 @@ namespace Application.ShoppingVan.Commands.AddItemToVan
                 }
 
                 var productToAddToVan = await _productRepository.FindByIdAsync(request.ProductId);
-                if (productToAddToVan == null) throw new RestException(System.Net.HttpStatusCode.BadRequest, new { Product = $"Product with id {request.ProductId} not found ", code = "product_notfound" });
+                if (productToAddToVan == null) throw new ProductNotFoundException(request.ProductId);
 
                 // selected product unit
                 var selectedUnit = productToAddToVan.Units.FirstOrDefault(x => x.Id == new Guid(request.UnitId));
-                if (selectedUnit == null) throw new RestException(System.Net.HttpStatusCode.BadRequest, new { Unit = $"Unit with id {request.UnitId} not found ", code = "unit_notfound" });
+                if (selectedUnit == null) throw new UnitNotFoundException(request.UnitId);
 
                 // Adding product to van
                 van.AddItem(request.ProductId, productToAddToVan.Name, selectedUnit.Id.ToString(), selectedUnit.Name, selectedUnit.Price, productToAddToVan.PhotoUrl, selectedUnit.SellingPrice);

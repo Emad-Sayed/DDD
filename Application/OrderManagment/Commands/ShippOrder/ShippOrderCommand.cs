@@ -28,7 +28,7 @@ namespace Application.OrderManagment.Commands.ShippOrder
             public async Task<Unit> Handle(ShippOrderCommand request, CancellationToken cancellationToken)
             {
                 var orderToShipp = await _orderRepository.GetByIdAsync(request.OrderId);
-                if (orderToShipp == null) throw new RestException(HttpStatusCode.NotFound, new { Order = $"Order with id {request.OrderId} not found ", code = "order_notfound" });
+                if (orderToShipp == null) throw new OrderNotFoundException(request.OrderId);
 
                 orderToShipp.ShippOrder();
 

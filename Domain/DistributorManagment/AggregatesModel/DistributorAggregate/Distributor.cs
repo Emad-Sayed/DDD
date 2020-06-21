@@ -2,6 +2,7 @@
 using Domain.Common.Exceptions;
 using Domain.Common.Interfaces;
 using Domain.DistributorManagment.Events;
+using Domain.DistributorManagment.Exceptions;
 using Domain.SharedKernel.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -56,7 +57,7 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
         {
             var distributorUser = DistributorUsers.FirstOrDefault(x => x.Id.ToString() == distributorUserId);
             if (distributorUser == null)
-                if (distributorUser == null) if (distributorUser == null) throw new RestException(HttpStatusCode.BadRequest, new { DistributorUser = $"DistributorUser with id {distributorUserId} not found ", code = "distributor_user_notfound" });
+                if (distributorUser == null) throw new DistributorUserNotFoundException(distributorUserId);
 
 
             DistributorUsers.Remove(distributorUser);
@@ -70,7 +71,7 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
         public void UpdateDistributorUser(string distributorUserId, string fullName)
         {
             var distributorUserToUpdate = DistributorUsers.FirstOrDefault(x => x.Id.ToString() == distributorUserId);
-            if (distributorUserToUpdate == null)  throw new RestException(HttpStatusCode.BadRequest, new { DistributorUser = $"DistributorUser with id {distributorUserId} not found ", code = "distributor_user_notfound" });
+            if (distributorUserToUpdate == null) throw new DistributorUserNotFoundException(distributorUserId);
 
 
             distributorUserToUpdate.Update(fullName);

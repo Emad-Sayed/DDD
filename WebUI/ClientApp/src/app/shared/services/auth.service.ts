@@ -6,6 +6,7 @@ import { OAuthService, TokenResponse } from 'angular-oauth2-oidc';
 import { LoginModel } from '../models/login/login.model';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -36,16 +37,16 @@ export class AuthService {
     }
 
     confirmEmail(email: string, token: string) {
-        return this.http.post<any>(`${Config.IdentityServerUrl}api/Auth/ConfirmEmail`, { email: email, token: token });
+        return this.http.post<any>(`${environment.identityServerUrl}api/Auth/ConfirmEmail`, { email: email, token: token });
     }
 
     resetPassword(email: string, password: string) {
-        return this.http.post<any>(`${Config.IdentityServerUrl}api/Auth/ResetPassword`, { email: email, password: password });
+        return this.http.post<any>(`${environment.identityServerUrl}api/Auth/ResetPassword`, { email: email, password: password });
     }
 
     login(loginModel: LoginModel) {
         // Load Discovery Document and then try to login the user
-        let url = Config.IdentityServerUrl + '.well-known/openid-configuration';
+        let url = environment.identityServerUrl + '.well-known/openid-configuration';
         this.oauthService.loadDiscoveryDocument(url).then(() => {
             // Do what ever you want here
             this.oauthService.fetchTokenUsingPasswordFlowAndLoadUserProfile(loginModel.email, loginModel.password).then(() => {
@@ -59,7 +60,7 @@ export class AuthService {
 
     async refreshToken(): Promise<TokenResponse> {
         // Load Discovery Document and then try to login the user
-        let url = Config.IdentityServerUrl + '.well-known/openid-configuration';
+        let url = environment.identityServerUrl + '.well-known/openid-configuration';
         await this.oauthService.loadDiscoveryDocument(url);
         // Do what ever you want here
         const refreshTokenResponse = await this.oauthService.refreshToken();

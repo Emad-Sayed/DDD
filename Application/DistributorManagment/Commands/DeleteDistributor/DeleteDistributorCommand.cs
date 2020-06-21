@@ -1,6 +1,6 @@
-﻿using Application.Common.Exceptions;
-using Domain.Common.Exceptions;
+﻿using Domain.Common.Exceptions;
 using Domain.DistributorManagment.AggregatesModel.DistributorAggregate;
+using Domain.DistributorManagment.Exceptions;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -29,8 +29,7 @@ namespace Application.DistributorManagment.Commands.DeleteDistributor
             {
                 // get distributor by id
                 var distributorFromRepo = await _distributorRepository.FindByIdAsync(request.DistributorId);
-                if (distributorFromRepo == null)
-                    if (distributorFromRepo == null) if (distributorFromRepo == null) throw new RestException(System.Net.HttpStatusCode.BadRequest, new { Distributor = $"Distributor with id {request.DistributorId} not found ", code = "distributor_notfound" });
+                if (distributorFromRepo == null) throw new DistributorNotFoundException(request.DistributorId);
 
 
                 // update distributor with the  deleted

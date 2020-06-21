@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Domain.Common.Exceptions;
 using FluentValidation;
 using MediatR;
-using ValidationException = Application.Common.Exceptions.ValidationException;
 
 namespace Application.Common.Behaviours
 {
@@ -32,7 +32,7 @@ namespace Application.Common.Behaviours
 
                 if (failures.Count != 0)
                 {
-                    throw new ValidationException(failures);
+                    throw new BaseValidationException(failures);
                 }
             }
 
