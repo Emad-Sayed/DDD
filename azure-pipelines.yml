@@ -25,10 +25,9 @@ steps:
   displayName: 'Publish API.csproj'
   inputs:
     command: publish
-    publishWebProjects: True
+    projects: '**/API.csproj'
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True 
-    projects: '**/API.csproj'
 
 - task: PublishBuildArtifacts@1
   displayName: 'publish artifacts'
