@@ -1,5 +1,7 @@
 ﻿using Domain.Common.Interfaces;
+using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
+using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Persistence.ProductCatalog;
@@ -85,6 +87,18 @@ namespace Infrastructure.Repositories.ProductCatalog
         {
             var units = await _context.Units.Where(x => productsIds.Contains(x.ProductId.ToString())).ToListAsync();
             return units;
+        }
+
+        public async Task<Brand> GetBrandById(string brandId)
+        {
+            return await _context.Brands
+                  .FirstOrDefaultAsync(x => x.Id.ToString() == brandId);
+        }
+
+        public async Task<ProductCategory> GetProductCategoryById(string productCategoryId)
+        {
+            return await _context.ProductCategories
+                  .FirstOrDefaultAsync(x => x.Id.ToString() == productCategoryId);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Application.ProductCatalog.ProductCategoryAggregate.Commands.CreatePro
     {
         public CreateProductCategoryCommandValidator()
         {
-            RuleFor(x => x.Name).NotEmpty();
+            RuleFor(x => x.Name).NotEmpty().WithMessage("Product Category name must be not Empty").WithErrorCode("name_empty");
         }
     }
 }

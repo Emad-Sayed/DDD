@@ -29,6 +29,12 @@ namespace Application.OrderManagment.Commands.CancelOrder
                 var orderToCancel = await _orderRepository.GetByIdAsync(request.OrderId);
                 if (orderToCancel == null) throw new OrderNotFoundException(request.OrderId);
 
+                if(orderToCancel.OrderStatus == OrderStatus.Confirmed ||
+                    orderToCancel.OrderStatus == OrderStatus.Delivered ||
+                    orderToCancel.OrderStatus == OrderStatus.Shipped)
+                {
+                    throw new CancelOrderAfterConfirmedException(request.OrderId);
+                }
 
                 orderToCancel.CancelOrder();
 

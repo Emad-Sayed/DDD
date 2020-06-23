@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Application.ProductCatalog.BrandAggregate.Commands.CreateBrand
 {
-    public class CreateBrandCommand : IRequest
+    public class CreateBrandCommand : IRequest<string>
     {
         public string Name { get; set; }
 
-        public class Handler : IRequestHandler<CreateBrandCommand>
+        public class Handler : IRequestHandler<CreateBrandCommand, string>
         {
             private readonly IBrandRepository _brandRepository;
 
@@ -21,7 +21,7 @@ namespace Application.ProductCatalog.BrandAggregate.Commands.CreateBrand
                 _brandRepository = brandRepository;
             }
 
-            public async Task<Unit> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
+            public async Task<string> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
             {
                 var newBrandToAdd = new Brand(request.Name);
 
@@ -29,7 +29,7 @@ namespace Application.ProductCatalog.BrandAggregate.Commands.CreateBrand
 
                 await _brandRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-                return Unit.Value;
+                return newBrandToAdd.Id.ToString();
             }
         }
     }

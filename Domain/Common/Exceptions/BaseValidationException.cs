@@ -24,8 +24,8 @@ namespace Domain.Common.Exceptions
             {
                 var errorCode = failureGroup.ErrorCode;
                 string errorMessage = failureGroup.ErrorMessage;
-
-                Errors.Add(errorCode, errorMessage);
+                if (!Errors.ContainsKey(errorCode))
+                    Errors.Add(errorCode, errorMessage);
             }
         }
 

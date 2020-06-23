@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { LoggingService } from './shared/services/logging.service';
 // import { ConfigurationService } from './shared/services/app.configuration.service';
 
 @Component({
@@ -9,8 +9,9 @@ import { ToastrService } from 'ngx-toastr';
 export class AppComponent {
   title = 'app';
   public constructor(
-    // private con: ConfigurationService
+    private loggingService: LoggingService
     ) {
-    // console.log('api address', con.apiAddress);
+      // this.loggingService.logException(new Error('this is test error'), 1)
+      
   }
 }

@@ -1,4 +1,6 @@
 ﻿using Domain.Common.Interfaces;
+using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
+using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,5 +19,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         void Update(Product product);
         void Delete(Product product);
         Task<Product> FindByIdAsync(string id);
+        Task<Brand> GetBrandById(string brandId);
+        Task<ProductCategory> GetProductCategoryById(string productCategoryId);
     }
 }

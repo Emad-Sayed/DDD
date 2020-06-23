@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.ProductCatalog.ProductAggregate.Commands.AddUnit
 {
-    public class AddUnitCommand : IRequest
+    public class AddUnitCommand : IRequest<string>
     {
         public string Name { get; set; }
 
@@ -37,7 +37,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.AddUnit
         public string ProductId { get; set; }
 
 
-        public class Handler : IRequestHandler<AddUnitCommand>
+        public class Handler : IRequestHandler<AddUnitCommand, string>
         {
             private readonly IProductRepository _productRepository;
 
@@ -46,14 +46,14 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.AddUnit
                 _productRepository = productRepository;
             }
 
-            public async Task<MediatR.Unit> Handle(AddUnitCommand request, CancellationToken cancellationToken)
+            public async Task<string> Handle(AddUnitCommand request, CancellationToken cancellationToken)
             {
                 // get product by id
                 var productFromRepo = await _productRepository.FindByIdAsync(request.ProductId);
                 if (productFromRepo == null) throw new ProductNotFoundException(request.ProductId);
 
                 // add unit to product
-                productFromRepo.AddUnitToProduct(request.Name, request.Count, request.ContentCount, request.Price, request.SellingPrice, request.Weight, request.IsAvailable);
+               var newProductUnit =  productFromRepo.AddUnitToProduct(request.Name, request.Count, request.ContentCount, request.Price, request.SellingPrice, request.Weight, request.IsAvailable);
 
                 // update product with the new unit created
                 _productRepository.Update(productFromRepo);
@@ -61,7 +61,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.AddUnit
                 // save changes in the database and rase ProductUpdated event
                 await _productRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
 
-                return MediatR.Unit.Value;
+                return newProductUnit.Id.ToString();
             }
         }
     }

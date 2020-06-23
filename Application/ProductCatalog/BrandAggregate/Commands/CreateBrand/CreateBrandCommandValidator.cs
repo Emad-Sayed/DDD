@@ -9,7 +9,7 @@ namespace Application.ProductCatalog.BrandAggregate.Commands.CreateBrand
     {
         public CreateBrandCommandValidator()
         {
-            RuleFor(x => x.Name).NotEmpty();
+            RuleFor(x => x.Name).NotEmpty().WithMessage("Brand name must be not Empty").WithErrorCode("name_empty");
         }
     }
 }

@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory
 {
-    public class CreateProductCategoryCommand : IRequest
+    public class CreateProductCategoryCommand : IRequest<string>
     {
         public string Name { get; set; }
 
-        public class Handler : IRequestHandler<CreateProductCategoryCommand>
+        public class Handler : IRequestHandler<CreateProductCategoryCommand, string>
         {
             private readonly IProductCategoryRepository _productCategoryRepository;
 
@@ -21,15 +21,15 @@ namespace Application.ProductCatalog.ProductCategoryAggregate.Commands.CreatePro
                 _productCategoryRepository = productCategoryRepository;
             }
 
-            public async Task<Unit> Handle(CreateProductCategoryCommand request, CancellationToken cancellationToken)
+            public async Task<string> Handle(CreateProductCategoryCommand request, CancellationToken cancellationToken)
             {
-                var newBrandToAdd = new ProductCategory(request.Name);
+                var newProductCategoryToAdd = new ProductCategory(request.Name);
 
-                _productCategoryRepository.Add(newBrandToAdd);
+                _productCategoryRepository.Add(newProductCategoryToAdd);
 
                 await _productCategoryRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-                return Unit.Value;
+                return newProductCategoryToAdd.Id.ToString();
             }
         }
     }

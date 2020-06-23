@@ -71,9 +71,7 @@ namespace API
 
             _assembliesStartup.ForEach(startup => startup.ConfigureServices(services));
 
-            services.Configure<AzureFileLoggerOptions>(Configuration.GetSection("AzureLogging"));
-
-            services.AddApplicationInsightsTelemetry();
+            services.AddApplicationInsightsTelemetry(Configuration["ApplicationInsights:InstrumentationKey"]);
 
             services.AddAuthentication(options =>
             {

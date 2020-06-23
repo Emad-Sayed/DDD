@@ -74,13 +74,15 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         }
 
         // add unit to product
-        public void AddUnitToProduct(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable)
+        public Unit AddUnitToProduct(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable)
         {
-            var newProductUnit = new Unit(name, count, contentCount, price, sellingPrice, weight, isAvailable, this.Id);
+            var newProductUnit = new Unit(name, count, contentCount, price, sellingPrice, weight, isAvailable, Id);
             Units.Add(newProductUnit);
 
             // rais product updated event
             AddDomainEvent(new ProductUpdated(this));
+
+            return newProductUnit;
         }
 
         // update unit product

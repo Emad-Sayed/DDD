@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 @Injectable({
     providedIn: 'root'
 })
-export class MyMonitoringService {
+export class LoggingService {
   appInsights: ApplicationInsights;
   constructor() {
     this.appInsights = new ApplicationInsights({
