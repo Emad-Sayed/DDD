@@ -1,15 +1,14 @@
-﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Application.Common.Validators;
+using FluentValidation;
 
-namespace Application.ProductCatalog.Products.Commands.DeleteProduct
+namespace Application.ProductCatalog.ProductAggregate.Commands.DeleteProduct
 {
     public class DeleteProductCommandValidator : AbstractValidator<DeleteProductCommand>
     {
         public DeleteProductCommandValidator()
         {
-            RuleFor(x => x.ProductId).NotEmpty().WithMessage("Product Id is required").WithErrorCode("productId_is_required");
+            RuleFor(x => x.ProductId).NotEmpty().Must(GuidValidator.IsGuid).WithMessage("Bad ProductId Format Id must be GUID").WithErrorCode("invalid_guid");
         }
+
     }
 }

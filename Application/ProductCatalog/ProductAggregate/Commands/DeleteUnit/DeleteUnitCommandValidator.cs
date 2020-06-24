@@ -1,7 +1,5 @@
-﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Application.Common.Validators;
+using FluentValidation;
 
 namespace Application.ProductCatalog.ProductAggregate.Commands.DeleteUnit
 {
@@ -9,8 +7,8 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.DeleteUnit
     {
         public DeleteUnitCommandValidator()
         {
-            RuleFor(x => x.UnitId).NotEmpty();
-            RuleFor(x => x.ProductId).NotEmpty();
+            RuleFor(x => x.UnitId).NotEmpty().NotEmpty().Must(GuidValidator.IsGuid).WithMessage("Bad UnitId Format UnitId must be GUID").WithErrorCode("invalid_guid"); ;
+            RuleFor(x => x.ProductId).NotEmpty().NotEmpty().Must(GuidValidator.IsGuid).WithMessage("Bad ProductId Format ProductId must be GUID").WithErrorCode("invalid_guid"); ;
         }
     }
 }

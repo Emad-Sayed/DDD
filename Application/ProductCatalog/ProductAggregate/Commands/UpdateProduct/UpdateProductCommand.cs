@@ -1,13 +1,12 @@
-﻿using Domain.Common.Exceptions;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.Exceptions;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Application.ProductCatalog.Products.Commands.UpdateProduct
+namespace Application.ProductCatalog.ProductAggregate.Commands.UpdateProduct
 {
-    public class UpdateProductCommand : IRequest
+    public class UpdateProductCommand : IRequest<string>
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -17,7 +16,7 @@ namespace Application.ProductCatalog.Products.Commands.UpdateProduct
         public string ProductCategoryId { get; set; }
         public bool AvailableToSell { get; set; }
 
-        public class Handler : IRequestHandler<UpdateProductCommand>
+        public class Handler : IRequestHandler<UpdateProductCommand, string>
         {
             private readonly IProductRepository _productRepository;
 
@@ -26,7 +25,7 @@ namespace Application.ProductCatalog.Products.Commands.UpdateProduct
                 _productRepository = productRepository;
             }
 
-            public async Task<MediatR.Unit> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+            public async Task<string> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
             {
                 var productFromRepo = await _productRepository.FindByIdAsync(request.Id);
                 if (productFromRepo == null) throw new ProductNotFoundException(request.Id);
@@ -37,7 +36,7 @@ namespace Application.ProductCatalog.Products.Commands.UpdateProduct
 
                 await _productRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
 
-                return MediatR.Unit.Value;
+                return productFromRepo.Id.ToString();
             }
         }
     }

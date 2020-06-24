@@ -1,12 +1,6 @@
-﻿using Domain.Common.Exceptions;
-using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
+﻿using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.Exceptions;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -58,7 +52,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.AddUnit
                 // update product with the new unit created
                 _productRepository.Update(productFromRepo);
 
-                // save changes in the database and rase ProductUpdated event
+                // save changes in the database and raise ProductUpdated event
                 await _productRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
 
                 return newProductUnit.Id.ToString();

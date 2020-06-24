@@ -1,20 +1,23 @@
-﻿using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
+using Application.ProductCatalog.ProductAggregate.Queries.ListUnitsByProductsIds;
 using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory;
 using Application.ShoppingVan.Commands.AddItemToVan;
 using Domain.Common.Exceptions;
+using Domain.ProductCatalog.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
-using System.Threading.Tasks;
 
-namespace Application.IntegrationTests.ShoppingVanTest.Commands
+namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
 {
 
+    using static ProductCatalogTesting;
 
-    using static ShoppingVanTesting;
-
-    public class AddItemToVanTest : ShoppingVanTestBase
+    public class AddUnitTest : ProductCatalogTestBase
     {
         [Test]
         public void ShouldRequireMinimumFields()
@@ -28,7 +31,7 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
         }
 
         [Test]
-        public async Task ShouldAddItemToVan()
+        public async Task ShouldAddUnitToProduct()
         {
             // Arrange
 
@@ -65,23 +68,55 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
                 Count = 6,
                 IsAvailable = true,
                 Name = "Test Unit",
-                Weight   = 44
+                Weight = 44
             };
 
             var unitId = await SendAsync(addUnitToCommand);
 
-            // AddItem To Shopping Van
-            var command = new AddItemToVanCommand
+            var listProductsUnitsQuery = new ListUnitsByProductsIdsQuery
             {
-                ProductId = productId,
-                UnitId = unitId
+                ProductsIds = new List<string> { productId }
+            };
+
+            var currentProductUnits = await SendAsync(listProductsUnitsQuery);
+
+            currentProductUnits.Should().OnlyContain(x =>
+                x.Id == unitId &&
+                x.ProductId == addUnitToCommand.ProductId &&
+                x.SellingPrice.Equals(addUnitToCommand.SellingPrice) &&
+                x.ContentCount == addUnitToCommand.ContentCount &&
+                x.Price.Equals(addUnitToCommand.Price) &&
+                x.Count == addUnitToCommand.Count &&
+                x.IsAvailable == addUnitToCommand.IsAvailable &&
+                x.Name == addUnitToCommand.Name &&
+                x.Weight.Equals(addUnitToCommand.Weight)
+                );
+        }
+
+        [Test]
+        public void ShouldThrowProductNotFoundException()
+        {
+            // Arrange
+
+            // Add unit to product
+            var addUnitToCommand = new AddUnitCommand
+            {
+                // random product Id
+                ProductId =  Guid.NewGuid().ToString(),
+                SellingPrice = 92,
+                ContentCount = 2,
+                Price = 33,
+                Count = 6,
+                IsAvailable = true,
+                Name = "Test Unit",
+                Weight = 44
             };
 
             // Act
-            var shoppingVanItemCount = await SendAsync(command);
+            var results = FluentActions.Invoking(() => SendAsync(addUnitToCommand));
 
             // Assert
-            shoppingVanItemCount.Should().Be(1);
+            results.Should().Throw<ProductNotFoundException>();
         }
 
     }

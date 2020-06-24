@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Domain.ProductCatalog.Exceptions;
 
 namespace Application.ProductCatalog.ProductAggregate.Queries.ProductById
 {
@@ -28,6 +29,7 @@ namespace Application.ProductCatalog.ProductAggregate.Queries.ProductById
             public async Task<ProductVM> Handle(ProductByIdQuery request, CancellationToken cancellationToken)
             {
                 var  productFromRepo = await _brandRepository.FindByIdAsync(request.ProductId);
+                if (productFromRepo == null) throw new ProductNotFoundException(request.ProductId);
 
                 var productToReturn = _mapper.Map<ProductVM>(productFromRepo);
 

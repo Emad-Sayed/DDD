@@ -1,7 +1,6 @@
 ﻿using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.Exceptions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 

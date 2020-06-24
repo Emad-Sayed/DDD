@@ -1,11 +1,10 @@
-﻿using Domain.Common.Exceptions;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.Exceptions;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Application.ProductCatalog.Products.Commands.DeleteProduct
+namespace Application.ProductCatalog.ProductAggregate.Commands.DeleteProduct
 {
     public class DeleteProductCommand : IRequest
     {

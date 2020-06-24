@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
@@ -8,15 +7,8 @@ using NUnit.Framework;
 using Persistence.ProductCatalog;
 using Respawn;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Application.Common.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Persistence;
-using Infrastructure;
 
 namespace Application.IntegrationTests.ProductCatalog
 {
@@ -33,7 +25,6 @@ namespace Application.IntegrationTests.ProductCatalog
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", true, true)
-                 .AddJsonFile($"appsettings.Development.json", optional: true)
                 .AddEnvironmentVariables();
 
             _configuration = builder.Build();
@@ -50,31 +41,14 @@ namespace Application.IntegrationTests.ProductCatalog
 
             startup.ConfigureServices(services);
 
-            // Setup testing user (need to add a user to identity and use a real guid)
-            var currentUserServiceDescriptor = services.FirstOrDefault(d =>
-                d.ServiceType == typeof(ICurrentUserService));
-
-            services.Remove(currentUserServiceDescriptor);
-
-            services.AddTransient<ICurrentUserService, CurrentUserService>();
-
             _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
 
             _checkpoint = new Checkpoint
             {
-                TablesToIgnore = new[] { "__EFMigrationsHistory" }
+                TablesToIgnore = new[] { "__EFMigrationsHistory", "Brands" },
+                
             };
 
-            EnsureDatabase();
-        }
-
-        private static void EnsureDatabase()
-        {
-            using var scope = _scopeFactory.CreateScope();
-
-            var context = scope.ServiceProvider.GetService<ProductCatalogContext>();
-
-            context.Database.EnsureCreated();
         }
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
@@ -86,39 +60,9 @@ namespace Application.IntegrationTests.ProductCatalog
             return await mediator.Send(request);
         }
 
-        private class CurrentUserService : ICurrentUserService
-        {
-            public string UserId => _currentUserId;
-
-            public string Address => throw new NotImplementedException();
-        }
-
-        private static string _currentUserId;
-
-        public static async Task<string> RunAsDefaultUserAsync()
-        {
-            return await RunAsUserAsync("test@local", "Testing1234!");
-        }
-
-        public static async Task<string> RunAsUserAsync(string userName, string password)
-        {
-            using var scope = _scopeFactory.CreateScope();
-
-            var userManager = scope.ServiceProvider.GetService<UserManager<IdentityUser>>();
-
-            var user = new IdentityUser { UserName = userName, Email = userName };
-
-            var result = await userManager.CreateAsync(user, password);
-
-            _currentUserId = user.Id;
-
-            return _currentUserId;
-        }
-
         public static async Task ResetState()
         {
-            //await _checkpoint.Reset(_configuration.GetConnectionString("TestingDatabase"));
-            _currentUserId = null;
+            await _checkpoint.Reset(_configuration.GetConnectionString("BrimoDatabase"));
         }
 
         public static async Task<T> FindAsync<T>(string id)

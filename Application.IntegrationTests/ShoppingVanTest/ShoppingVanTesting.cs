@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Persistence.ShoppingVan;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.IntegrationTests.ShoppingVanTest
 {
@@ -28,7 +29,6 @@ namespace Application.IntegrationTests.ShoppingVanTest
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", true, true)
-                 .AddJsonFile($"appsettings.Development.json", optional: true)
                 .AddEnvironmentVariables();
 
             _configuration = builder.Build();
@@ -69,7 +69,7 @@ namespace Application.IntegrationTests.ShoppingVanTest
 
             var context = scope.ServiceProvider.GetService<ShoppingVanContext>();
 
-            context.Database.EnsureCreated();
+            //context.Database.Migrate();
         }
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
@@ -112,7 +112,7 @@ namespace Application.IntegrationTests.ShoppingVanTest
 
         public static async Task ResetState()
         {
-            //await _checkpoint.Reset(_configuration.GetConnectionString("TestingDatabase"));
+            await _checkpoint.Reset(_configuration.GetConnectionString("BrimoDatabase"));
             _currentUserId = null;
         }
 

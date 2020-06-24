@@ -1,25 +1,24 @@
-﻿using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
+﻿using System.Threading.Tasks;
+using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
+using Application.ProductCatalog.ProductAggregate.Commands.DeleteProduct;
 using Domain.Common.Exceptions;
 using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
-using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
+using Domain.ProductCatalog.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
-using System;
-using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
 {
-
     using static ProductCatalogTesting;
 
-    public class CreateProductTest : ProductCatalogTestBase
+    public class DeleteProductTest : ProductCatalogTestBase
     {
         [Test]
         public void ShouldRequireMinimumFields()
         {
             // Arrange
-            var command = new CreateProductCommand();
+            var command = new DeleteProductCommand();
 
             // Act
             var results = FluentActions.Invoking(() => SendAsync(command));
@@ -29,17 +28,17 @@ namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
         }
 
         [Test]
-        public async Task ShouldCreateProduct()
+        public async Task ShouldDeleteProduct()
         {
             // Arrange
 
             // Create product brand
-            var brand = await CreateAsync(new Brand("Test Brand"));
+            var brand = await CreateAsync(new Brand("Test Brand Delete Brand"));
 
             // Create product category
-            var productCategory = await CreateAsync(new ProductCategory("Test ProductCategory"));
+            var productCategory = await CreateAsync(new ProductCategory("Test ProductCategory Delete Product category"));
 
-            var command = new CreateProductCommand
+            var createProductCommand = new CreateProductCommand
             {
                 AvailableToSell = true,
                 // created brand id
@@ -51,13 +50,19 @@ namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
                 Barcode = "Test Product"
             };
 
+            var productToAddId = await SendAsync(createProductCommand);
+
+            var deleteProductCommand = new DeleteProductCommand
+            {
+                ProductId = productToAddId
+            };
+
             // Act
-            var productId = await SendAsync(command);
-            var product = await FindAsync<Product>(productId);
+            await SendAsync(deleteProductCommand);
+            var results = FluentActions.Invoking(() => SendAsync(deleteProductCommand));
 
             // Assert
-            product.Should().NotBeNull();
-            product.CreatedDateUtc.Should().BeCloseTo(DateTime.UtcNow, 10000);
+            results.Should().Throw<ProductNotFoundException>();
         }
 
     }

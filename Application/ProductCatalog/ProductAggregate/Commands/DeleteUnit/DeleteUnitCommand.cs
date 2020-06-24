@@ -1,10 +1,6 @@
-﻿using Domain.Common.Exceptions;
-using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
+﻿using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.Exceptions;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
