@@ -16,13 +16,20 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@1
+  displayName: 'Install NuGet'
 
 - task: NuGetCommand@2
+  displayName: 'Restore NuGet Packages'
   inputs:
     restoreSolution: '$(solution)'
+    
+- task: DotNetCoreCLI@2
+  displayName: 'Testing'
+  inputs:
+    command: 'test'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Publish API.csproj'
+  displayName: 'Publish All Projects'
   inputs:
     command: publish
     publishWebProjects: True
