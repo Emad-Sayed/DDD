@@ -1,34 +1,36 @@
-﻿using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
+﻿using System.Threading.Tasks;
+using Application.Common.Interfaces;
+using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory;
 using Application.ShoppingVan.Commands.AddItemToVan;
+using Application.ShoppingVan.Commands.RemoveItemFromVan;
 using Domain.Common.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
-using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.ShoppingVanTest.Commands
 {
 
-
     using static ShoppingVanTesting;
 
-    public class AddItemToVanTest : ShoppingVanTestBase
+    public class RemoveItemFromVanTest : ShoppingVanTestBase
     {
+
         [Test]
         public void ShouldRequireMinimumFields()
         {
-            var command = new AddItemToVanCommand();
+            var command = new RemoveItemFromVanCommand();
 
             FluentActions.Invoking(() =>
-                SendAsync(command))
+                    SendAsync(command))
                 .Should()
                 .Throw<BaseValidationException>();
         }
 
         [Test]
-        public async Task ShouldAddItemToVan()
+        public async Task ShouldRemoveItemFromVan()
         {
             // Arrange
             await RunAsDefaultUserAsync();
@@ -66,24 +68,32 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
                 Count = 6,
                 IsAvailable = true,
                 Name = "Test Unit",
-                Weight   = 44
+                Weight = 44
             };
 
             var unitId = await SendAsync(addUnitToCommand);
 
             // AddItem To Shopping Van
-            var command = new AddItemToVanCommand
+            var addItemToVanCommand = new AddItemToVanCommand
             {
                 ProductId = productId,
                 UnitId = unitId
             };
+            await SendAsync(addItemToVanCommand);
+            await SendAsync(addItemToVanCommand);
+
+            // remove item from Shopping Van
+            var command = new RemoveItemFromVanCommand
+            {
+                ProductId = productId
+            };
+
+            var productCount = await SendAsync(command);
 
             // Act
-            await SendAsync(command);
-            var shoppingVanItemCount = await SendAsync(command);
 
             // Assert
-            shoppingVanItemCount.Should().Be(2);
+            productCount.Should().Be(1);
         }
 
     }

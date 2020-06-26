@@ -10,8 +10,8 @@ namespace Application.ShoppingVan.Commands.AddItemToVan
     {
         public AddItemToVanCommandValidator()
         {
-            RuleFor(x => x.ProductId).Must(guid => GuidValidator.IsGuid(guid)).WithMessage("Bad ProductId Format ProductId must be GUID").WithErrorCode("invalid_guid");
-            RuleFor(x => x.UnitId).NotEmpty().Must(guid => GuidValidator.IsGuid(guid)).WithMessage("Bad UnitId Format UnitId must be GUID").WithErrorCode("invalid_guid");
+            RuleFor(x => x.ProductId).Must(GuidValidator.IsGuid).WithMessage("Bad ProductId Format ProductId must be GUID").WithErrorCode("invalid_guid");
+            RuleFor(x => x.UnitId).NotEmpty().Must(GuidValidator.IsGuid).WithMessage("Bad UnitId Format UnitId must be GUID").WithErrorCode("invalid_guid");
         }
     }
 }

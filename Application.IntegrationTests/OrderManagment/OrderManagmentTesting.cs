@@ -1,23 +1,23 @@
-﻿using MediatR;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
-using Moq;
-using NUnit.Framework;
-using Respawn;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Brimo.IDP.Admin.EntityFramework.Shared.Entities.Identity;
+using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Persistence.ShoppingVan;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using NUnit.Framework;
+using Persistence.OrderManagment;
+using Respawn;
 
-namespace Application.IntegrationTests.ShoppingVanTest
+namespace Application.IntegrationTests.OrderManagment
 {
     [SetUpFixture]
-    public class ShoppingVanTesting
+    public class OrderManagmentTesting
     {
         private static IConfigurationRoot _configuration;
         private static IServiceScopeFactory _scopeFactory;
@@ -36,7 +36,7 @@ namespace Application.IntegrationTests.ShoppingVanTest
             var startup = new API.Startup(_configuration);
 
             var services = new ServiceCollection();
-            var identityStartUp = new  Brimo.IDP.STS.Identity.Startup(_configuration);
+            var identityStartUp = new Brimo.IDP.STS.Identity.Startup(_configuration);
 
             services.AddSingleton(Mock.Of<IHostingEnvironment>(w =>
                 w.EnvironmentName == "Development"));
@@ -69,7 +69,7 @@ namespace Application.IntegrationTests.ShoppingVanTest
         {
             using var scope = _scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetService<ShoppingVanContext>();
+            var context = scope.ServiceProvider.GetService<OrderContext>();
 
             //context.Database.Migrate();
         }
@@ -123,7 +123,7 @@ namespace Application.IntegrationTests.ShoppingVanTest
         {
             using var scope = _scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetService<ShoppingVanContext>();
+            var context = scope.ServiceProvider.GetService<OrderContext>();
 
             return await context.FindAsync<T>(new Guid(id));
         }
@@ -133,7 +133,7 @@ namespace Application.IntegrationTests.ShoppingVanTest
         {
             using var scope = _scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetService<ShoppingVanContext>();
+            var context = scope.ServiceProvider.GetService<OrderContext>();
 
             await context.AddAsync(entity);
             await context.SaveChangesAsync();

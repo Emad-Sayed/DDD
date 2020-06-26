@@ -1,37 +1,28 @@
-﻿using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory;
 using Application.ShoppingVan.Commands.AddItemToVan;
-using Domain.Common.Exceptions;
+using Application.ShoppingVan.Queries.CurrentCustomerVan;
+using Application.ShoppingVan.Queries.CurrentVanPricenfo;
 using FluentAssertions;
 using NUnit.Framework;
-using System.Threading.Tasks;
 
-namespace Application.IntegrationTests.ShoppingVanTest.Commands
+namespace Application.IntegrationTests.ShoppingVanTest.Queries
 {
-
-
     using static ShoppingVanTesting;
 
-    public class AddItemToVanTest : ShoppingVanTestBase
+    public class CurrentVanPriceInfoTest : ShoppingVanTestBase
     {
         [Test]
-        public void ShouldRequireMinimumFields()
-        {
-            var command = new AddItemToVanCommand();
-
-            FluentActions.Invoking(() =>
-                SendAsync(command))
-                .Should()
-                .Throw<BaseValidationException>();
-        }
-
-        [Test]
-        public async Task ShouldAddItemToVan()
+        public async Task ShouldGetCurrentCustomerVanPriceInfo()
         {
             // Arrange
-            await RunAsDefaultUserAsync();
+            var currentCustomerId = await RunAsDefaultUserAsync();
 
             // Create product brand
             var brandCommand = new CreateBrandCommand { Name = "Test Brand" };
@@ -66,7 +57,7 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
                 Count = 6,
                 IsAvailable = true,
                 Name = "Test Unit",
-                Weight   = 44
+                Weight = 44
             };
 
             var unitId = await SendAsync(addUnitToCommand);
@@ -78,12 +69,16 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
                 UnitId = unitId
             };
 
-            // Act
             await SendAsync(command);
-            var shoppingVanItemCount = await SendAsync(command);
+            // Act
+
+            var currentVanPriceInfoQuery = new CurrentVanPriceInfoQuery();
+            var currentCustomerVanPriceInfo = await SendAsync(currentVanPriceInfoQuery);
 
             // Assert
-            shoppingVanItemCount.Should().Be(2);
+            currentCustomerVanPriceInfo.TaxValue.Should().Be(14);
+            //currentCustomerVanPriceInfo.TotalVanPriceBeforeTaxValue.Should().Be(addUnitToCommand.SellingPrice);
+            currentCustomerVanPriceInfo.TotalVanPriceAfterTaxValue.Should().Be(addUnitToCommand.SellingPrice + (addUnitToCommand.SellingPrice * 0.14f));
         }
 
     }

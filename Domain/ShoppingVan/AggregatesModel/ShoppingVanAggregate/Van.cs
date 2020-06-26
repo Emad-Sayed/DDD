@@ -45,7 +45,7 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
             }
 
             TotalItemsCount += 1;
-            TotalPrice += vanItem.UnitPrice;
+            TotalPrice += vanItem.SellingPrice + (vanItem.SellingPrice * 0.14f);
 
             AddDomainEvent(new ShoppingVanUpdated(this));
         }
@@ -57,7 +57,7 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
             {
                 TotalItemsCount -= 1;
                 vanItem.ChangeAmount(vanItem.Amount - 1);
-                TotalPrice -= vanItem.UnitPrice;
+                TotalPrice -= vanItem.SellingPrice + (vanItem.SellingPrice * 0.14f);
 
                 // Check if the van item amount is less than or = to 0 then will remove this item from van
                 if (vanItem.Amount <= 0) ShoppingVanItems.Remove(vanItem);

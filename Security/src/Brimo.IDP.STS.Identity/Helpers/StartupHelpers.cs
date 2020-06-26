@@ -151,14 +151,9 @@ namespace Brimo.IDP.STS.Identity.Helpers
             var configurationConnectionString = configuration.GetConnectionString(ConfigurationConsts.ConfigurationDbConnectionStringKey);
             var persistedGrantsConnectionString = configuration.GetConnectionString(ConfigurationConsts.PersistedGrantDbConnectionStringKey);
 
-            switch (databaseProvider.ProviderType)
-            {
-                case DatabaseProviderType.SqlServer:
-                    services.RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(databaseProvider.ProviderType), $@"The value needs to be one of {string.Join(", ", Enum.GetNames(typeof(DatabaseProviderType)))}.");
-            }
+
+            services.RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString);
+
         }
 
         /// <summary>

@@ -30,12 +30,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\API\API.csproj" />
+    <ProjectReference Include="..\Security\src\Brimo.IDP.STS.Identity\Brimo.IDP.STS.Identity.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="DistributorManagment\" />
     <Folder Include="CustomerManagment\" />
-    <Folder Include="OrderManagment\" />
+    <Folder Include="OrderManagment\Queries\" />
   </ItemGroup>
 
 </Project>

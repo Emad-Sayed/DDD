@@ -1,4 +1,11 @@
-﻿using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Application.CustomerManagment.Commands.CreateCustomer;
+using Application.OrderManagment.Commands.PlaceOrder;
+using Application.OrderManagment.Queries.ListOrders;
+using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory;
@@ -6,15 +13,12 @@ using Application.ShoppingVan.Commands.AddItemToVan;
 using Domain.Common.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
-using System.Threading.Tasks;
 
-namespace Application.IntegrationTests.ShoppingVanTest.Commands
+namespace Application.IntegrationTests.OrderManagment.Commands
 {
+    using static OrderManagmentTesting;
 
-
-    using static ShoppingVanTesting;
-
-    public class AddItemToVanTest : ShoppingVanTestBase
+    public class PlaceOrderTest : OrderManagmentTestBase
     {
         [Test]
         public void ShouldRequireMinimumFields()
@@ -28,10 +32,22 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
         }
 
         [Test]
-        public async Task ShouldAddItemToVan()
+        public async Task ShouldPlaceTheOrder()
         {
             // Arrange
-            await RunAsDefaultUserAsync();
+            var accountId = await RunAsDefaultUserAsync();
+
+            var createCustomerCommand = new CreateCustomerCommand
+            {
+                AccountId = accountId,
+                City = "Test City",
+                Area = "Test Area",
+                ShopName = "Test Shop Name",
+                ShopAddress = "Test Shop address",
+                LocationOnMap = "Test LocationOnMap"
+            };
+
+           await SendAsync(createCustomerCommand);
 
             // Create product brand
             var brandCommand = new CreateBrandCommand { Name = "Test Brand" };
@@ -66,7 +82,7 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
                 Count = 6,
                 IsAvailable = true,
                 Name = "Test Unit",
-                Weight   = 44
+                Weight = 44
             };
 
             var unitId = await SendAsync(addUnitToCommand);
@@ -78,12 +94,19 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
                 UnitId = unitId
             };
 
-            // Act
             await SendAsync(command);
             var shoppingVanItemCount = await SendAsync(command);
+            // Act
+            var placeOrderCommand = new PlaceOrderCommand();
+            await SendAsync(placeOrderCommand);
+
+            var ordersQuery = new ListOrdersQuery();
+            var orders = await SendAsync(ordersQuery);
 
             // Assert
-            shoppingVanItemCount.Should().Be(2);
+
+            orders.Data.Should().NotBeNull();
+            orders.TotalCount.Should().Be(1);
         }
 
     }

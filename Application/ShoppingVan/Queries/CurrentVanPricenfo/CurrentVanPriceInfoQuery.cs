@@ -31,12 +31,11 @@ namespace Application.ShoppingVan.Queries.CurrentVanPricenfo
             {
                 var vanFromRepo = await _shoppingVanRepository.FindByCustomerIdAsync(_currentUserService.UserId);
                 float taxValue = 14;
-                float taxPercentage = taxValue / 100;
                 var vanInfo = new VanPriceInfoVM
                 {
                     TaxValue = taxValue,
-                    TotalVanPriceBeforeTaxValue = vanFromRepo.TotalPrice,
-                    TotalVanPriceAfterTaxValue = (taxPercentage * vanFromRepo.TotalPrice) + vanFromRepo.TotalPrice
+                    TotalVanPriceBeforeTaxValue = vanFromRepo.TotalPrice - (vanFromRepo.TotalPrice * 0.14f),
+                    TotalVanPriceAfterTaxValue = vanFromRepo.TotalPrice
                 };
                 return vanInfo;
             }

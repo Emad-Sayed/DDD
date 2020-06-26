@@ -26,9 +26,6 @@ namespace Application.ShoppingVan.Commands.RemoveItemFromVan
 
             public async Task<int> Handle(RemoveItemFromVanCommand request, CancellationToken cancellationToken)
             {
-                if (string.IsNullOrEmpty(_currentUserService.UserId))
-                    throw new Exception("you must login");
-
                 // Get current logged in user shopping van
                 var van = await _shoppingVanRepository.GetCustomerShoppingVan(_currentUserService.UserId);
 

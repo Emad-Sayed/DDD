@@ -1,34 +1,26 @@
-﻿using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory;
 using Application.ShoppingVan.Commands.AddItemToVan;
+using Application.ShoppingVan.Commands.DeleteCurrentCustomerVan;
+using Application.ShoppingVan.Queries.CurrentCustomerVan;
 using Domain.Common.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
-using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.ShoppingVanTest.Commands
 {
+     using static ShoppingVanTesting;
 
-
-    using static ShoppingVanTesting;
-
-    public class AddItemToVanTest : ShoppingVanTestBase
+    public class DeleteCurrentCustomerVanTest : ShoppingVanTestBase
     {
         [Test]
-        public void ShouldRequireMinimumFields()
-        {
-            var command = new AddItemToVanCommand();
-
-            FluentActions.Invoking(() =>
-                SendAsync(command))
-                .Should()
-                .Throw<BaseValidationException>();
-        }
-
-        [Test]
-        public async Task ShouldAddItemToVan()
+        public async Task ShouldDeleteCurrentCustomerVan()
         {
             // Arrange
             await RunAsDefaultUserAsync();
@@ -66,7 +58,7 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
                 Count = 6,
                 IsAvailable = true,
                 Name = "Test Unit",
-                Weight   = 44
+                Weight = 44
             };
 
             var unitId = await SendAsync(addUnitToCommand);
@@ -78,12 +70,21 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
                 UnitId = unitId
             };
 
-            // Act
             await SendAsync(command);
-            var shoppingVanItemCount = await SendAsync(command);
+            // Act
 
+            var getCurrentCustomerVanQuery = new CurrentCustomerVanQuery();
+            var currentCustomerVan = await SendAsync(getCurrentCustomerVanQuery);
+
+            var deleteCurrentCustomerVanCommand = new DeleteCurrentCustomerVanCommand();
+
+            await SendAsync(deleteCurrentCustomerVanCommand);
+
+            var currentCustomerVanAfterDeleting = await SendAsync(getCurrentCustomerVanQuery);
             // Assert
-            shoppingVanItemCount.Should().Be(2);
+
+            currentCustomerVan.Should().NotBeNull();
+            currentCustomerVanAfterDeleting.Should().BeNull();
         }
 
     }

@@ -12,13 +12,7 @@ namespace Infrastructure.Repositories.ShoppingVan
     {
         private readonly ShoppingVanContext _context;
 
-        public IUnitOfWork UnitOfWork
-        {
-            get
-            {
-                return _context;
-            }
-        }
+        public IUnitOfWork UnitOfWork => _context;
 
         public ShoppingVanRepository(ShoppingVanContext context)
         {
