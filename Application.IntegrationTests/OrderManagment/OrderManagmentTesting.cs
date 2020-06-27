@@ -28,19 +28,26 @@ namespace Application.IntegrationTests.OrderManagment
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
                 .AddEnvironmentVariables();
+
+            builder.AddJsonFile("appsettings.Testing.Development.json", true, true);
+            builder.AddJsonFile("appsettings.Testing.json", true, true);
+
 
             _configuration = builder.Build();
 
             var startup = new API.Startup(_configuration);
-
-            var services = new ServiceCollection();
             var identityStartUp = new Brimo.IDP.STS.Identity.Startup(_configuration);
 
-            services.AddSingleton(Mock.Of<IHostingEnvironment>(w =>
-                w.EnvironmentName == "Development"));
+            var services = new ServiceCollection();
 
+            services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
+                w.EnvironmentName == "Development" &&
+                w.ApplicationName == "API"));
+
+            services.AddSingleton(Mock.Of<IHostingEnvironment>(w =>
+                            w.EnvironmentName == "Development" &&
+                            w.ApplicationName == "API"));
 
             services.AddLogging();
 
@@ -61,7 +68,6 @@ namespace Application.IntegrationTests.OrderManagment
             {
                 TablesToIgnore = new[] { "__EFMigrationsHistory" }
             };
-
             EnsureDatabase();
         }
 

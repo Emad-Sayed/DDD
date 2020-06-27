@@ -71,7 +71,7 @@ namespace API
 
             _assembliesStartup.ForEach(startup => startup.ConfigureServices(services));
 
-            services.AddApplicationInsightsTelemetry(Configuration["ApplicationInsights:InstrumentationKey"]);
+            //services.AddApplicationInsightsTelemetry(Configuration["ApplicationInsights:InstrumentationKey"]);
 
             services.AddAuthentication(options =>
             {

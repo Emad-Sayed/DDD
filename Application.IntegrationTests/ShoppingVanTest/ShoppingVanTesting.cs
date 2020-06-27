@@ -28,7 +28,8 @@ namespace Application.IntegrationTests.ShoppingVanTest
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile("appsettings.Testing.Development.json", true, true)
+                .AddJsonFile("appsettings.Testing.json", true, true)
                 .AddEnvironmentVariables();
 
             _configuration = builder.Build();
@@ -38,9 +39,11 @@ namespace Application.IntegrationTests.ShoppingVanTest
             var services = new ServiceCollection();
             var identityStartUp = new  Brimo.IDP.STS.Identity.Startup(_configuration);
 
-            services.AddSingleton(Mock.Of<IHostingEnvironment>(w =>
+            services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
                 w.EnvironmentName == "Development"));
 
+            services.AddSingleton(Mock.Of<IHostingEnvironment>(w =>
+                w.EnvironmentName == "Development" && w.ApplicationName =="Brimo.API"));
 
             services.AddLogging();
 
@@ -114,6 +117,7 @@ namespace Application.IntegrationTests.ShoppingVanTest
 
         public static async Task ResetState()
         {
+            var ss = _configuration.GetConnectionString("BrimoDatabase");
             await _checkpoint.Reset(_configuration.GetConnectionString("BrimoDatabase"));
             _currentUserId = null;
         }

@@ -1,14 +1,14 @@
-﻿using Domain.CustomerManagment.AggregatesModel.CustomerAggregate;
-using MediatR;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-namespace Application.CustomerManagment.Commands.CreateCustomer
-{
+using Domain.CustomerManagment.AggregatesModel.CustomerAggregate;
+using MediatR;
 
-    public class CreateCustomerCommand : IRequest<string>
+namespace Application.CustomerManagment.Commands.UpdateCustomer
+{
+    public class UpdateCustomerCommand : IRequest<string>
     {
         public string AccountId { get; set; }
         public string FullName { get; set; }
@@ -18,7 +18,7 @@ namespace Application.CustomerManagment.Commands.CreateCustomer
         public string City { get; set; }
         public string Area { get; set; }
 
-        public class Handler : IRequestHandler<CreateCustomerCommand, string>
+        public class Handler : IRequestHandler<UpdateCustomerCommand, string>
         {
             private readonly ICustomerRepository _customerRepository;
 
@@ -30,26 +30,24 @@ namespace Application.CustomerManagment.Commands.CreateCustomer
                 _mediator = mediator;
             }
 
-            public async Task<string> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
+            public async Task<string> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
             {
-                var entity = new Customer
-                    (
-                    request.AccountId,
+                var customer = await _customerRepository.GetCustomerByAccountId(request.AccountId);
+                customer.UpdateCustomer(
                     request.City,
                     request.Area,
                     request.FullName,
                     request.ShopName,
                     request.ShopAddress,
                     request.LocationOnMap
-                    );
+                );
 
-                _customerRepository.Add(entity);
+                _customerRepository.Update(customer);
 
                 await _customerRepository.UnitOfWork.SaveEntitiesAsync();
 
-                return entity.Id.ToString();
+                return customer.Id.ToString();
             }
         }
     }
-
 }

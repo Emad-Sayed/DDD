@@ -24,7 +24,8 @@ namespace Application.IntegrationTests.ProductCatalog
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile("appsettings.Testing.Development.json", true, true)
+                .AddJsonFile("appsettings.Testing.json", true, true)
                 .AddEnvironmentVariables();
 
             _configuration = builder.Build();
@@ -33,9 +34,12 @@ namespace Application.IntegrationTests.ProductCatalog
 
             var services = new ServiceCollection();
 
-            services.AddSingleton(Mock.Of<IHostingEnvironment>(w =>
+            services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
                 w.EnvironmentName == "Development"));
 
+
+            services.AddSingleton(Mock.Of<IHostingEnvironment>(w =>
+                w.EnvironmentName == "Development"));
 
             services.AddLogging();
 
@@ -46,7 +50,7 @@ namespace Application.IntegrationTests.ProductCatalog
             _checkpoint = new Checkpoint
             {
                 TablesToIgnore = new[] { "__EFMigrationsHistory", "Brands" },
-                
+
             };
 
         }

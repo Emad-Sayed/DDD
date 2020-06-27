@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.Configuration;
 using Application.CustomerManagment.Commands.CreateCustomer;
 using Application.CustomerManagment.Commands.DeleteCustomer;
+using Application.CustomerManagment.Commands.UpdateCustomer;
 using Application.CustomerManagment.Queries.CustomerById;
 using Application.CustomerManagment.Queries.ListCities;
 using Application.CustomerManagment.Queries.ListCustomers;
@@ -35,6 +36,14 @@ namespace API.Controllers.CustomerManagment
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateCustomerCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody]UpdateCustomerCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);

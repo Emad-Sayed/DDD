@@ -7,9 +7,12 @@ namespace Application.CustomerManagment.ViewModels
     public class CustomerVM
     {
         public string Id { get; set; }
-        public string AccountId { get; private set; }
-        public string ShopName { get; private set; }
-        public string ShopAddress { get; private set; }
-        public string LocationOnMap { get; private set; }
+        public string AccountId { get;  set; }
+        public string FullName { get;  set; }
+        public string ShopName { get;  set; }
+        public string ShopAddress { get;  set; }
+        public string LocationOnMap { get;  set; }
+        public string City { get;  set; }
+        public string Area { get;  set; }
     }
 }
