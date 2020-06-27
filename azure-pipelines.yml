@@ -22,7 +22,12 @@ steps:
   displayName: 'Restore NuGet Packages'
   inputs:
     restoreSolution: '$(solution)'
-  
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run All Test'
+  inputs:
+    command: 'test'
+
 - task: DotNetCoreCLI@2
   displayName: 'Publish All Projects'
   inputs:
