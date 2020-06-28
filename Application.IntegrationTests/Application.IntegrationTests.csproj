@@ -42,7 +42,6 @@
   <ItemGroup>
     <Folder Include="DistributorManagment\" />
     <Folder Include="CustomerManagment\" />
-    <Folder Include="OrderManagment\Queries\" />
   </ItemGroup>
 
 </Project>

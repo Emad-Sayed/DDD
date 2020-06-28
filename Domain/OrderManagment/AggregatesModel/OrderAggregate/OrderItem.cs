@@ -1,5 +1,4 @@
 ﻿using Domain.Base.Entity;
-using Domain.OrderManagment.Exceptions;
 
 namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
 {
@@ -36,16 +35,12 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             UnitName = unitName;
         }
 
-        public void Update(string unitId, string unitName, int unitCount = 1)
+        public void Update(string unitId, string unitName,float unitPrice, int unitCount = 1)
         {
             UnitCount = unitCount;
             UnitId = unitId;
+            UnitPrice = unitPrice;
             UnitName = unitName;
-        }
-
-        public void AddUnits(int units)
-        {
-            UnitCount += units;
         }
     }
 

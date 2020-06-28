@@ -1,24 +1,40 @@
-﻿using System.Threading.Tasks;
-using Application.CustomerManagment.Commands.CreateCustomer;
+﻿using Application.CustomerManagment.Commands.CreateCustomer;
+using Application.OrderManagment.Commands.CancelOrder;
 using Application.OrderManagment.Commands.PlaceOrder;
-using Application.OrderManagment.Queries.ListOrders;
 using Application.OrderManagment.Queries.OrderById;
 using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory;
 using Application.ShoppingVan.Commands.AddItemToVan;
+using Domain.Common.Exceptions;
+using Domain.OrderManagment.AggregatesModel.OrderAggregate;
 using FluentAssertions;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.OrderManagment.Commands
 {
     using static OrderManagmentTesting;
 
-    public class PlaceOrderTest : OrderManagmentTestBase
+    public class CancelOrderTest : OrderManagmentTestBase
     {
         [Test]
-        public async Task ShouldPlaceOrder()
+        public void ShouldRequireMinimumFields()
+        {
+            var command = new CancelOrderCommand();
+
+            FluentActions.Invoking(() =>
+                SendAsync(command))
+                .Should()
+                .Throw<BaseValidationException>();
+        }
+
+        [Test]
+        public async Task ShouldCancelOrder()
         {
             // Arrange
             var accountId = await RunAsDefaultUserAsync();
@@ -83,11 +99,15 @@ namespace Application.IntegrationTests.OrderManagment.Commands
             await SendAsync(addItemToVanCommand);
             await SendAsync(addItemToVanCommand);
 
-            // Act
-
             // Place Order Command
             var placeOrderCommand = new PlaceOrderCommand();
             var orderId = await SendAsync(placeOrderCommand);
+
+            // Act
+
+            // Cancel Order Command
+            var cancelOrderCommand = new CancelOrderCommand { OrderId = orderId };
+            await SendAsync(cancelOrderCommand);
 
             // Get Order By Id Query
             var orderByIdQuery = new OrderByIdQuery { OrderId = orderId };
@@ -95,7 +115,7 @@ namespace Application.IntegrationTests.OrderManagment.Commands
 
             // Assert
             order.Should().NotBeNull();
-            order.OrderItems.Count.Should().Be(1);
+            order.OrderStatus.Should().Be(OrderStatus.Cancelled);
         }
     }
 }

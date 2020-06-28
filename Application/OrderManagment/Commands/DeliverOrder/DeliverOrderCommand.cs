@@ -30,6 +30,7 @@ namespace Application.OrderManagment.Commands.DeliverOrder
                 var orderToDeliver = await _orderRepository.GetByIdAsync(request.OrderId);
                 if (orderToDeliver == null) throw new OrderNotFoundException(request.OrderId);
 
+                if (orderToDeliver.OrderStatus != OrderStatus.Shipped) throw new OrderNotShippedException(request.OrderId);
 
                 orderToDeliver.DeliverOrder();
 

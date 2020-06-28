@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Domain.OrderManagment.Exceptions
 {
-    public class CancelOrderAfterConfirmedException : BusinessException
+    public class CancelConfirmedOrderException : BusinessException
     {
-        public CancelOrderAfterConfirmedException(string id)
+        public CancelConfirmedOrderException(string id)
            : base(HttpStatusCode.BadRequest, $"Can cancel confirmed order with id {id}", "order_cancel_after_confirmed")
         {
         }

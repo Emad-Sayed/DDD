@@ -113,6 +113,8 @@ namespace Brimo.IDP.STS.Identity.Controllers
 
             var result = await _userManager.AddPasswordAsync(user, model.Password);
 
+            if (!result.Succeeded) return BadRequest("this user already registerd before");
+
             var businessUserId = await CreateCustomer(model, user);
             user.BusinessUserId = businessUserId;
             await _userManager.UpdateAsync(user);

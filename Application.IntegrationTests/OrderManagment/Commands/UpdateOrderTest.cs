@@ -1,24 +1,40 @@
-﻿using System.Threading.Tasks;
-using Application.CustomerManagment.Commands.CreateCustomer;
+﻿using Application.CustomerManagment.Commands.CreateCustomer;
 using Application.OrderManagment.Commands.PlaceOrder;
-using Application.OrderManagment.Queries.ListOrders;
+using Application.OrderManagment.Commands.UpdateOrder;
 using Application.OrderManagment.Queries.OrderById;
 using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory;
 using Application.ShoppingVan.Commands.AddItemToVan;
+using Domain.Common.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.OrderManagment.Commands
 {
     using static OrderManagmentTesting;
 
-    public class PlaceOrderTest : OrderManagmentTestBase
+    public class UpdateOrderTest : OrderManagmentTestBase
     {
         [Test]
-        public async Task ShouldPlaceOrder()
+        public void ShouldRequireMinimumFields()
+        {
+            var command = new UpdateOrderCommand();
+
+            FluentActions.Invoking(() =>
+                SendAsync(command))
+                .Should()
+                .Throw<BaseValidationException>();
+        }
+
+        [Test]
+        public async Task ShouldUpdateOrder()
         {
             // Arrange
             var accountId = await RunAsDefaultUserAsync();
@@ -58,8 +74,8 @@ namespace Application.IntegrationTests.OrderManagment.Commands
 
             var productId = await SendAsync(createProductCommand);
 
-            // Add unit to product
-            var addUnitToCommand = new AddUnitCommand
+            // Add first unit to product
+            var addFirstUnitCommand = new AddUnitCommand
             {
                 ProductId = productId,
                 SellingPrice = 92,
@@ -67,23 +83,36 @@ namespace Application.IntegrationTests.OrderManagment.Commands
                 Price = 33,
                 Count = 6,
                 IsAvailable = true,
-                Name = "Test Unit",
+                Name = "Test First Unit",
                 Weight = 44
             };
 
-            var unitId = await SendAsync(addUnitToCommand);
+            var firstUnitId = await SendAsync(addFirstUnitCommand);
+
+            // Add first unit to product
+            var addSecondUnitCommand = new AddUnitCommand
+            {
+                ProductId = productId,
+                SellingPrice = 342,
+                ContentCount = 24,
+                Price = 323,
+                Count = 64,
+                IsAvailable = true,
+                Name = "Test Second Unit",
+                Weight = 94
+            };
+
+            var secondUnitId = await SendAsync(addSecondUnitCommand);
 
             // AddItem To Shopping Van
             var addItemToVanCommand = new AddItemToVanCommand
             {
                 ProductId = productId,
-                UnitId = unitId
+                UnitId = firstUnitId
             };
 
             await SendAsync(addItemToVanCommand);
             await SendAsync(addItemToVanCommand);
-
-            // Act
 
             // Place Order Command
             var placeOrderCommand = new PlaceOrderCommand();
@@ -92,10 +121,28 @@ namespace Application.IntegrationTests.OrderManagment.Commands
             // Get Order By Id Query
             var orderByIdQuery = new OrderByIdQuery { OrderId = orderId };
             var order = await SendAsync(orderByIdQuery);
+            // Act
+
+            var updateOrderCommand = new UpdateOrderCommand 
+            { 
+                OrderId = orderId,
+                OrderItemId = order.OrderItems.FirstOrDefault(x => x.UnitId == firstUnitId).Id,
+                UnitId = secondUnitId,
+                UnitCount = 10,
+                UnitName = addSecondUnitCommand.Name
+            };
+
+            await SendAsync(updateOrderCommand);
+
+            // Get Order By Id Query
+            var orderAfterUpdate = await SendAsync(orderByIdQuery);
+
 
             // Assert
             order.Should().NotBeNull();
             order.OrderItems.Count.Should().Be(1);
+            order.OrderItems.FirstOrDefault(x => x.UnitId == firstUnitId).UnitName.Should().Be(addFirstUnitCommand.Name);
+            orderAfterUpdate.OrderItems.FirstOrDefault(x => x.UnitId == secondUnitId).UnitName.Should().Be(addSecondUnitCommand.Name);
         }
     }
 }

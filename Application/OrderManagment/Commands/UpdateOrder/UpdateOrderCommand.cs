@@ -18,6 +18,7 @@ namespace Application.OrderManagment.Commands.UpdateOrder
         public string OrderItemId { get; set; }
         public string UnitName { get; set; }
         public string UnitId { get; set; }
+        public float UnitPrice { get; set; }
         public int UnitCount { get; set; }
 
         public class Handler : IRequestHandler<UpdateOrderCommand>
@@ -34,7 +35,7 @@ namespace Application.OrderManagment.Commands.UpdateOrder
                 var orderFromRepo = await _orderRepository.GetByIdAsync(request.OrderId);
                 if (orderFromRepo == null) throw new OrderNotFoundException(request.OrderId);
                 
-                orderFromRepo.UpdateOrderItem(request.OrderItemId, request.UnitId, request.UnitName, request.UnitCount);
+                orderFromRepo.UpdateOrderItem(request.OrderItemId, request.UnitId, request.UnitName, request.UnitPrice, request.UnitCount);
 
                 _orderRepository.Update(orderFromRepo);
 

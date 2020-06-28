@@ -30,6 +30,8 @@ namespace Application.OrderManagment.Commands.ShippOrder
                 var orderToShipp = await _orderRepository.GetByIdAsync(request.OrderId);
                 if (orderToShipp == null) throw new OrderNotFoundException(request.OrderId);
 
+                if (orderToShipp.OrderStatus != OrderStatus.Confirmed) throw new OrderNotConfirmedException(request.OrderId);
+
                 orderToShipp.ShippOrder();
 
                 await _orderRepository.UnitOfWork.SaveEntitiesAsync();

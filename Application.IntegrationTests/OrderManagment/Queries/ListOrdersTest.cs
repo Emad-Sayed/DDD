@@ -1,24 +1,28 @@
-﻿using System.Threading.Tasks;
-using Application.CustomerManagment.Commands.CreateCustomer;
+﻿using Application.CustomerManagment.Commands.CreateCustomer;
 using Application.OrderManagment.Commands.PlaceOrder;
+using Application.OrderManagment.Queries.CustomerOrders;
 using Application.OrderManagment.Queries.ListOrders;
-using Application.OrderManagment.Queries.OrderById;
 using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory;
 using Application.ShoppingVan.Commands.AddItemToVan;
+using Domain.OrderManagment.AggregatesModel.OrderAggregate;
 using FluentAssertions;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Application.IntegrationTests.OrderManagment.Commands
+namespace Application.IntegrationTests.OrderManagment.Queries
 {
     using static OrderManagmentTesting;
 
-    public class PlaceOrderTest : OrderManagmentTestBase
+    public class ListOrdersTest : OrderManagmentTestBase
     {
         [Test]
-        public async Task ShouldPlaceOrder()
+        public async Task ShouldListAllOrders()
         {
             // Arrange
             var accountId = await RunAsDefaultUserAsync();
@@ -83,19 +87,19 @@ namespace Application.IntegrationTests.OrderManagment.Commands
             await SendAsync(addItemToVanCommand);
             await SendAsync(addItemToVanCommand);
 
-            // Act
-
             // Place Order Command
             var placeOrderCommand = new PlaceOrderCommand();
-            var orderId = await SendAsync(placeOrderCommand);
+            await SendAsync(placeOrderCommand);
+
+            // Act
 
             // Get Order By Id Query
-            var orderByIdQuery = new OrderByIdQuery { OrderId = orderId };
-            var order = await SendAsync(orderByIdQuery);
+            var listOrdersQuery = new ListOrdersQuery { OrderStatuses = new List<OrderStatus> { OrderStatus.Placed } };
+            var listOrders = await SendAsync(listOrdersQuery);
 
             // Assert
-            order.Should().NotBeNull();
-            order.OrderItems.Count.Should().Be(1);
+            listOrders.Data.Should().NotBeNull();
+            listOrders.Data.Count.Should().Be(1);
         }
     }
 }

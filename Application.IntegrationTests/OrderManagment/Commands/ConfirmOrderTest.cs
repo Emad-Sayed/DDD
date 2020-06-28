@@ -1,13 +1,17 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Application.CustomerManagment.Commands.CreateCustomer;
+using Application.OrderManagment.Commands.ConfirmOrder;
 using Application.OrderManagment.Commands.PlaceOrder;
-using Application.OrderManagment.Queries.ListOrders;
 using Application.OrderManagment.Queries.OrderById;
 using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory;
 using Application.ShoppingVan.Commands.AddItemToVan;
+using Domain.Common.Exceptions;
+using Domain.OrderManagment.AggregatesModel.OrderAggregate;
+using Domain.OrderManagment.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -15,10 +19,21 @@ namespace Application.IntegrationTests.OrderManagment.Commands
 {
     using static OrderManagmentTesting;
 
-    public class PlaceOrderTest : OrderManagmentTestBase
+    public class ConfirmOrderTest : OrderManagmentTestBase
     {
         [Test]
-        public async Task ShouldPlaceOrder()
+        public void ShouldRequireMinimumFields()
+        {
+            var command = new ConfirmOrderCommand();
+
+            FluentActions.Invoking(() =>
+                SendAsync(command))
+                .Should()
+                .Throw<BaseValidationException>();
+        }
+
+        [Test]
+        public async Task ShouldConfirmOrder()
         {
             // Arrange
             var accountId = await RunAsDefaultUserAsync();
@@ -83,19 +98,24 @@ namespace Application.IntegrationTests.OrderManagment.Commands
             await SendAsync(addItemToVanCommand);
             await SendAsync(addItemToVanCommand);
 
-            // Act
 
             // Place Order Command
             var placeOrderCommand = new PlaceOrderCommand();
             var orderId = await SendAsync(placeOrderCommand);
+
+            // Act
+
+            // Confirm Order Command
+            var confirmOrderCommand = new ConfirmOrderCommand { OrderId = orderId };
+            await SendAsync(confirmOrderCommand);
 
             // Get Order By Id Query
             var orderByIdQuery = new OrderByIdQuery { OrderId = orderId };
             var order = await SendAsync(orderByIdQuery);
 
             // Assert
-            order.Should().NotBeNull();
-            order.OrderItems.Count.Should().Be(1);
+            order.OrderStatus.Should().Be(OrderStatus.Confirmed);
         }
+
     }
 }
