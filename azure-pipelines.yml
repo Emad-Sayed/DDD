@@ -22,7 +22,17 @@ steps:
   displayName: 'Restore NuGet Packages'
   inputs:
     restoreSolution: '$(solution)'
-  
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run All Test'
+  inputs:
+    command: 'test'
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/drop/**/site/cobertura/coverage.xml'
+    
 - task: DotNetCoreCLI@2
   displayName: 'Publish All Projects'
   inputs:
