@@ -13,9 +13,9 @@ using NUnit.Framework;
 
 namespace Application.IntegrationTests.OrderManagment.Commands
 {
-    using static OrderManagmentTesting;
+    using static Testing;
 
-    public class PlaceOrderTest : OrderManagmentTestBase
+    public class PlaceOrderTest : TestBase
     {
         [Test]
         public async Task ShouldPlaceOrder()

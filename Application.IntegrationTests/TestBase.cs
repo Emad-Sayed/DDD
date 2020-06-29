@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.IntegrationTests.ShoppingVanTest
+namespace Application.IntegrationTests
 {
+    using static Testing;
 
-     using static ShoppingVanTesting;
-
-    public class ShoppingVanTestBase
+    public class TestBase
     {
 
         [SetUp]

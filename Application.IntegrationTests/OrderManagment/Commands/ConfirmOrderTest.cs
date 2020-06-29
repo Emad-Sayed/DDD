@@ -17,9 +17,9 @@ using NUnit.Framework;
 
 namespace Application.IntegrationTests.OrderManagment.Commands
 {
-    using static OrderManagmentTesting;
+    using static Testing;
 
-    public class ConfirmOrderTest : OrderManagmentTestBase
+    public class ConfirmOrderTest : TestBase
     {
         [Test]
         public void ShouldRequireMinimumFields()

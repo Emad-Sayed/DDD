@@ -5,15 +5,16 @@ using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
 using FluentAssertions;
 using NUnit.Framework;
+using Persistence.ProductCatalog;
 using System;
 using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
 {
 
-    using static ProductCatalogTesting;
+    using static Testing;
 
-    public class CreateProductTest : ProductCatalogTestBase
+    public class CreateProductTest : TestBase
     {
         [Test]
         public void ShouldRequireMinimumFields()
@@ -34,10 +35,10 @@ namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
             // Arrange
 
             // Create product brand
-            var brand = await CreateAsync(new Brand("Test Brand"));
+            var brand = await CreateAsync<Brand, ProductCatalogContext>(new Brand("Test Brand"));
 
             // Create product category
-            var productCategory = await CreateAsync(new ProductCategory("Test ProductCategory"));
+            var productCategory = await CreateAsync<ProductCategory, ProductCatalogContext>(new ProductCategory("Test ProductCategory"));
 
             var command = new CreateProductCommand
             {
@@ -53,7 +54,7 @@ namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
 
             // Act
             var productId = await SendAsync(command);
-            var product = await FindAsync<Product>(productId);
+            var product = await FindAsync<Product, ProductCatalogContext>(productId);
 
             // Assert
             product.Should().NotBeNull();

@@ -18,9 +18,9 @@ using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.OrderManagment.Commands
 {
-    using static OrderManagmentTesting;
+    using static Testing;
 
-    public class UpdateOrderTest : OrderManagmentTestBase
+    public class UpdateOrderTest : TestBase
     {
         [Test]
         public void ShouldRequireMinimumFields()

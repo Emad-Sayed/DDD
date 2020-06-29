@@ -15,9 +15,9 @@ using NUnit.Framework;
 
 namespace Application.IntegrationTests.ShoppingVanTest.Commands
 {
-     using static ShoppingVanTesting;
+    using static Testing;
 
-    public class DeleteCurrentCustomerVanTest : ShoppingVanTestBase
+    public class DeleteCurrentCustomerVanTest : TestBase
     {
         [Test]
         public async Task ShouldDeleteCurrentCustomerVan()

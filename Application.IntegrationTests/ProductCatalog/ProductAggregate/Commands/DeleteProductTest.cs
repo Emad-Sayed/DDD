@@ -7,12 +7,13 @@ using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
 using Domain.ProductCatalog.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
+using Persistence.ProductCatalog;
 
 namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
 {
-    using static ProductCatalogTesting;
+    using static Testing;
 
-    public class DeleteProductTest : ProductCatalogTestBase
+    public class DeleteProductTest : TestBase
     {
         [Test]
         public void ShouldRequireMinimumFields()
@@ -33,10 +34,10 @@ namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
             // Arrange
 
             // Create product brand
-            var brand = await CreateAsync(new Brand("Test Brand Delete Brand"));
+            var brand = await CreateAsync<Brand, ProductCatalogContext>(new Brand("Test Brand Delete Brand"));
 
             // Create product category
-            var productCategory = await CreateAsync(new ProductCategory("Test ProductCategory Delete Product category"));
+            var productCategory = await CreateAsync<ProductCategory, ProductCatalogContext>(new ProductCategory("Test ProductCategory Delete Product category"));
 
             var createProductCommand = new CreateProductCommand
             {

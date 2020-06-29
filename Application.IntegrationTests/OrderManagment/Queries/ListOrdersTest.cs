@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.OrderManagment.Queries
 {
-    using static OrderManagmentTesting;
+    using static Testing;
 
-    public class ListOrdersTest : OrderManagmentTestBase
+    public class ListOrdersTest : TestBase
     {
         [Test]
         public async Task ShouldListAllOrders()

@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.OrderManagment.Queries
 {
-    using static OrderManagmentTesting;
+    using static Testing;
 
-    public class OrderByIdQueryTest : OrderManagmentTestBase
+    public class OrderByIdQueryTest : TestBase
     {
         [Test]
         public async Task ShouldGetOrderById()

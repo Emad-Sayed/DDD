@@ -20,9 +20,9 @@ using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.OrderManagment.Commands
 {
-    using static OrderManagmentTesting;
+    using static Testing;
 
-    public class DeliverOrderTest : OrderManagmentTestBase
+    public class DeliverOrderTest : TestBase
     {
         [Test]
         public void ShouldRequireMinimumFields()

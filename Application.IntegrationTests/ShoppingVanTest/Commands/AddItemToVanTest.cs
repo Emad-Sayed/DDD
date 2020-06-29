@@ -12,9 +12,9 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
 {
 
 
-    using static ShoppingVanTesting;
+    using static Testing;
 
-    public class AddItemToVanTest : ShoppingVanTestBase
+    public class AddItemToVanTest : TestBase
     {
         [Test]
         public void ShouldRequireMinimumFields()

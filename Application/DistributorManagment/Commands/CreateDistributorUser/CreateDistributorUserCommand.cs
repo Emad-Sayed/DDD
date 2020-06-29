@@ -16,13 +16,13 @@ using System.Threading.Tasks;
 
 namespace Application.DistributorManagment.Commands.CreateDistributorUser
 {
-    public class CreateDistributorUserCommand : IRequest
+    public class CreateDistributorUserCommand : IRequest<string>
     {
         public string DistributorId { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
 
-        public class Handler : IRequestHandler<CreateDistributorUserCommand>
+        public class Handler : IRequestHandler<CreateDistributorUserCommand, string>
         {
             private readonly IDistributorRepository _distributorRepository;
             private readonly IConfiguration _configuration;
@@ -34,7 +34,7 @@ namespace Application.DistributorManagment.Commands.CreateDistributorUser
                 _configuration = configuration;
             }
 
-            public async Task<Unit> Handle(CreateDistributorUserCommand request, CancellationToken cancellationToken)
+            public async Task<string> Handle(CreateDistributorUserCommand request, CancellationToken cancellationToken)
             {
                 var distributor = await _distributorRepository.FindByIdAsync(request.DistributorId);
                 if (distributor == null) throw new DistributorNotFoundException(request.DistributorId);
@@ -49,7 +49,7 @@ namespace Application.DistributorManagment.Commands.CreateDistributorUser
 
                 await _distributorRepository.UnitOfWork.SaveEntitiesAsync();
 
-                return Unit.Value;
+                return accountId;
             }
 
             private async Task<string> CreateUserAccountAsync(CreateDistributorUserCommand request)

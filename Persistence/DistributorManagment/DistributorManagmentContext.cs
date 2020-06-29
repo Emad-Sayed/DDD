@@ -37,6 +37,8 @@ namespace Persistence.DistributorManagment
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(DistributorManagmentContext).Assembly, type => type.FullName.Contains("Distributor"));
+            modelBuilder.Ignore<City>();
+            modelBuilder.Ignore<Area>();
         }
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))

@@ -13,9 +13,9 @@ using NUnit.Framework;
 namespace Application.IntegrationTests.ShoppingVanTest.Commands
 {
 
-    using static ShoppingVanTesting;
+    using static Testing;
 
-    public class RemoveItemFromVanTest : ShoppingVanTestBase
+    public class RemoveItemFromVanTest : TestBase
     {
 
         [Test]

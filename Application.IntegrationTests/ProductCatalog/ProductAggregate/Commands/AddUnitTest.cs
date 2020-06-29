@@ -15,9 +15,9 @@ using NUnit.Framework;
 namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
 {
 
-    using static ProductCatalogTesting;
+    using static Testing;
 
-    public class AddUnitTest : ProductCatalogTestBase
+    public class AddUnitTest : TestBase
     {
         [Test]
         public void ShouldRequireMinimumFields()
