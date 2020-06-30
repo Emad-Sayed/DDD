@@ -9,6 +9,7 @@ using Respawn;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.IntegrationTests.ProductCatalog
 {
@@ -24,8 +25,9 @@ namespace Application.IntegrationTests.ProductCatalog
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.Testing.Development.json", true, true)
+                
                 .AddJsonFile("appsettings.Testing.json", true, true)
+                .AddJsonFile("appsettings.Testing.Development.json", true, true)
                 .AddEnvironmentVariables();
 
             _configuration = builder.Build();
@@ -53,8 +55,17 @@ namespace Application.IntegrationTests.ProductCatalog
 
             };
 
+            EnsureDatabase();
         }
 
+        private static void EnsureDatabase()
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var context = scope.ServiceProvider.GetService<ProductCatalogContext>();
+            context.Database.EnsureDeleted();
+            context.Database.Migrate();
+        }
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
         {
             using var scope = _scopeFactory.CreateScope();

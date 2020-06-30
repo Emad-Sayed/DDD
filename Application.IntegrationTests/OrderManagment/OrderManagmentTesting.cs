@@ -7,6 +7,7 @@ using Brimo.IDP.Admin.EntityFramework.Shared.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -30,8 +31,9 @@ namespace Application.IntegrationTests.OrderManagment
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddEnvironmentVariables();
 
-            builder.AddJsonFile("appsettings.Testing.Development.json", true, true);
+            
             builder.AddJsonFile("appsettings.Testing.json", true, true);
+            builder.AddJsonFile("appsettings.Testing.Development.json", true, true);
 
 
             _configuration = builder.Build();
@@ -76,8 +78,8 @@ namespace Application.IntegrationTests.OrderManagment
             using var scope = _scopeFactory.CreateScope();
 
             var context = scope.ServiceProvider.GetService<OrderContext>();
-
-            //context.Database.Migrate();
+            context.Database.EnsureDeleted();
+            context.Database.Migrate();
         }
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)

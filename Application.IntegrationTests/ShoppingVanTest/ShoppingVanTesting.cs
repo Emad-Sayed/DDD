@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Brimo.IDP.Admin.EntityFramework.Shared.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Persistence.ShoppingVan;
 
 namespace Application.IntegrationTests.ShoppingVanTest
@@ -28,8 +29,8 @@ namespace Application.IntegrationTests.ShoppingVanTest
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.Testing.Development.json", true, true)
                 .AddJsonFile("appsettings.Testing.json", true, true)
+                .AddJsonFile("appsettings.Testing.Development.json", true, true)
                 .AddEnvironmentVariables();
 
             _configuration = builder.Build();
@@ -73,8 +74,8 @@ namespace Application.IntegrationTests.ShoppingVanTest
             using var scope = _scopeFactory.CreateScope();
 
             var context = scope.ServiceProvider.GetService<ShoppingVanContext>();
-
-            //context.Database.Migrate();
+            context.Database.EnsureDeleted();
+            context.Database.Migrate();
         }
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
