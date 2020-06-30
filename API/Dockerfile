@@ -5,11 +5,11 @@ WORKDIR /app
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
-WORKDIR /src
-COPY ["API/API.csproj", "API/"]
+WORKDIR /API
+COPY ["API.csproj", "API/"]
 RUN dotnet restore "API/API.csproj"
 COPY . .
-WORKDIR "/src/API"
+WORKDIR "/API"
 RUN dotnet build "API.csproj" -c Release -o /app/build
 
 FROM build AS publish
