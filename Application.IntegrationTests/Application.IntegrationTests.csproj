@@ -40,9 +40,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DistributorManagment\" />
     <Folder Include="CustomerManagment\" />
-    <Folder Include="OrderManagment\Queries\" />
+    <Folder Include="DistributorManagment\Queries\" />
   </ItemGroup>
 
 </Project>

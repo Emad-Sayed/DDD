@@ -13,9 +13,9 @@ using NUnit.Framework;
 
 namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Queries
 {
-    using static ProductCatalogTesting;
+    using static Testing;
 
-    public class ListUnitsByProductsIdsTest : ProductCatalogTestBase
+    public class ListUnitsByProductsIdsTest : TestBase
     {
 
         [Test]

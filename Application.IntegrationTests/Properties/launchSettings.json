@@ -3,7 +3,7 @@
     "Application.IntegrationTests": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Prod"
       }
     }
   }

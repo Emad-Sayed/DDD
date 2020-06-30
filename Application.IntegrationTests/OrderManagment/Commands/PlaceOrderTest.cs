@@ -1,38 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Application.CustomerManagment.Commands.CreateCustomer;
 using Application.OrderManagment.Commands.PlaceOrder;
 using Application.OrderManagment.Queries.ListOrders;
+using Application.OrderManagment.Queries.OrderById;
 using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory;
 using Application.ShoppingVan.Commands.AddItemToVan;
-using Domain.Common.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
 
 namespace Application.IntegrationTests.OrderManagment.Commands
 {
-    using static OrderManagmentTesting;
+    using static Testing;
 
-    public class PlaceOrderTest : OrderManagmentTestBase
+    public class PlaceOrderTest : TestBase
     {
         [Test]
-        public void ShouldRequireMinimumFields()
-        {
-            var command = new AddItemToVanCommand();
-
-            FluentActions.Invoking(() =>
-                SendAsync(command))
-                .Should()
-                .Throw<BaseValidationException>();
-        }
-
-        [Test]
-        public async Task ShouldPlaceTheOrder()
+        public async Task ShouldPlaceOrder()
         {
             // Arrange
             var accountId = await RunAsDefaultUserAsync();
@@ -47,7 +33,7 @@ namespace Application.IntegrationTests.OrderManagment.Commands
                 LocationOnMap = "Test LocationOnMap"
             };
 
-           await SendAsync(createCustomerCommand);
+            await SendAsync(createCustomerCommand);
 
             // Create product brand
             var brandCommand = new CreateBrandCommand { Name = "Test Brand" };
@@ -88,26 +74,28 @@ namespace Application.IntegrationTests.OrderManagment.Commands
             var unitId = await SendAsync(addUnitToCommand);
 
             // AddItem To Shopping Van
-            var command = new AddItemToVanCommand
+            var addItemToVanCommand = new AddItemToVanCommand
             {
                 ProductId = productId,
                 UnitId = unitId
             };
 
-            await SendAsync(command);
-            var shoppingVanItemCount = await SendAsync(command);
-            // Act
-            var placeOrderCommand = new PlaceOrderCommand();
-            await SendAsync(placeOrderCommand);
+            await SendAsync(addItemToVanCommand);
+            await SendAsync(addItemToVanCommand);
 
-            var ordersQuery = new ListOrdersQuery();
-            var orders = await SendAsync(ordersQuery);
+            // Act
+
+            // Place Order Command
+            var placeOrderCommand = new PlaceOrderCommand();
+            var orderId = await SendAsync(placeOrderCommand);
+
+            // Get Order By Id Query
+            var orderByIdQuery = new OrderByIdQuery { OrderId = orderId };
+            var order = await SendAsync(orderByIdQuery);
 
             // Assert
-
-            orders.Data.Should().NotBeNull();
-            orders.TotalCount.Should().Be(1);
+            order.Should().NotBeNull();
+            order.OrderItems.Count.Should().Be(1);
         }
-
     }
 }

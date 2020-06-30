@@ -30,9 +30,11 @@ namespace Application.OrderManagment.Commands.ConfirmOrder
                 var orderToConfirm = await _orderRepository.GetByIdAsync(request.OrderId);
                 if (orderToConfirm == null) throw new OrderNotFoundException(request.OrderId);
 
+                if (orderToConfirm.OrderStatus != OrderStatus.Placed) throw new OrderNotPlacedException(request.OrderId);
+
                 orderToConfirm.ConfirmOrder();
 
-                await _orderRepository.UnitOfWork.SaveEntitiesAsync();
+                await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
                 return Unit.Value;
             }

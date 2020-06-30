@@ -92,6 +92,7 @@ namespace API
 
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
+            var ss = env.EnvironmentName;
             app.UseMiddleware<ErrorHandlingMiddleware>();
             _assembliesStartup.ForEach(x => x.Configure(app.ApplicationServices));
             app.UseSwagger();

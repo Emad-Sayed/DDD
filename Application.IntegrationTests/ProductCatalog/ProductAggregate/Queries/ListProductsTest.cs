@@ -8,9 +8,9 @@ using NUnit.Framework;
 
 namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Queries
 {
-    using static ProductCatalogTesting;
+    using static Testing;
 
-    public class ListProductsTest : ProductCatalogTestBase
+    public class ListProductsTest : TestBase
     {
 
         [Test]

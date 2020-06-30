@@ -52,7 +52,7 @@ namespace Brimo.IDP.STS.Identity
             services.AddCors();
             // Add services for authentication, including Identity model and external providers
             RegisterAuthentication(services);
-            
+
             // Add all dependencies for Asp.Net Core Identity in MVC - these dependencies are injected into generic Controllers
             // Including settings for MVC and Localization
             // If you want to change primary keys or use another db model for Asp.Net Core Identity:
@@ -65,12 +65,11 @@ namespace Brimo.IDP.STS.Identity
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+
+            app.UseDeveloperExceptionPage();
+
             app.UseCors(op => op.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            
+
             // Add custom security headers
             app.UseSecurityHeaders();
 
@@ -80,8 +79,8 @@ namespace Brimo.IDP.STS.Identity
 
             app.UseRouting();
             app.UseAuthorization();
-            app.UseEndpoints(endpoint => 
-            { 
+            app.UseEndpoints(endpoint =>
+            {
                 endpoint.MapDefaultControllerRoute();
                 endpoint.MapHealthChecks("/health", new HealthCheckOptions
                 {

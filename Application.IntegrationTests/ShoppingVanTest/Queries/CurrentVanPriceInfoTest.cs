@@ -14,9 +14,9 @@ using NUnit.Framework;
 
 namespace Application.IntegrationTests.ShoppingVanTest.Queries
 {
-    using static ShoppingVanTesting;
+    using static Testing;
 
-    public class CurrentVanPriceInfoTest : ShoppingVanTestBase
+    public class CurrentVanPriceInfoTest : TestBase
     {
         [Test]
         public async Task ShouldGetCurrentCustomerVanPriceInfo()

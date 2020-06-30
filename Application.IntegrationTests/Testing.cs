@@ -1,24 +1,28 @@
-﻿using MediatR;
+﻿using Application.Common.Interfaces;
+using Brimo.IDP.Admin.EntityFramework.Shared.Entities.Identity;
+using MediatR;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
 using Moq;
 using NUnit.Framework;
+using Persistence.ShoppingVan;
 using Respawn;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Common.Interfaces;
-using Brimo.IDP.Admin.EntityFramework.Shared.Entities.Identity;
-using Microsoft.AspNetCore.Identity;
+using Persistence.CustomerManagment;
+using Persistence.DistributorManagment;
+using Persistence.OrderManagment;
+using Persistence.ProductCatalog;
 using Microsoft.EntityFrameworkCore;
-using Persistence.ShoppingVan;
 
-namespace Application.IntegrationTests.ShoppingVanTest
+namespace Application.IntegrationTests
 {
     [SetUpFixture]
-    public class ShoppingVanTesting
+    public class Testing
     {
         private static IConfigurationRoot _configuration;
         private static IServiceScopeFactory _scopeFactory;
@@ -38,13 +42,14 @@ namespace Application.IntegrationTests.ShoppingVanTest
             var startup = new API.Startup(_configuration);
 
             var services = new ServiceCollection();
-            var identityStartUp = new  Brimo.IDP.STS.Identity.Startup(_configuration);
-
+            var identityStartUp = new Brimo.IDP.STS.Identity.Startup(_configuration);
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Developement");
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
-                w.EnvironmentName == "Development"));
+                w.EnvironmentName == Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")));
 
             services.AddSingleton(Mock.Of<IHostingEnvironment>(w =>
-                w.EnvironmentName == "Development" && w.ApplicationName =="Brimo.API"));
+            w.EnvironmentName == Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")));
 
             services.AddLogging();
 
@@ -73,9 +78,26 @@ namespace Application.IntegrationTests.ShoppingVanTest
         {
             using var scope = _scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetService<ShoppingVanContext>();
-            context.Database.EnsureDeleted();
-            context.Database.Migrate();
+            var currentEnvironment = scope.ServiceProvider.GetService<IWebHostEnvironment>();
+            var env = currentEnvironment.EnvironmentName;
+
+            var shoppingVanContext = scope.ServiceProvider.GetService<ShoppingVanContext>();
+            var orderContext = scope.ServiceProvider.GetService<OrderContext>();
+            var productCatalogContext = scope.ServiceProvider.GetService<ProductCatalogContext>();
+            var customerManagmentContext = scope.ServiceProvider.GetService<CustomerManagmentContext>();
+            var distributorManagmentContext = scope.ServiceProvider.GetService<DistributorManagmentContext>();
+
+            shoppingVanContext.Database.EnsureDeleted();
+            orderContext.Database.EnsureDeleted();
+            productCatalogContext.Database.EnsureDeleted();
+            customerManagmentContext.Database.EnsureDeleted();
+            distributorManagmentContext.Database.EnsureDeleted();
+
+            shoppingVanContext.Database.Migrate();
+            orderContext.Database.Migrate();
+            productCatalogContext.Database.Migrate();
+            customerManagmentContext.Database.Migrate();
+            distributorManagmentContext.Database.Migrate();
         }
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
@@ -118,27 +140,26 @@ namespace Application.IntegrationTests.ShoppingVanTest
 
         public static async Task ResetState()
         {
-            var ss = _configuration.GetConnectionString("BrimoDatabase");
             await _checkpoint.Reset(_configuration.GetConnectionString("BrimoDatabase"));
             _currentUserId = null;
         }
 
-        public static async Task<T> FindAsync<T>(string id)
-            where T : class
+        public static async Task<T> FindAsync<T, C>(string id)
+            where T : class where C : DbContext
         {
             using var scope = _scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetService<ShoppingVanContext>();
+            var context = scope.ServiceProvider.GetService<C>();
 
             return await context.FindAsync<T>(new Guid(id));
         }
 
-        public static async Task<T> CreateAsync<T>(T entity)
-     where T : class
+        public static async Task<T> CreateAsync<T, C>(T entity)
+     where T : class where C : DbContext
         {
             using var scope = _scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetService<ShoppingVanContext>();
+            var context = scope.ServiceProvider.GetService<C>();
 
             await context.AddAsync(entity);
             await context.SaveChangesAsync();

@@ -7,12 +7,13 @@ using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
 using FluentAssertions;
 using NUnit.Framework;
+using Persistence.ProductCatalog;
 
 namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
 {
-    using static ProductCatalogTesting;
+    using static Testing;
 
-    public class UpdateProductTest : ProductCatalogTestBase
+    public class UpdateProductTest : TestBase
     {
         [Test]
         public void ShouldRequireMinimumFields()
@@ -33,10 +34,10 @@ namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
             // Arrange
 
             // Create product brand
-            var brand = await CreateAsync(new Brand("Test Brand Update Brand"));
+            var brand = await CreateAsync<Brand, ProductCatalogContext>(new Brand("Test Brand Update Brand"));
 
             // Create product category
-            var productCategory = await CreateAsync(new ProductCategory("Test ProductCategory Update Product category"));
+            var productCategory = await CreateAsync<ProductCategory, ProductCatalogContext>(new ProductCategory("Test ProductCategory Update Product category"));
 
             var createProductCommand = new CreateProductCommand
             {
@@ -66,7 +67,7 @@ namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
             };
 
             var productToUpdateId = await SendAsync(updateProductCommand);
-            var product = await FindAsync<Product>(productToUpdateId);
+            var product = await FindAsync<Product, ProductCatalogContext>(productToUpdateId);
 
             // Act
 

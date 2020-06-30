@@ -11,5 +11,15 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
 
         public string CityId { get; private set; }
         public City City { get; private set; }
+
+        private Area() { }
+
+        public Area(string name,string cityId, Guid id = default)
+        {
+            Name = name;
+            CityId = cityId;
+
+            Id = id == default ? Guid.NewGuid() : id;
+        }
     }
 }

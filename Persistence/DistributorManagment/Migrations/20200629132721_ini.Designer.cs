@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Persistence.CustomerManagment;
+using Persistence.DistributorManagment;
 
-namespace Persistence.CustomerManagment.Migrations
+namespace Persistence.DistributorManagment.Migrations
 {
-    [DbContext(typeof(CustomerManagmentContext))]
-    [Migration("20200626214635_AddingFullNameToCustomer")]
-    partial class AddingFullNameToCustomer
+    [DbContext(typeof(DistributorManagmentContext))]
+    [Migration("20200629132721_ini")]
+    partial class ini
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,32 +21,7 @@ namespace Persistence.CustomerManagment.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Area", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CityId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CityId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDateUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId1");
-
-                    b.ToTable("Areas");
-                });
-
-            modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.City", b =>
+            modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Distributor", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,10 +35,10 @@ namespace Persistence.CustomerManagment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Distributors");
                 });
 
-            modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Customer", b =>
+            modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.DistributorUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -75,35 +50,30 @@ namespace Persistence.CustomerManagment.Migrations
                     b.Property<DateTime>("CreatedDateUtc")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DistributorId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("DistributorId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LocationOnMap")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShopAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShopName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.HasIndex("DistributorId1");
+
+                    b.ToTable("DistributorUser");
                 });
 
-            modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Area", b =>
-                {
-                    b.HasOne("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.City", "City")
-                        .WithMany("Areas")
-                        .HasForeignKey("CityId1");
-                });
-
-            modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Customer", b =>
+            modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Distributor", b =>
                 {
                     b.OwnsOne("Domain.SharedKernel.ValueObjects.Address", "Address", b1 =>
                         {
-                            b1.Property<Guid>("CustomerId")
+                            b1.Property<Guid>("DistributorId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Area")
@@ -112,13 +82,20 @@ namespace Persistence.CustomerManagment.Migrations
                             b1.Property<string>("City")
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.HasKey("CustomerId");
+                            b1.HasKey("DistributorId");
 
-                            b1.ToTable("Customers");
+                            b1.ToTable("Distributors");
 
                             b1.WithOwner()
-                                .HasForeignKey("CustomerId");
+                                .HasForeignKey("DistributorId");
                         });
+                });
+
+            modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.DistributorUser", b =>
+                {
+                    b.HasOne("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Distributor", "Distributor")
+                        .WithMany("DistributorUsers")
+                        .HasForeignKey("DistributorId1");
                 });
 #pragma warning restore 612, 618
         }

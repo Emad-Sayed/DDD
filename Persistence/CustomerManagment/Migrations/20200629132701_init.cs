@@ -3,20 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.CustomerManagment.Migrations
 {
-    public partial class AddingCityAndRegion : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Address_City",
-                table: "Customers",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "Address_Region",
-                table: "Customers",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "Cities",
                 columns: table => new
@@ -31,20 +21,39 @@ namespace Persistence.CustomerManagment.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Regions",
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedDateUtc = table.Column<DateTime>(nullable: false),
+                    AccountId = table.Column<string>(nullable: true),
+                    FullName = table.Column<string>(nullable: true),
+                    ShopName = table.Column<string>(nullable: true),
+                    ShopAddress = table.Column<string>(nullable: true),
+                    LocationOnMap = table.Column<string>(nullable: true),
+                    Address_Area = table.Column<string>(nullable: true),
+                    Address_City = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Areas",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedDateUtc = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    CityId = table.Column<int>(nullable: false),
+                    CityId = table.Column<string>(nullable: true),
                     CityId1 = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Regions", x => x.Id);
+                    table.PrimaryKey("PK_Areas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Regions_Cities_CityId1",
+                        name: "FK_Areas_Cities_CityId1",
                         column: x => x.CityId1,
                         principalTable: "Cities",
                         principalColumn: "Id",
@@ -52,26 +61,21 @@ namespace Persistence.CustomerManagment.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Regions_CityId1",
-                table: "Regions",
+                name: "IX_Areas_CityId1",
+                table: "Areas",
                 column: "CityId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Regions");
+                name: "Areas");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "Cities");
-
-            migrationBuilder.DropColumn(
-                name: "Address_City",
-                table: "Customers");
-
-            migrationBuilder.DropColumn(
-                name: "Address_Region",
-                table: "Customers");
         }
     }
 }

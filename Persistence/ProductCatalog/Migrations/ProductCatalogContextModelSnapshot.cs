@@ -34,20 +34,6 @@ namespace Persistence.ProductCatalog.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Brands");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("9de2a9e6-867e-4051-9c20-98f97699c697"),
-                            CreatedDateUtc = new DateTime(2020, 6, 14, 9, 28, 52, 514, DateTimeKind.Utc).AddTicks(5689),
-                            Name = "Brand 1"
-                        },
-                        new
-                        {
-                            Id = new Guid("1ffd55cc-be56-46c5-8532-2726f878fc71"),
-                            CreatedDateUtc = new DateTime(2020, 6, 14, 9, 28, 52, 514, DateTimeKind.Utc).AddTicks(7802),
-                            Name = "Brand 2"
-                        });
                 });
 
             modelBuilder.Entity("Domain.ProductCatalog.AggregatesModel.ProductAggregate.Product", b =>
@@ -141,20 +127,6 @@ namespace Persistence.ProductCatalog.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProductCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("460ef8c6-22c4-4a4d-9c20-8ef253ff5c3b"),
-                            CreatedDateUtc = new DateTime(2020, 6, 14, 9, 28, 52, 516, DateTimeKind.Utc).AddTicks(5428),
-                            Name = "ProductCategory 1"
-                        },
-                        new
-                        {
-                            Id = new Guid("509c00ae-6ec9-4cff-8a90-41c3593ed395"),
-                            CreatedDateUtc = new DateTime(2020, 6, 14, 9, 28, 52, 516, DateTimeKind.Utc).AddTicks(6205),
-                            Name = "ProductCategory 2"
-                        });
                 });
 
             modelBuilder.Entity("Domain.ProductCatalog.AggregatesModel.ProductAggregate.Product", b =>

@@ -1,13 +1,10 @@
 ﻿using Domain.Base.Entity;
-using Domain.Common.Exceptions;
 using Domain.Common.Interfaces;
 using Domain.OrderManagment.Events;
 using Domain.OrderManagment.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Net;
 
 namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
 {
@@ -32,7 +29,7 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             OrderItems = new List<OrderItem>();
         }
 
-        public Order(string customerId, string customerName, string address,float totalPrice)
+        public Order(string customerId, string customerName, string address, float totalPrice)
         {
             CustomerId = customerId;
             CustomerName = customerName;
@@ -44,42 +41,33 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             OrderItems = new List<OrderItem>();
 
             // Add the OrderStarterDomainEvent to the domain events collection 
-            // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]
+            // to be raised/dispatched when commiting changes into the Database [ After DbContext.SaveChanges() ]
             // Register Placing order event
             AddOrderPlacedDomainEvent(customerId, address);
         }
 
         // DDD Patterns comment
-        // This Order AggregateRoot's method "AddOrderitem()" should be the only way to add Items to the Order,
+        // This Order AggregateRoot's method "AddOrderItem()" should be the only way to add Items to the Order,
         // so any behavior (discounts, etc.) and validations are controlled by the AggregateRoot 
         // in order to maintain consistency between the whole Aggregate. 
         public void AddOrderItem(string productId, string productName, float unitPrice, string photoUrl, string unitId, string unitName, int unitCount = 1)
         {
-            var existingOrderForProduct = OrderItems.Where(o => o.ProductId == productId)
-                .SingleOrDefault();
+            var existingOrderForProduct = OrderItems.SingleOrDefault(o => o.ProductId == productId);
+            if (existingOrderForProduct != null) throw new ProductExitInOrderException(productId);
 
-            if (existingOrderForProduct != null)
-            {
-                //if previous line exist modify it with higher discount  and units..
+            //add validated new order item
+            var orderItem = new OrderItem(Id.ToString(), productId, productName, unitPrice, photoUrl, unitId, unitName, unitCount);
 
-                existingOrderForProduct.AddUnits(unitCount);
-            }
-            else
-            {
-                //add validated new order item
-
-                var orderItem = new OrderItem(Id.ToString(), productId, productName, unitPrice, photoUrl, unitId, unitName, unitCount);
-                OrderItems.Add(orderItem);
-            }
+            OrderItems.Add(orderItem);
         }
 
-        public void UpdateOrderItem(string orderItemId, string unitId, string unitName, int unitCount)
+        public void UpdateOrderItem(string orderItemId, string unitId, string unitName, float unitPrice, int unitCount)
         {
             var orderItemToUpdate = OrderItems.FirstOrDefault(x => x.Id == new Guid(orderItemId));
             if (orderItemToUpdate == null) throw new OrderItemNotFoundException(orderItemId);
 
 
-            orderItemToUpdate.Update(unitId, unitName, unitCount);
+            orderItemToUpdate.Update(unitId, unitName, unitPrice, unitCount);
 
             AddDomainEvent(new OrderUpdated(this));
         }
