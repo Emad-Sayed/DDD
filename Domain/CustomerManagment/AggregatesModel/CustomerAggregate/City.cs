@@ -9,5 +9,13 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
     {
         public string Name { get; private set; }
         public ICollection<Area> Areas { get; private set; }
+
+        private City() { }
+
+        public City(string name, Guid id = default)
+        {
+            Name = name;
+            Id = id == default ? Guid.NewGuid() : id;
+        }
     }
 }

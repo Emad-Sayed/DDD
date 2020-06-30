@@ -43,12 +43,13 @@ namespace Application.IntegrationTests
 
             var services = new ServiceCollection();
             var identityStartUp = new Brimo.IDP.STS.Identity.Startup(_configuration);
-
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Developement");
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
-                w.EnvironmentName == "Development"));
+                w.EnvironmentName == Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")));
 
             services.AddSingleton(Mock.Of<IHostingEnvironment>(w =>
-                w.EnvironmentName == "Development" && w.ApplicationName == "Brimo.API"));
+            w.EnvironmentName == Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")));
 
             services.AddLogging();
 
