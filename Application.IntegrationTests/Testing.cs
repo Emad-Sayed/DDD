@@ -18,6 +18,7 @@ using Persistence.DistributorManagment;
 using Persistence.OrderManagment;
 using Persistence.ProductCatalog;
 using Microsoft.EntityFrameworkCore;
+using Brimo.IDP.Admin.EntityFramework.Shared.DbContexts;
 
 namespace Application.IntegrationTests
 {
@@ -85,19 +86,22 @@ namespace Application.IntegrationTests
             var orderContext = scope.ServiceProvider.GetService<OrderContext>();
             var productCatalogContext = scope.ServiceProvider.GetService<ProductCatalogContext>();
             var customerManagmentContext = scope.ServiceProvider.GetService<CustomerManagmentContext>();
-            var distributorManagmentContext = scope.ServiceProvider.GetService<DistributorManagmentContext>();
+            var distributorManagmentContext = scope.ServiceProvider.GetService<DistributorManagmentContext>(); 
+            var adminIdentityDbContext = scope.ServiceProvider.GetService<AdminIdentityDbContext>();
 
             shoppingVanContext.Database.EnsureDeleted();
             orderContext.Database.EnsureDeleted();
             productCatalogContext.Database.EnsureDeleted();
             customerManagmentContext.Database.EnsureDeleted();
             distributorManagmentContext.Database.EnsureDeleted();
+            adminIdentityDbContext.Database.EnsureDeleted();
 
             shoppingVanContext.Database.Migrate();
             orderContext.Database.Migrate();
             productCatalogContext.Database.Migrate();
             customerManagmentContext.Database.Migrate();
             distributorManagmentContext.Database.Migrate();
+            adminIdentityDbContext.Database.Migrate();
         }
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
