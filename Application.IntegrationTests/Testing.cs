@@ -34,9 +34,14 @@ namespace Application.IntegrationTests
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.Testing.json", true, true)
-                .AddJsonFile("appsettings.Testing.Development.json", true, true)
                 .AddEnvironmentVariables();
+
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+           
+            if (env == "Production")
+                builder.AddJsonFile("appsettings.Testing.json", true, true);
+            else
+                builder.AddJsonFile("appsettings.Testing.Development.json", true, true);
 
             _configuration = builder.Build();
 
@@ -44,8 +49,7 @@ namespace Application.IntegrationTests
 
             var services = new ServiceCollection();
             var identityStartUp = new Brimo.IDP.STS.Identity.Startup(_configuration);
-            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Developement");
-            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
             services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
                 w.EnvironmentName == Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")));
 
@@ -86,7 +90,7 @@ namespace Application.IntegrationTests
             var orderContext = scope.ServiceProvider.GetService<OrderContext>();
             var productCatalogContext = scope.ServiceProvider.GetService<ProductCatalogContext>();
             var customerManagmentContext = scope.ServiceProvider.GetService<CustomerManagmentContext>();
-            var distributorManagmentContext = scope.ServiceProvider.GetService<DistributorManagmentContext>(); 
+            var distributorManagmentContext = scope.ServiceProvider.GetService<DistributorManagmentContext>();
             var adminIdentityDbContext = scope.ServiceProvider.GetService<AdminIdentityDbContext>();
 
             shoppingVanContext.Database.EnsureDeleted();
