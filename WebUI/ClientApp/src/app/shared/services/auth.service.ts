@@ -18,9 +18,9 @@ export class AuthService {
         this.oauthService.configure({
             requireHttps: false,
             skipIssuerCheck: true,
-            scope: "openid profile roles brimo_api offline_access",
-            clientId: "FlutterClientId",
-            dummyClientSecret: "FlutterClientSecret",
+            scope: "openid profile roles brimo_api",
+            clientId: "BrimoWebUIId",
+            dummyClientSecret: "BrimoWebUISecret",
             oidc: false,
             responseType: "password"
         });

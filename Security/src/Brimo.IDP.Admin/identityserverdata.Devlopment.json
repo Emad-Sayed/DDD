@@ -75,6 +75,20 @@
             ]
           }
         ]
+      },
+      {
+        "Name": "brimo_api",
+        "Scopes": [
+          {
+            "Name": "brimo_api",
+            "DisplayName": "brimo_api",
+            "Required": true,
+            "UserClaims": [
+              "role",
+              "name"
+            ]
+          }
+        ]
       }
     ],
     "Clients": [
@@ -106,6 +120,46 @@
           "profile",
           "roles"
         ]
+      },
+      {
+        "ClientId": "BrimoWebUIId",
+        "ClientName": "BrimoWebUI",
+        "AllowedGrantTypes": [
+          "password"
+        ],
+        "ClientSecrets": [
+          {
+            "Value": "BrimoWebUISecret"
+          }
+        ],
+        "AllowedScopes": [
+          "openid",
+          "email",
+          "profile",
+          "roles",
+          "brimo_api"
+        ],
+        "AllowAccessTokensViaBrowser": true
+      },
+      {
+        "ClientId": "FlutterClientId",
+        "ClientName": "FlutterClientId",
+        "AllowedGrantTypes": [
+          "password"
+        ],
+        "ClientSecrets": [
+          {
+            "Value": "FlutterClientSecret"
+          }
+        ],
+        "AllowedScopes": [
+          "openid",
+          "email",
+          "profile",
+          "roles",
+          "brimo_api"
+        ],
+        "AllowAccessTokensViaBrowser": true
       },
       {
         "ClientId": "BrimoClientId_api_swaggerui",
