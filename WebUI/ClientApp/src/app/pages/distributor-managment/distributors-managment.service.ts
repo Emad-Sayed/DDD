@@ -57,7 +57,7 @@ export class DistributorsManagmentService {
 
     //#region Cities 
     getCities(query: any = {}): Observable<ApiResponse<City>> {
-        return this.httpService.getAll<ApiResponse<City>>(`${Config.Distributors}/Cities`, query)
+        return this.httpService.getAll<ApiResponse<City>>(`${Config.Customers}/Cities`, query)
     }
     //#endregion
 }

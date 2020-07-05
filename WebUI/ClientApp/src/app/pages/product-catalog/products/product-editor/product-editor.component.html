@@ -48,8 +48,13 @@
       </div>
       <div class="col-5 product-img-wrapper">
         <img [src]="imgURL" class="img-fluid" *ngIf="imgURL">
-        <label for="product-img" class="">
-          <i class="fas fa-image text-light"></i>
+        <label for="product-img" class="mt-2">
+          <ng-container *ngIf="imgURL; else add">
+            <span class="btn btn-outline-secondary">استبدال الصورة</span>
+          </ng-container>
+          <ng-template #add>
+            <span class="btn btn-outline-secondary">إضافة صورة</span>
+          </ng-template>
         </label>
         <input #file type="file" id="product-img" hidden accept='image/*' (change)="preview(file.files)" />
       </div>
@@ -111,8 +116,8 @@
           </div>
           <div class="_sale w-10 d-flex justify-content-center">
             <label class="checkbox checkbox-primary">
-              <input type="checkbox" name="isAvailable" [(ngModel)]="unit.isAvailable" />
-              <span class="checkmark mt-2"></span>
+              <input type="checkbox" name="isAvailable" [(ngModel)]="unit.isAvailable"/>
+              <span class="checkmark"></span>
             </label>
           </div>
           <div class="_add d-flex save-del-btn w-10">

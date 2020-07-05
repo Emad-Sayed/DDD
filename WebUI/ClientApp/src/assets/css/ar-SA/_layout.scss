@@ -1,5 +1,5 @@
 /* ========================== Typohraphy ============================*/
-$font-default: "Cairo-Bold";
+$font-default: "Cairo";
 $direction: rtl;
 $right: right;
 $left: left;
@@ -241,3 +241,13 @@ p {
 //         padding-left: 30px !important;
 //     }
 // }
+
+
+thead{
+    border-bottom: 2px solid #dee2e6;
+    tr{
+        th{
+            border-bottom: 0;
+        }
+    }
+}

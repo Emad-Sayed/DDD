@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
 using Brimo.IDP.STS.Identity.Configuration;
+using System.Net;
 
 namespace Brimo.IDP.STS.Identity.Services
 {
@@ -22,12 +23,10 @@ namespace Brimo.IDP.STS.Identity.Services
                 Host = _configuration.Host,
                 Port = _configuration.Port,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
-                EnableSsl = _configuration.UseSSL
+                EnableSsl = _configuration.UseSSL,
+                UseDefaultCredentials = true,
+                Credentials = new NetworkCredential(_configuration.Login, _configuration.Password)
             };
-            if (!string.IsNullOrEmpty(_configuration.Password))
-                _client.Credentials = new System.Net.NetworkCredential(_configuration.Login, _configuration.Password);
-            else
-                _client.UseDefaultCredentials = true;
         }
 
         public Task SendEmailAsync(string email, string subject, string htmlMessage)

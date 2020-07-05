@@ -1,32 +1,6 @@
-.box {
-  position: fixed;
-  z-index: 4;
-  overflow: auto;
-  top: 0px;
-  left: -1000px;
-  width: 50%;
-  opacity: 0;
-  padding: 10px 0px;
-  height: 100%;
-  background-color: #fff;
-  color: #343838;
-  -webkit-transition: all 350ms cubic-bezier(0.6, 0.05, 0.28, 0.91);
-  transition: all 350ms cubic-bezier(0.6, 0.05, 0.28, 0.91);
-}
-
-.table-responsive{
-  height: 60vh;
-}
-
 .active {
   left: 0px;
   opacity: 1;
-}
-.card {
-  .card-body {
-    border-top: 1px solid #dbdbdb;
-    padding: 0;
-  }
 }
 
 /* .ais-SearchBox { margin-bottom: 1em } */
@@ -36,70 +10,10 @@
 .ais-Pagination-item {
   padding: 0.5rem;
 }
-.card {
-  .card-search {
-      width: 100% !important;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: row;
-    background: #fff;
-    padding: 10px 15px;
-    border-radius: 5px;
-    .form-group {
-      margin-bottom: 0;
-      .form-control {
-        padding: 1.2rem !important;
-        background: #fbfbfb;
-        border-radius: 5px;
-        box-shadow: none;
-        height: 30px;
-        width: 300px;
-        border: 0;
-        font-weight: 400;
-      }
-      .card-link {
-        margin-right: 1.5rem !important;
-        color: #1b2e4b;
-        padding: 0;
-        display: block;
-        position: relative;
-        white-space: nowrap;
-        font-size: 1rem;
-        margin: auto;
-      }
-      .card-link:hover {
-        text-decoration: none;
-        color: #0168fa;
-        .fa-search {
-          color: #0168fa;
-        }
-      }
-    }
-  }
+.nav-tabs{
+  border-bottom: 0;
 }
 
-.search-btn {
-  position: absolute;
-  left: 1rem;
-}
-
-.page-item:first-child .page-link {
-  margin-left: 0;
-  border-top-right-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.page-item:last-child .page-link {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-top-left-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
-}
-
-/* product editor */
-app-product-editor {
-  box-shadow: -5px 5px 8px rgba(0, 0, 0, 0.5);
-  margin-top: 46px;
+.table-responsive {
+  height: 62.5vh;
 }

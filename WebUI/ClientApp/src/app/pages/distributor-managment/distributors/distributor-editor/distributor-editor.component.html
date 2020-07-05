@@ -7,12 +7,12 @@
     </div>
     <div class="row mt-2">
         <label for="dist-name" class="col-3 col-form-label">إسم الموزع</label>
-        <input type="text" name="name" [(ngModel)]="distributor.name" id="dist-name" class="col-8 form-control"
+        <input type="text" name="name" [(ngModel)]="distributor.name" id="dist-name" class="col-5 offset-4 form-control"
             placeholder="إسم الموزع" />
     </div>
     <div class="row mt-2">
         <label for="dist-city" class="col-3 col-form-label">إختر المدينة</label>
-        <select class="col-8 form-control" id="dist-city" name="city" [(ngModel)]="distributor.city">
+        <select class="col-5 offset-4 form-control" id="dist-city" name="city" [(ngModel)]="distributor.city">
             <option selected>إختر المدينة</option>
             <option *ngFor="let city of cities" [value]="city.name">
                 {{ city.name }}</option>
@@ -20,7 +20,7 @@
     </div>
     <div class="row mt-2">
         <label for="dist-area" class="col-3 col-form-label">إختر المنطقة</label>
-        <select class="col-8 form-control" id="dist-area" name="area" [(ngModel)]="distributor.area">
+        <select class="col-5 offset-4 form-control" id="dist-area" name="area" [(ngModel)]="distributor.area">
             <option selected>إختر المنطقة</option>
             <option *ngFor="let area of fillteredCities(distributor.city)" [value]="area.name">
                 {{ area.name }}</option>
@@ -29,8 +29,8 @@
 
     <div class="row p-2">
         <!-- item DistributorUsers -->
-        <div class="item-distributorUsers">
-            <div class="row mt-2 item-distributorUsers-header p-3">
+        <div class="item-distributorUsers w-100">
+            <div class="row mt-2 item-units-header p-3">
                 <h4 class="border-bottom w-100"> المستخديمن :</h4>
             </div>
             <div class="row item-distributorUsers-content">

@@ -98,16 +98,18 @@
       949 ج م
     </div>
   </div>
-  <div class="row mt-5">
+  <div class="row text-center mt-5">
     <div class="col">
-      <button class="btn confirm-btn" *ngIf="order.orderStatus == 0" (click)="confirmOrder()">تاكيد الطلب </button>
+      <button class="btn btn-outline-info confirm-btn" *ngIf="order.orderStatus == 0" (click)="confirmOrder()">تاكيد الطلب </button>
       <button class="btn confirm-btn" *ngIf="order.orderStatus == 1" (click)="shippOrder()">شحن الطلب </button>
       <button class="btn confirm-btn" *ngIf="order.orderStatus == 2" (click)="orderDeliver()">تم التوصيل </button>
     </div>
     <div class="col">
-      <button class="btn cancel-btn" *ngIf="order.orderStatus == 0 || order.orderStatus == 1 || order.orderStatus == 2"
+      <button class="btn btn-outline-danger cancel-btn" *ngIf="order.orderStatus == 0 || order.orderStatus == 1 || order.orderStatus == 2"
         (click)="cancelOrder()">إلغاء الطلب </button>
-      <button class="btn print-btn mr-2">
+    </div>
+    <div class="col">
+      <button class="btn btn-outline-warning print-btn mr-2">
         <span class="fa fa-print print-icon"></span>
       </button>
     </div>
