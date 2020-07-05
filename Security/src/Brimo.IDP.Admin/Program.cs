@@ -64,11 +64,15 @@ namespace Brimo.IDP.Admin
                  {
                      configApp.AddJsonFile("serilog.json", optional: true, reloadOnChange: true);
                      configApp.AddJsonFile("identitydata.json", optional: true, reloadOnChange: true);
-                     configApp.AddJsonFile("identityserverdata.json", optional: true, reloadOnChange: true);
+                     
 
                      if (hostContext.HostingEnvironment.IsDevelopment())
                      {
+                         configApp.AddJsonFile("identityserverdata.Devlopment.json", optional: true, reloadOnChange: true);
                          configApp.AddUserSecrets<Startup>();
+                     } else
+                     {
+                         configApp.AddJsonFile("identityserverdata.json", optional: true, reloadOnChange: true);
                      }
 
                      configApp.AddEnvironmentVariables();

@@ -30,7 +30,6 @@ namespace Brimo.IDP.STS.Identity
 
         public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .AddJsonFile("serilog.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables()
             .Build();
@@ -43,9 +42,13 @@ namespace Brimo.IDP.STS.Identity
 
                      if (hostContext.HostingEnvironment.IsDevelopment())
                      {
+                         configApp.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                          configApp.AddUserSecrets<Startup>();
                      }
-
+                     else
+                     {
+                         configApp.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                     }
                      configApp.AddEnvironmentVariables();
                      configApp.AddCommandLine(args);
                  })
