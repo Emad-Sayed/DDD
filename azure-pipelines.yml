@@ -13,7 +13,6 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  env: 'Production'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -24,14 +23,16 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- task: CmdLine@2
+- task: VSTest@2
   inputs:
-    script: 'SET ASPNETCORE_ENVIRONMENT=$(env)'
-- task: DotNetCoreCLI@2
-  displayName: 'Run All Test'
-  inputs:
-    command: 'test'
-    
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\*test*.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    runSettingsFile: '$(System.DefaultWorkingDirectory)/DevOps.runsettings'
+    codeCoverageEnabled: true
 - task: DotNetCoreCLI@2
   displayName: 'Publish All Projects'
   inputs:
