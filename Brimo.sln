@@ -50,9 +50,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebUI", "WebUI\WebUI.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.IntegrationTests", "Application.IntegrationTests\Application.IntegrationTests.csproj", "{1B4726D9-D801-4727-9781-7D121869F2E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.UnitTests", "Application.UnitTests\Application.UnitTests.csproj", "{A2858DA6-DC72-42F3-9C64-7721FBDFD6A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.UnitTests", "Application.UnitTests\Application.UnitTests.csproj", "{A2858DA6-DC72-42F3-9C64-7721FBDFD6A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.UnitTests", "Domain.UnitTests\Domain.UnitTests.csproj", "{C62AC3A4-B8C4-4CFA-8C0F-4E407A19CACD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.UnitTests", "Domain.UnitTests\Domain.UnitTests.csproj", "{C62AC3A4-B8C4-4CFA-8C0F-4E407A19CACD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

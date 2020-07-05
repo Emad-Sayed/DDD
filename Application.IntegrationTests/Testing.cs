@@ -36,8 +36,8 @@ namespace Application.IntegrationTests
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddEnvironmentVariables();
 
-            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-           
+            var env = TestContext.Parameters["ASPNETCORE_ENVIRONMENT"];
+
             if (env == "Production")
                 builder.AddJsonFile("appsettings.Testing.json", true, true);
             else
@@ -98,14 +98,21 @@ namespace Application.IntegrationTests
             productCatalogContext.Database.EnsureDeleted();
             customerManagmentContext.Database.EnsureDeleted();
             distributorManagmentContext.Database.EnsureDeleted();
-            adminIdentityDbContext.Database.EnsureDeleted();
 
             shoppingVanContext.Database.Migrate();
             orderContext.Database.Migrate();
             productCatalogContext.Database.Migrate();
             customerManagmentContext.Database.Migrate();
             distributorManagmentContext.Database.Migrate();
-            adminIdentityDbContext.Database.Migrate();
+            try
+            {
+                adminIdentityDbContext.Database.Migrate();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
