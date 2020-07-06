@@ -35,33 +35,11 @@ export class CoreService {
     }
 
     public handleError(error: any) {
-        // if (error.headers) {
-        //     const applicationErrors = error.headers.get('Application-Errors');
-        //     if (applicationErrors) {
-        //         console.log('error', applicationErrors);
-        //         return throwError(applicationErrors);
-        //     }
-        // }
-        // if(error.status == 400) {
-        //     console.log('hello 400 errors')
-        // }
-        // const serverError = error.error;
-        // console.log(error);
-        // if (serverError) {
-        //     for (const key in serverError) {
-        //         if (serverError.hasOwnProperty(key)) {
-        //             if (key != 'isTrusted') {
-        //                 console.log('error', serverError[key]);
-
-        //                 this.showErrorOperation(ErrorsKey[serverError.errors.code])
-        //             }
-        //         }
-        //     }
-        // }
-        console.log(error.error)
-        error.error.Errors.forEach(err => {
-            this.showErrorOperation(err.ErrorMessage);
-        });
+        if (error?.error?.Errors != null) {
+            error.error.Errors.forEach((err: { ErrorMessage: string; }) => {
+                this.showErrorOperation(err.ErrorMessage);
+            });
+        }
         return throwError(error);
     }
 
