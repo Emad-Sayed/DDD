@@ -40,6 +40,7 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
         {
             var distributorUserToCreate = new DistributorUser(Id.ToString(), accountId, fullName, email);
             DistributorUsers.Add(distributorUserToCreate);
+            AddDomainEvent(new DistributorUserCreated(distributorUserToCreate));
         }
 
         // update distributor
@@ -64,7 +65,6 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
 
             // rais Distributor updated event
             AddDomainEvent(new DistributorUserDeleted(distributorUser));
-            AddDomainEvent(new DistributorUpdated(this));
         }
 
         // update  Distributor User
@@ -77,7 +77,20 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
             distributorUserToUpdate.Update(fullName);
 
             // rais product updated event
-            AddDomainEvent(new DistributorUpdated(this));
+            AddDomainEvent(new DistributorUserUpdated(distributorUserToUpdate));
+        }
+
+        // Confirm  Distributor User Email
+        public void ConfirmDistributorUserEmail(string distributorUserId)
+        {
+            var distributorUserToConfirmEmail = DistributorUsers.FirstOrDefault(x => x.Id.ToString() == distributorUserId);
+            if (distributorUserToConfirmEmail == null) throw new DistributorUserNotFoundException(distributorUserId);
+
+
+            distributorUserToConfirmEmail.ConfirmEmail();
+
+            // rais product updated event
+            AddDomainEvent(new DistributorUserEmailConfirmed(distributorUserToConfirmEmail));
         }
     }
 }

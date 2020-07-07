@@ -43,7 +43,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
 
 
         [HttpPost("SendSMSCode")]
-        public async Task<IActionResult> SendSMSCode([FromBody]SendSMSCodeVM sendSMSCodeVM)
+        public async Task<IActionResult> SendSMSCode([FromBody] SendSMSCodeVM sendSMSCodeVM)
         {
             // Check if phone number is registered before if not will create new user with this phone number
             var userFromDb = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == sendSMSCodeVM.PhoneNumber);
@@ -104,7 +104,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody]RegisterVM model)
+        public async Task<IActionResult> Register([FromBody] RegisterVM model)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == model.PhoneNumber);
             if (user == null) return BadRequest("User with this phone number not found");
@@ -122,7 +122,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
         }
 
         [HttpGet("GetCustomerByPhoneNumber")]
-        public async Task<IActionResult> UpdateProfile([FromQuery]string phoneNumber)
+        public async Task<IActionResult> UpdateProfile([FromQuery] string phoneNumber)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == "+" + phoneNumber.Trim());
             if (user == null) return BadRequest("user_with_this_phone_number_not_found");
@@ -145,7 +145,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
 
 
         [HttpDelete("DeleteUser")]
-        public async Task<IActionResult> DeleteUser([FromQuery]string userId)
+        public async Task<IActionResult> DeleteUser([FromQuery] string userId)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
             if (user == null) return BadRequest("User with this id not found");
@@ -189,6 +189,21 @@ namespace Brimo.IDP.STS.Identity.Controllers
             return Ok(user.Id);
         }
 
+        [HttpPost("ResendSendInvitationMail")]
+        public async Task<IActionResult> ResendSendInvitationMail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return BadRequest("user_not_found");
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var fullConfirmationUrl = _configuration["BrimoWebURL"] + "/complete_registration" + "?email=" + user.Email + "&token=" + HttpUtility.UrlEncode(token);
+
+            // TODO Send Token To User Email
+            await _emailSender.SendEmailAsync(user.Email, "Brimo Invitation", $"Brimo Team Please click the link to complete your rgistration <a href=\"{fullConfirmationUrl}\">link</a>");
+
+            return Ok();
+        }
+
         private async Task SendInvitationMail(UserIdentity user)
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -211,6 +226,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
+            await ConfirmDistributorUserEmail(user.Id);
             return Ok(new { user.EmailConfirmed });
         }
 
@@ -221,7 +237,11 @@ namespace Brimo.IDP.STS.Identity.Controllers
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
             if (user == null) return BadRequest("user_with_this_email_not_found");
 
-            if (!user.EmailConfirmed || !user.PhoneNumberConfirmed) throw new Exception("please_confirm_your_account_first");
+            if (await _userManager.IsInRoleAsync(user, "Customer"))
+                if (!user.PhoneNumberConfirmed) throw new Exception("please_confirm_your_account_first");
+
+            if (await _userManager.IsInRoleAsync(user, "Distributor"))
+                if (!user.EmailConfirmed) throw new Exception("please_confirm_your_account_first");
 
             var result = await _userManager.AddPasswordAsync(user, model.Password);
 
@@ -298,6 +318,25 @@ namespace Brimo.IDP.STS.Identity.Controllers
 
             var responseString = await response.Content.ReadAsStringAsync();
             return responseString;
+        }
+
+        private async Task ConfirmDistributorUserEmail(string accountId)
+        {
+            var apiClient = new HttpClient();
+
+            var body = new
+            {
+                AccountId = accountId
+            };
+
+            var json = JsonConvert.SerializeObject(body);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var url = _configuration["BrimoAPIURL"] + "/api/DistributorManagment/Distributors/ConfirmDistributorUserEmail";
+
+            var response = await apiClient.PostAsync(url, data);
+
+            if (response.StatusCode != HttpStatusCode.OK) throw new Exception(await response.Content.ReadAsStringAsync());
         }
     }
 }

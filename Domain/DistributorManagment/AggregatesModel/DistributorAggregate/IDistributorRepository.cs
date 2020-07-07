@@ -14,5 +14,6 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
         Task<Distributor> FindByIdAsync(string id);
         Task<(int, List<Distributor>)> GetAllAsync(int pageNumber, int pageSize, string keyWord);
         Task<(int, List<City>)> GetAllCitiesAsync(int pageNumber, int pageSize, string keyWord);
+        Task ConfirmDistributorUserEmail(string userId);
     }
 }

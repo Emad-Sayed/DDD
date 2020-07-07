@@ -5,5 +5,6 @@ export class DistributorUser {
         public distributorId?: string,
         public fullName?: string,
         public email?: string,
+        public emailConfirmed?: boolean,
     ) { }
 }

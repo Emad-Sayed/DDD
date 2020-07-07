@@ -64,6 +64,9 @@
                         <button class="btn p-2" (click)="removeDistributorUser(distributor.distributorUsers[i], i)">
                             <i class="fas fa-trash-alt text-danger"></i>
                         </button>
+                        <button *ngIf="!distributorUser.emailConfirmed" class="btn p-2" (click)="resendInvitationEmail(distributorUser.email)">
+                            <i class="fas fa-reply text-danger"></i>
+                        </button>
                     </div>
                 </div>
             </div>

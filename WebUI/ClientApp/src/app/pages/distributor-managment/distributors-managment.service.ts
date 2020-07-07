@@ -6,6 +6,8 @@ import { Config } from 'src/app/shared/confing/config';
 import { Distributor } from 'src/app/shared/models/distributor-managment/distributor.model';
 import { DistributorUser } from 'src/app/shared/models/distributor-managment/distributor-user.model';
 import { City } from 'src/app/shared/models/distributor-managment/city.model';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +15,7 @@ import { City } from 'src/app/shared/models/distributor-managment/city.model';
 export class DistributorsManagmentService {
 
     distributorEditor = new BehaviorSubject<any>({ openEditor: false });
-    public constructor(private httpService: HttpService) { }
+    public constructor(private httpService: HttpService, private http: HttpClient) { }
 
 
     //#region Distributor
@@ -44,6 +46,11 @@ export class DistributorsManagmentService {
     createDistributorUser(distributorUser: DistributorUser, distributorId: string): Observable<any> {
         return this.httpService.post(`${Config.Distributors}/${distributorId}/CreateDistributorUser`, distributorUser);
     }
+
+    resendInvitationEmail(email: string): Observable<any> {
+        return this.http.post(`${environment.identityServerUrl}api/Auth/ResendSendInvitationMail`, {}, { params: { email: email } });
+    }
+
 
     updateDistributorUser(distributorUser: DistributorUser, distributorId: string): Observable<any> {
         return this.httpService.put(`${Config.Distributors}/${distributorId}/UpdateDistributorUser`, distributorUser);

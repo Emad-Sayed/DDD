@@ -11,6 +11,7 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
         public string AccountId { get; private set; }
         public string FullName { get; private set; }
         public string Email { get; private set; }
+        public bool EmailConfirmed { get; private set; }
 
         public string DistributorId { get; private set; }
         public Distributor Distributor { get; private set; }
@@ -34,6 +35,11 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
         public void Update(string fullName)
         {
             FullName = fullName;
+        }
+
+        public void ConfirmEmail()
+        {
+            EmailConfirmed = true;
         }
     }
 }

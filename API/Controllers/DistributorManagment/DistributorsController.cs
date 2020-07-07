@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Configuration;
+using Application.DistributorManagment.Commands.ConfirmDistributorUserEmail;
 using Application.DistributorManagment.Commands.CreateDistributor;
 using Application.DistributorManagment.Commands.CreateDistributorUser;
 using Application.DistributorManagment.Commands.DeleteDistributor;
@@ -76,6 +77,14 @@ namespace API.Controllers.DistributorManagment
 
         [HttpPut("{distributorId}/UpdateDistributorUser")]
         public async Task<IActionResult> UpdateDistributorUser([FromBody]UpdateDistributorUserCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+
+        [HttpPost("ConfirmDistributorUserEmail")]
+        public async Task<IActionResult> Get([FromBody] ConfirmDistributorUserEmailCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);

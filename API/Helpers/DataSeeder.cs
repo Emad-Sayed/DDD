@@ -31,11 +31,11 @@ namespace API.Helpers
                 var distributorManagmentContext = scope.ServiceProvider.GetService<DistributorManagmentContext>();
                 try
                 {
+                    distributorManagmentContext.Database.Migrate();
                     productCatalogContext.Database.Migrate();
                     orderContext.Database.Migrate();
                     customerManagmentContext.Database.Migrate();
                     shoppingVanContext.Database.Migrate();
-                    distributorManagmentContext.Database.Migrate();
                 }
                 catch (Exception) { }
                 SeedBrands(productCatalogContext);

@@ -30,6 +30,7 @@ namespace Persistence.DistributorManagment
         }
 
         public DbSet<Distributor> Distributors { get; set; }
+        public DbSet<DistributorUser> DistributorUsers { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Area> Areas { get; set; }
 

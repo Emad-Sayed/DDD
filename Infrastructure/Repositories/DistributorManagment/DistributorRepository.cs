@@ -93,5 +93,15 @@ namespace Infrastructure.Repositories.DistributorManagment
 
             return (count, cities);
         }
+
+        public async Task ConfirmDistributorUserEmail(string userId)
+        {
+            var distributorUser = await _context.DistributorUsers.FirstOrDefaultAsync(x => x.AccountId == userId);
+            if (distributorUser != null)
+            {
+                distributorUser.ConfirmEmail();
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

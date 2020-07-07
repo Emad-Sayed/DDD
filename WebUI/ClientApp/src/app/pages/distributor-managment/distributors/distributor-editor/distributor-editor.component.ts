@@ -124,6 +124,11 @@ export class DistributorEditorComponent implements OnInit {
     });
   }
 
+  resendInvitationEmail(email: string) {
+    this.distributorManagmentService.resendInvitationEmail(email).subscribe(res => {
+      console.log('invitaiton sent');
+    })
+  }
   saveData() {
     if (this.isEditing) {
       this.updateDistributor();
