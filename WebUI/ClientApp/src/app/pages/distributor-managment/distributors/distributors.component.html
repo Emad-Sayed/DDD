@@ -1,93 +1,65 @@
 <div class="row">
-    <div class="col-12">
-      <!-- search box -->
-      <div class="w-100 card mb-3">
-        <div class="ais-SearchBox card-search">
-          <form class="ais-SearchBox-form w-100 form-group d-flex" novalidate>
-            <input
-              class="ais-SearchBox-input form-control col-5"
-              autocomplete="off"
-              autocorrect="off"
-              autocapitalize="off"
-              placeholder="رقم الموزع / الإسم"
-              spellcheck="false"
-              maxlength="512"
-              type="search"
-              value=""
-              (keydown)="onKeyUp($event.target.value)"
-            />
-            <!-- <a class="ais-SearchBox-submit card-link" type="submit" title="Submit the search query.">
+  <div class="col-12">
+    <!-- search box -->
+    <div class="w-100 card mb-3">
+      <div class="ais-SearchBox card-search">
+        <form class="ais-SearchBox-form w-100 form-group d-flex" novalidate>
+          <input class="ais-SearchBox-input form-control col-5" autocomplete="off" autocorrect="off"
+            autocapitalize="off" placeholder="رقم الموزع / الإسم" spellcheck="false" maxlength="512" type="search"
+            value="" (keydown)="onKeyUp($event.target.value)" />
+          <!-- <a class="ais-SearchBox-submit card-link" type="submit" title="Submit the search query.">
                       <i class="fas fa-search ml-2"></i>
                       بحث
                   </a> -->
-            <a
-              class="btn btn-outline-info mr-auto"
-              type="button"
-              (click)="openEditorToAddDistributor()"
-            >
-              اضافة
-            </a>
-          </form>
-        </div>
+          <a class="btn btn-outline-info mr-auto" type="button" (click)="openEditorToAddDistributor()">
+            اضافة
+          </a>
+        </form>
       </div>
-    </div>
-    <div class="col-12">
-      <div class="card">
-        <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
-          <div
-            class="table-responsive"
-            infiniteScroll
-            [infiniteScrollDistance]="2"
-            [infiniteScrollThrottle]="50"
-            (scrolled)="onScroll()"
-            [scrollWindow]="false"
-          >
-            <table class="table table-dashboard mb-0">
-              <thead>
-                <tr>
-                  <th scope="col" class="border-top-0">رقم</th>
-                  <th scope="col" class="border-top-0">كود الموزع</th>
-                  <th scope="col" class="border-top-0">إسم الموزع</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  *ngFor="let distributor of distributors; let i = index"
-                  rel="off-canvas"
-                  class="canvas-btn"
-                >
-                  <th
-                    scope="row"
-                    (click)="openEditorToUpdateDistributor(distributor)"
-                  >
-                    {{ i + 1 }}
-                  </th>
-                  <td (click)="openEditorToUpdateDistributor(distributor)">
-                    {{ distributor?.id?.substr(0, 5) }}
-                  </td>
-                  <td (click)="openEditorToUpdateDistributor(distributor)">
-                    {{ distributor?.name }}
-                  </td>
-                  <td class="text-center">
-                    <button
-                      (click)="showDeleteDistributorPopup(distributor)"
-                      class="btn p-0"
-                    >
-                      <i class="fas fa-trash-alt text-danger"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-6">
-      <app-distributor-editor
-        class="box"
-        [ngClass]="{ active: openEditor }"
-      ></app-distributor-editor>
     </div>
   </div>
-  
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
+        <div class="table-responsive" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+          (scrolled)="onScroll()" [scrollWindow]="false">
+          <table class="table table-dashboard mb-0">
+            <thead>
+              <tr>
+                <th scope="col" class="border-top-0">رقم</th>
+                <th scope="col" class="border-top-0">كود الموزع</th>
+                <th scope="col" class="border-top-0">إسم الموزع</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="distributors.length == 0">
+                <td colspan="4">
+                  <img src="assets/images/nodata.svg" class="nodata-img">
+                </td>
+              </tr>
+              <tr *ngFor="let distributor of distributors; let i = index" rel="off-canvas" class="canvas-btn">
+                <th scope="row" (click)="openEditorToUpdateDistributor(distributor)">
+                  {{ i + 1 }}
+                </th>
+                <td (click)="openEditorToUpdateDistributor(distributor)">
+                  {{ distributor?.id?.substr(0, 5) }}
+                </td>
+                <td (click)="openEditorToUpdateDistributor(distributor)">
+                  {{ distributor?.name }}
+                </td>
+                <td class="text-center">
+                  <button (click)="showDeleteDistributorPopup(distributor)" class="btn p-0">
+                    <i class="fas fa-trash-alt text-danger"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <app-distributor-editor class="box" [ngClass]="{ active: openEditor }"></app-distributor-editor>
+  </div>
+</div>

@@ -10,10 +10,16 @@
 .ais-Pagination-item {
   padding: 0.5rem;
 }
-.nav-tabs{
+.nav-tabs {
   border-bottom: 0;
 }
 
 .table-responsive {
   height: 62.5vh;
+}
+.nodata-img {
+  width: 350px;
+  height: 350px;
+  margin: 0 auto;
+  display: block;
 }

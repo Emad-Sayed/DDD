@@ -22,8 +22,11 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
     <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashbord" routerLinkActive="active">الصفحة الرئيسية</a>
+      </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="/orders/recently" routerLinkActive="active">
           طلبات حديثة
@@ -42,9 +45,20 @@
       <li class="nav-item" *ngIf="isAdmin">
         <a class="nav-link" routerLink="/distributors" routerLinkActive="active">الموزعين</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" (click)="logout()">تسجيل الخروج</a>
-      </li>
     </ul>
+    <!-- <div>
+      <a class="nav-link text-white" (click)="logout()"><i class="fas fa-user text-white"></i></a>
+    </div> -->
+
+    <div class="btn-group">
+      <a class="btn dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        <i class="fas fa-user text-white"></i>
+      </a>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" href="#">الصفحة الشخصية</a>
+        <a class="dropdown-item" href="#" (click)="logout()">تسجيل الخروج</a>
+      </div>
+    </div>
   </div>
 </nav>

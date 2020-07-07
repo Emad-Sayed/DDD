@@ -12,6 +12,7 @@ const routes: Routes = [
     {
         path: '', component: LayoutComponent,
         children: [
+            { path: 'dashbord', loadChildren: () => import('./pages/dashbord/dashbord.module').then(m => m.DashbordModule), canActivate: [AuthGuard] },
             { path: 'orders', loadChildren: () => import('./pages/order-managment/order-managment.module').then(m => m.OrderManagmentModule), canActivate: [AuthGuard] },
             { path: 'customers', loadChildren: () => import('./pages/customers-managment/customers-managment.module').then(m => m.CustomersManagmentModule), canActivate: [AuthGuard] },
             { path: 'distributors', loadChildren: () => import('./pages/distributor-managment/distributor-managment.module').then(m => m.DistributorManagmentModule), canActivate: [AuthGuard] },

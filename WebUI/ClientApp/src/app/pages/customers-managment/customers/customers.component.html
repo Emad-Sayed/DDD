@@ -27,6 +27,11 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr *ngIf="customers.length == 0">
+                                <td colspan="4">
+                                    <img src="assets/images/nodata.svg" class="nodata-img">
+                                </td>
+                            </tr>
                             <tr *ngFor="let customer of customers; let i = index" rel="off-canvas" class="canvas-btn">
                                 <th (click)="openEditorToUpdateCustomer(customer)" scope="row">{{ i + 1 }}</th>
                                 <td (click)="openEditorToUpdateCustomer(customer)">

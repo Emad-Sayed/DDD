@@ -42,11 +42,12 @@
         font-size: 1rem;
         margin: auto;
       }
-      .card-link:hover{
+      .card-link:hover {
         text-decoration: none;
         color: #0168fa;
-        .fa-search{
-          color: #0168fa;        }
+        .fa-search {
+          color: #0168fa;
+        }
       }
     }
   }
@@ -75,4 +76,11 @@
 app-product-editor {
   box-shadow: -5px 5px 8px rgba(0, 0, 0, 0.5);
   margin-top: 46px;
+}
+
+.nodata-img {
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
+  display: block;
 }

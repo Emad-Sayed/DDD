@@ -24,7 +24,7 @@ namespace Application.Common.Behaviours
         {
             var requestName = typeof(TRequest).Name;
             var userId = _currentUserService.UserId ?? string.Empty;
-            string userName = string.Empty;
+            string userName = _currentUserService.Name ?? string.Empty;
 
             _logger.LogInformation("Brimo API Request: {Name} {@UserId} {@UserName} {@Request}",
                 requestName, userId, userName, request);
