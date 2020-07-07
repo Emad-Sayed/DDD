@@ -26,21 +26,21 @@ namespace API.Controllers.Order
             _currentUserService = currentUserService;
         }
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery]ListOrdersQuery query)
+        public async Task<IActionResult> Get([FromQuery] ListOrdersQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);
         }
 
         [HttpGet("CustomerOrders/{customerId}")]
-        public async Task<IActionResult> GetCustomerOrders([FromQuery]CustomerOrdersQuery query)
+        public async Task<IActionResult> GetCustomerOrders([FromQuery] CustomerOrdersQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);
         }
 
         [HttpGet("MyOrders")]
-        public async Task<IActionResult> GetMyOrders([FromQuery]CustomerOrdersQuery query)
+        public async Task<IActionResult> GetMyOrders([FromQuery] CustomerOrdersQuery query)
         {
             query.CustomerId = _currentUserService.UserId;
             var result = await Mediator.Send(query);
@@ -57,7 +57,7 @@ namespace API.Controllers.Order
 
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody]UpdateOrderCommand command)
+        public async Task<IActionResult> Put([FromBody] UpdateOrderCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);
@@ -67,35 +67,35 @@ namespace API.Controllers.Order
         public async Task<IActionResult> PlaceOrder()
         {
             var result = await Mediator.Send(new PlaceOrderCommand());
-            return Ok(result);
+            return Ok(new { result });
         }
 
         [HttpPost("ConfirmOrder")]
-        public async Task<IActionResult> ConfirmOrder([FromBody]ConfirmOrderCommand command)
+        public async Task<IActionResult> ConfirmOrder([FromBody] ConfirmOrderCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return Ok(new { result });
         }
 
         [HttpPost("ShippOrder")]
-        public async Task<IActionResult> ShippOrder([FromBody]ShippOrderCommand command)
+        public async Task<IActionResult> ShippOrder([FromBody] ShippOrderCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);
         }
 
         [HttpPost("DeliverOrder")]
-        public async Task<IActionResult> DeliverOrder([FromBody]DeliverOrderCommand command)
+        public async Task<IActionResult> DeliverOrder([FromBody] DeliverOrderCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return Ok(new { result });
         }
 
         [HttpPost("CancelOrder")]
-        public async Task<IActionResult> CancelOrder([FromBody]CancelOrderCommand command)
+        public async Task<IActionResult> CancelOrder([FromBody] CancelOrderCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return Ok(new { result });
         }
 
 

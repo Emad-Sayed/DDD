@@ -1,4 +1,6 @@
-﻿using Domain.Common.Interfaces;
+﻿using Application.Common.Interfaces;
+using Domain.Base.Entity;
+using Domain.Common.Interfaces;
 using Domain.DistributorManagment.AggregatesModel.DistributorAggregate;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +15,7 @@ namespace Persistence.DistributorManagment
 {
     public class DistributorManagmentContext : DbContext, IUnitOfWork
     {
-
+        private readonly ICurrentUserService _currentUserService;
         private readonly IMediator _mediator;
         private IDbContextTransaction _currentTransaction;
 
@@ -23,9 +25,10 @@ namespace Persistence.DistributorManagment
         public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
         public bool HasActiveTransaction => _currentTransaction != null;
 
-        public DistributorManagmentContext(DbContextOptions<DistributorManagmentContext> options, IMediator mediator) : base(options)
+        public DistributorManagmentContext(DbContextOptions<DistributorManagmentContext> options, IMediator mediator, ICurrentUserService currentUserService) : base(options)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _currentUserService = currentUserService;
 
         }
 
@@ -54,17 +57,46 @@ namespace Persistence.DistributorManagment
 
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
             // performed through the DbContext will be committed
-            var result = await base.SaveChangesAsync(cancellationToken);
+
+            foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedBy = _currentUserService.Name;
+                        entry.Entity.Created = DateTime.UtcNow;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.LastModifiedBy = _currentUserService.Name;
+                        entry.Entity.LastModified = DateTime.UtcNow;
+                        break;
+                }
+            }
+
+            await base.SaveChangesAsync(cancellationToken);
 
             return true;
         }
 
         public async Task<bool> SaveEntitiesSeveralTransactionsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-
+            foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedBy = _currentUserService.Name;
+                        entry.Entity.Created = DateTime.UtcNow;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.LastModifiedBy = _currentUserService.Name;
+                        entry.Entity.LastModified = DateTime.UtcNow;
+                        break;
+                }
+            }
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
             // performed through the DbContext will be committed
-            var result = await base.SaveChangesAsync(cancellationToken);
+            await base.SaveChangesAsync(cancellationToken);
 
             // Dispatch Domain Events collection. 
             // Choices:

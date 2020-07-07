@@ -1,4 +1,6 @@
-﻿using Domain.Common.Interfaces;
+﻿using Application.Common.Interfaces;
+using Domain.Base.Entity;
+using Domain.Common.Interfaces;
 using Domain.OrderManagment.AggregatesModel.OrderAggregate;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +15,9 @@ namespace Persistence.OrderManagment
     {
 
         private readonly IMediator _mediator;
+        private readonly ICurrentUserService _currentUserService;
+
+
         private IDbContextTransaction _currentTransaction;
 
 
@@ -21,10 +26,10 @@ namespace Persistence.OrderManagment
         public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
         public bool HasActiveTransaction => _currentTransaction != null;
 
-        public OrderContext(DbContextOptions<OrderContext> options, IMediator mediator) : base(options)
+        public OrderContext(DbContextOptions<OrderContext> options, IMediator mediator, ICurrentUserService currentUserService) : base(options)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-
+            _currentUserService = currentUserService;
         }
 
         public DbSet<Order> Orders { get; set; }
@@ -37,6 +42,21 @@ namespace Persistence.OrderManagment
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedBy = _currentUserService.Name;
+                        entry.Entity.Created = DateTime.UtcNow;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.LastModifiedBy = _currentUserService.Name;
+                        entry.Entity.LastModified = DateTime.UtcNow;
+                        break;
+                }
+            }
+
             // Dispatch Domain Events collection. 
             // Choices:
             // A) Right BEFORE committing data (EF SaveChanges) into the DB will make a single transaction including  
@@ -47,17 +67,31 @@ namespace Persistence.OrderManagment
 
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
             // performed through the DbContext will be committed
-            var result = await base.SaveChangesAsync(cancellationToken);
+            await base.SaveChangesAsync(cancellationToken);
 
             return true;
         }
 
         public async Task<bool> SaveEntitiesSeveralTransactionsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedBy = _currentUserService.Name;
+                        entry.Entity.Created = DateTime.UtcNow;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.LastModifiedBy = _currentUserService.Name;
+                        entry.Entity.LastModified = DateTime.UtcNow;
+                        break;
+                }
+            }
 
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
             // performed through the DbContext will be committed
-            var result = await base.SaveChangesAsync(cancellationToken);
+            await base.SaveChangesAsync(cancellationToken);
 
             // Dispatch Domain Events collection. 
             // Choices:

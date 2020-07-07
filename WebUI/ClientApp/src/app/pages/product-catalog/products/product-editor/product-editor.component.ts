@@ -33,6 +33,7 @@ export class ProductEditorComponent implements OnInit {
     this.getBrands();
     this.getProductCategories();
     this.productCatalogService.productEditor.subscribe(res => {
+      if(res.productRequestSuccess) return;
       if (res.product) {
         this.isEditing = true;
         this.getProductById(res.product.id);

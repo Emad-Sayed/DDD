@@ -32,7 +32,7 @@ namespace API.Controllers.ProductCatalog
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery]ListProductsQuery query)
+        public async Task<IActionResult> Get([FromQuery] ListProductsQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);
@@ -40,14 +40,14 @@ namespace API.Controllers.ProductCatalog
 
 
         [HttpGet("GetUnitsByProductsIds")]
-        public async Task<IActionResult> GetUnitsByProductsIds([FromQuery]ListUnitsByProductsIdsQuery query)
+        public async Task<IActionResult> GetUnitsByProductsIds([FromQuery] ListUnitsByProductsIdsQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);
         }
 
         [HttpGet("{productId}")]
-        public async Task<IActionResult> GetById([FromQuery]ProductByIdQuery query)
+        public async Task<IActionResult> GetById([FromQuery] ProductByIdQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);
@@ -55,44 +55,44 @@ namespace API.Controllers.ProductCatalog
 
         [HttpPost]
         [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
-        public async Task<IActionResult> Post([FromBody]CreateProductCommand command)
+        public async Task<IActionResult> Post([FromBody] CreateProductCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return Ok(new { result });
         }
 
         [HttpPut]
         [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
-        public async Task<IActionResult> Put([FromBody]UpdateProductCommand command)
+        public async Task<IActionResult> Put([FromBody] UpdateProductCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return Ok(new { result });
         }
 
         [HttpDelete]
         [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
-        public async Task<IActionResult> Delete([FromQuery]DeleteProductCommand command)
+        public async Task<IActionResult> Delete([FromQuery] DeleteProductCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);
         }
 
         [HttpPost("{productId}/AddUnit")]
-        public async Task<IActionResult> AddUnit([FromBody]AddUnitCommand command)
+        public async Task<IActionResult> AddUnit([FromBody] AddUnitCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return Ok(new { result });
         }
 
         [HttpPut("{productId}/UpdateUnit")]
-        public async Task<IActionResult> UpdateUnit([FromBody]UpdateUnitCommand command)
+        public async Task<IActionResult> UpdateUnit([FromBody] UpdateUnitCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);
         }
 
         [HttpDelete("{productId}/DeleteUnit")]
-        public async Task<IActionResult> DeleteUnit([FromQuery]DeleteUnitCommand command)
+        public async Task<IActionResult> DeleteUnit([FromQuery] DeleteUnitCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);

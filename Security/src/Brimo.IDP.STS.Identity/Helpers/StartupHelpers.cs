@@ -422,6 +422,7 @@ namespace Brimo.IDP.STS.Identity.Helpers
             foreach (var role in roles)
             {
                 context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
+                context.IssuedClaims.Add(new Claim(JwtClaimTypes.Name, user.FullName ?? user.UserName ));
             }
 
         }

@@ -5,11 +5,10 @@ using System.Text;
 
 namespace Domain.Base.Entity
 {
-    public abstract partial class EntityBase
+    public abstract partial class EntityBase : AuditableEntity
     {
         protected EntityBase()
         {
-            CreatedDateUtc = DateTime.UtcNow;
         }
 
         protected EntityBase(Guid id)
@@ -18,7 +17,6 @@ namespace Domain.Base.Entity
         }
 
         public Guid Id { get; protected set; }
-        public DateTime CreatedDateUtc { get; protected set; }
 
         private List<INotification> _domainEvents;
         public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();

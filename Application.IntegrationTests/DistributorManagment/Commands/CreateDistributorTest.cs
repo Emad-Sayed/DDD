@@ -46,7 +46,7 @@ namespace Application.IntegrationTests.DistributorManagment.Commands
 
             // Assert
             distributor.Should().NotBeNull();
-            distributor.CreatedDateUtc.Should().BeCloseTo(DateTime.UtcNow, 10000);
+            distributor.Created.Should().BeCloseTo(DateTime.UtcNow, 10000);
         }
     }
 }

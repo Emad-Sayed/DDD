@@ -5,20 +5,14 @@ using System.Text;
 
 namespace Domain.Base.Entity
 {
-    public abstract class AuditedEntity : EntityBase
+    public abstract class AuditableEntity
     {
-        protected AuditedEntity() : this(Guid.NewGuid())
-        {
+        public string CreatedBy { get; set; }
 
-        }
+        public DateTime Created { get; set; }
 
-        protected AuditedEntity(Guid id) : base(id)
-        {
+        public string LastModifiedBy { get; set; }
 
-        }
-
-        public DateTime? LastStateChangeTime { get; set; }
-        public Guid? LastStateChangerUserId { get; set; }
-        public RecordState RecordState { get; set; }
+        public DateTime? LastModified { get; set; }
     }
 }

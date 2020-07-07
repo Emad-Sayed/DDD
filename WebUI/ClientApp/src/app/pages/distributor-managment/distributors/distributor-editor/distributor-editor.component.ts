@@ -26,10 +26,12 @@ export class DistributorEditorComponent implements OnInit {
   ngOnInit() {
     this.getCities();
     this.distributorManagmentService.distributorEditor.subscribe(res => {
+      if(res.distributorRequestSuccess) return;
       if (res.distributor) {
         this.isEditing = true;
         this.getDistributorById(res.distributor.id);
       } else {
+        this.isEditing = false;
         this.distributor = new Distributor();
       }
     })
@@ -112,14 +114,14 @@ export class DistributorEditorComponent implements OnInit {
   //#region Distributor
   createDistributor() {
     this.distributorManagmentService.createDistributor(this.distributor).subscribe(res => {
-      // this.distributorManagmentService.distributorEditor.next({ distributorRequestSuccess: true });
+      this.distributorManagmentService.distributorEditor.next({ distributorRequestSuccess: true, openEditor: true });
       this.core.showSuccessOperation();
     });
   }
 
   updateDistributor() {
     this.distributorManagmentService.updateDistributor(this.distributor).subscribe(res => {
-      // this.distributorManagmentService.distributorEditor.next({ distributorRequestSuccess: true });
+      this.distributorManagmentService.distributorEditor.next({ distributorRequestSuccess: true, openEditor: true });
       this.core.showSuccessOperation();
     });
   }

@@ -58,7 +58,7 @@ namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
 
             // Assert
             product.Should().NotBeNull();
-            product.CreatedDateUtc.Should().BeCloseTo(DateTime.UtcNow, 10000);
+            product.Created.Should().BeCloseTo(DateTime.UtcNow, 10000);
         }
 
     }

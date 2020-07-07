@@ -1,4 +1,6 @@
-﻿using Application.CustomerManagment;
+﻿using Application.Common.Interfaces;
+using Application.CustomerManagment;
+using Domain.Base.Entity;
 using Domain.Common.Interfaces;
 using Domain.CustomerManagment.AggregatesModel.CustomerAggregate;
 using MediatR;
@@ -17,6 +19,7 @@ namespace Persistence.CustomerManagment
     {
 
         private readonly IMediator _mediator;
+        private readonly ICurrentUserService _currentUserService;
         private IDbContextTransaction _currentTransaction;
 
 
@@ -25,10 +28,10 @@ namespace Persistence.CustomerManagment
         public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
         public bool HasActiveTransaction => _currentTransaction != null;
 
-        public CustomerManagmentContext(DbContextOptions<CustomerManagmentContext> options, IMediator mediator) : base(options)
+        public CustomerManagmentContext(DbContextOptions<CustomerManagmentContext> options, IMediator mediator, ICurrentUserService currentUserService) : base(options)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-
+            _currentUserService = currentUserService;
         }
 
         public DbSet<Customer> Customers { get; set; }
@@ -42,6 +45,21 @@ namespace Persistence.CustomerManagment
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedBy = _currentUserService.Name;
+                        entry.Entity.Created = DateTime.UtcNow;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.LastModifiedBy = _currentUserService.Name;
+                        entry.Entity.LastModified = DateTime.UtcNow;
+                        break;
+                }
+            }
+
             // Dispatch Domain Events collection. 
             // Choices:
             // A) Right BEFORE committing data (EF SaveChanges) into the DB will make a single transaction including  
@@ -52,17 +70,30 @@ namespace Persistence.CustomerManagment
 
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
             // performed through the DbContext will be committed
-            var result = await base.SaveChangesAsync(cancellationToken);
+            await base.SaveChangesAsync(cancellationToken);
 
             return true;
         }
 
         public async Task<bool> SaveEntitiesSeveralTransactionsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-
+            foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedBy = _currentUserService.Name;
+                        entry.Entity.Created = DateTime.UtcNow;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.LastModifiedBy = _currentUserService.Name;
+                        entry.Entity.LastModified = DateTime.UtcNow;
+                        break;
+                }
+            }
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
             // performed through the DbContext will be committed
-            var result = await base.SaveChangesAsync(cancellationToken);
+            await base.SaveChangesAsync(cancellationToken);
 
             // Dispatch Domain Events collection. 
             // Choices:

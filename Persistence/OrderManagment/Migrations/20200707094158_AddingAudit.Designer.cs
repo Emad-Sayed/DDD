@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Persistence.ShoppingVan;
+using Persistence.OrderManagment;
 
-namespace Persistence.ShoppingVan.Migrations
+namespace Persistence.OrderManagment.Migrations
 {
-    [DbContext(typeof(ShoppingVanContext))]
-    partial class ShoppingVanContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(OrderContext))]
+    [Migration("20200707094158_AddingAudit")]
+    partial class AddingAudit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,11 +21,14 @@ namespace Persistence.ShoppingVan.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate.Van", b =>
+            modelBuilder.Entity("Domain.OrderManagment.AggregatesModel.OrderAggregate.Order", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -34,13 +39,31 @@ namespace Persistence.ShoppingVan.Migrations
                     b.Property<string>("CustomerId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CustomerName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TotalItemsCount")
+                    b.Property<DateTime>("OrderCanceledDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("OrderConfirmedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("OrderDeliveredDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("OrderPlacedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("OrderShippedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
                     b.Property<float>("TotalPrice")
@@ -48,17 +71,14 @@ namespace Persistence.ShoppingVan.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ShoppingVans");
+                    b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate.VanItem", b =>
+            modelBuilder.Entity("Domain.OrderManagment.AggregatesModel.OrderAggregate.OrderItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -72,6 +92,12 @@ namespace Persistence.ShoppingVan.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OrderId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("OrderId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("PhotoUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -81,8 +107,8 @@ namespace Persistence.ShoppingVan.Migrations
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("SellingPrice")
-                        .HasColumnType("real");
+                    b.Property<int>("UnitCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("UnitId")
                         .HasColumnType("nvarchar(max)");
@@ -93,24 +119,18 @@ namespace Persistence.ShoppingVan.Migrations
                     b.Property<float>("UnitPrice")
                         .HasColumnType("real");
 
-                    b.Property<string>("VanId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("VanId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("VanId1");
+                    b.HasIndex("OrderId1");
 
-                    b.ToTable("ShoppingVanItems");
+                    b.ToTable("OrderItems");
                 });
 
-            modelBuilder.Entity("Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate.VanItem", b =>
+            modelBuilder.Entity("Domain.OrderManagment.AggregatesModel.OrderAggregate.OrderItem", b =>
                 {
-                    b.HasOne("Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate.Van", "Van")
-                        .WithMany("ShoppingVanItems")
-                        .HasForeignKey("VanId1");
+                    b.HasOne("Domain.OrderManagment.AggregatesModel.OrderAggregate.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId1");
                 });
 #pragma warning restore 612, 618
         }

@@ -28,38 +28,38 @@ namespace API.Controllers.CustomerManagment
         }
 
         [HttpGet("{customerId}")]
-        public async Task<IActionResult> GetById([FromQuery]CustomerByIdQuery query)
+        public async Task<IActionResult> GetById([FromQuery] CustomerByIdQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]CreateCustomerCommand command)
+        public async Task<IActionResult> Post([FromBody] CreateCustomerCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return Ok(new { result });
         }
 
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody]UpdateCustomerCommand command)
+        public async Task<IActionResult> Put([FromBody] UpdateCustomerCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return Ok(new { result });
         }
 
 
         [HttpDelete]
         [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
-        public async Task<IActionResult> Delete([FromQuery]DeleteCustomerCommand command)
+        public async Task<IActionResult> Delete([FromQuery] DeleteCustomerCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return Ok(new { result });
         }
 
         [HttpGet("Cities")]
-        public async Task<IActionResult> GetAllCities([FromQuery]ListCitiesQuery query)
+        public async Task<IActionResult> GetAllCities([FromQuery] ListCitiesQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);
