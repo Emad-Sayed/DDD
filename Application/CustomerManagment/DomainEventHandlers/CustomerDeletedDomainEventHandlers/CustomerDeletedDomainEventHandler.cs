@@ -1,7 +1,9 @@
-﻿using Domain.Common.Exceptions;
+﻿using Application.Common.Interfaces;
+using Domain.Common.Exceptions;
 using Domain.CustomerManagment.Events;
 using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,14 +18,19 @@ namespace Application.CustomerManagment.DomainEventHandlers.CustomerDeletedDomai
     public class CustomerDeletedDomainEventHandler : INotificationHandler<CustomerDeleted>
     {
         private readonly IConfiguration _configuration;
+        private readonly ILogger<CustomerDeletedDomainEventHandler> _logger;
+        private readonly ICurrentUserService _currentUserService;
 
-        public CustomerDeletedDomainEventHandler(IConfiguration configuration)
+        public CustomerDeletedDomainEventHandler(IConfiguration configuration, ILogger<CustomerDeletedDomainEventHandler> logger, ICurrentUserService currentUserService)
         {
             _configuration = configuration;
+            _logger = logger;
+            _currentUserService = currentUserService;
         }
 
         public async Task Handle(CustomerDeleted notification, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("Brimo API EventHandelr: {Name} {@UserId} {@UserName} {@Request}", nameof(CustomerDeleted), _currentUserService.UserId, _currentUserService.Name, notification);
             HttpClient apiClient = new HttpClient();
 
             // TODO Set bearer toekn to http headers
