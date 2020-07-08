@@ -68,7 +68,7 @@ namespace Application.DistributorManagment.Commands.CreateDistributorUser
 
                 var response = await apiClient.PostAsync(url, data);
                 var responseString = await response.Content.ReadAsStringAsync();
-                if (response.StatusCode != HttpStatusCode.OK) throw new BusinessException(HttpStatusCode.BadRequest, $"An error occurs while creating distributor account /" + responseString, "distributor_account_error");
+                if (response.StatusCode != HttpStatusCode.OK) throw new BusinessException(HttpStatusCode.BadRequest, $"An error occurs while creating distributor account /" + responseString, "create_distributor_account_error");
                 return responseString;
             }
         }
