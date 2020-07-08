@@ -128,7 +128,7 @@ namespace Application.IntegrationTests
         {
             public string UserId => _currentUserId;
 
-            public string Address => throw new NotImplementedException();
+            public string Name => "Test";
         }
 
         private static string _currentUserId;

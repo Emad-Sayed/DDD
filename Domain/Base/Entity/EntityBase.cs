@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.Base.Entity
 {
-    public abstract partial class EntityBase : AuditableEntity
+    public abstract partial class EntityBase
     {
         protected EntityBase()
         {

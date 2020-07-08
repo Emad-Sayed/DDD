@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.Base.Entity
 {
-    public abstract class AuditableEntity
+    public abstract class AuditableEntity: EntityBase
     {
         public string CreatedBy { get; set; }
 

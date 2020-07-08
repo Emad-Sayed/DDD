@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
 {
-    public class VanItem : EntityBase
+    public class VanItem : AuditableEntity
     {
         public string ProductId { get; private set; }
         public string ProductName { get; private set; }

@@ -12,7 +12,7 @@ using System.Text;
 
 namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
 {
-    public class Distributor : EntityBase, IAggregateRoot
+    public class Distributor : AuditableEntity, IAggregateRoot
     {
         public string Name { get; private set; }
         public Address Address { get; private set; }
@@ -57,8 +57,7 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
         public void DeleteDistributorUser(string distributorUserId)
         {
             var distributorUser = DistributorUsers.FirstOrDefault(x => x.Id.ToString() == distributorUserId);
-            if (distributorUser == null)
-                if (distributorUser == null) throw new DistributorUserNotFoundException(distributorUserId);
+            if (distributorUser == null) throw new DistributorUserNotFoundException(distributorUserId);
 
 
             DistributorUsers.Remove(distributorUser);

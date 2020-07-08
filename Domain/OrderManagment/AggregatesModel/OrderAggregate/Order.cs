@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
 {
-    public class Order : EntityBase, IAggregateRoot
+    public class Order : AuditableEntity, IAggregateRoot
     {
         public string CustomerId { get; private set; }
         public string CustomerName { get; private set; }

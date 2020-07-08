@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate
 {
-    public class ProductCategory : EntityBase, IAggregateRoot
+    public class ProductCategory : AuditableEntity, IAggregateRoot
     {
         public string Name { get; private set; }
 

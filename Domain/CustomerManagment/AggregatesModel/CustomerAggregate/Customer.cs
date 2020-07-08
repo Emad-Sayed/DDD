@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
 {
-    public class Customer : EntityBase, IAggregateRoot
+    public class Customer : AuditableEntity, IAggregateRoot
     {
         public string AccountId { get; private set; }
         public string FullName { get; private set; }
@@ -16,6 +16,7 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
         public string ShopAddress { get; private set; }
         public string LocationOnMap { get; private set; }
         public Address Address { get; private set; }
+        public bool IsDeleted { get; private set; }
 
         private Customer() { }
 
@@ -45,6 +46,7 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
         // delete customer
         public void Delete()
         {
+            IsDeleted = true;
             // rais product deleted event
             AddDomainEvent(new CustomerDeleted(this));
         }

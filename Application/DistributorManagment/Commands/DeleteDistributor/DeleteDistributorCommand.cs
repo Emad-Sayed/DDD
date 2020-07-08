@@ -31,6 +31,7 @@ namespace Application.DistributorManagment.Commands.DeleteDistributor
                 var distributorFromRepo = await _distributorRepository.FindByIdAsync(request.DistributorId);
                 if (distributorFromRepo == null) throw new DistributorNotFoundException(request.DistributorId);
 
+                if (distributorFromRepo.DistributorUsers.Count > 0) throw new DistributorContainsUsersException(request.DistributorId);
 
                 // update distributor with the  deleted
                 _distributorRepository.Delete(distributorFromRepo);

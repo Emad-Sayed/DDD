@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 {
-    public class Unit : EntityBase
+    public class Unit : AuditableEntity
     {
         public string Name { get; private set; }
 
@@ -29,6 +29,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 
         public Guid ProductId { get; private set; }
         public Product Product { get; private set; }
+        public bool IsDeleted { get; private set; }
 
         private Unit() { }
 
@@ -53,6 +54,11 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             SellingPrice = sellingPrice;
             Weight = weight;
             IsAvailable = isAvailable;
+        }
+
+       public void DeleteUnit()
+        {
+            IsDeleted = true;
         }
     }
 }

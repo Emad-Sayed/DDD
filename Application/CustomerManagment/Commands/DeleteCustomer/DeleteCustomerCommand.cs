@@ -32,7 +32,7 @@ namespace Application.CustomerManagment.Commands.DeleteCustomer
 
                 customerFromRepo.Delete();
 
-                _customerRepository.Delete(customerFromRepo);
+                _customerRepository.Update(customerFromRepo);
 
                 await _customerRepository.UnitOfWork.SaveEntitiesAsync();
 

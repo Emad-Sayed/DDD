@@ -32,7 +32,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.DeleteProduct
                 productFromRepo.DeleteProduct();
 
                 // update product with the new unit deleted
-                _productRepository.Delete(productFromRepo);
+                _productRepository.Update(productFromRepo);
 
                 // save changes in the database and rase ProductUpdated event
                 await _productRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

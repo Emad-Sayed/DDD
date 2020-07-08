@@ -43,12 +43,14 @@ namespace Infrastructure.Repositories.CustomerManagment
         public async Task<Customer> FindByIdAsync(string id)
         {
             return await _context.Customers
+                .Where(x => x.IsDeleted == false)
                    .FirstOrDefaultAsync(x => x.Id.ToString() == id);
         }
 
         public async Task<(int, List<Customer>)> GetAllAsync(int pageNumber, int pageSize, string keyWord)
         {
             var query = _context.Customers
+                .Where(x => x.IsDeleted == false)
                 //.Include(x => x.CustomerItems)
                 .AsQueryable();
 
@@ -75,6 +77,7 @@ namespace Infrastructure.Repositories.CustomerManagment
         public async Task<Customer> GetCustomerByAccountId(string id)
         {
             return await _context.Customers
+                .Where(x => x.IsDeleted == false)
                    .FirstOrDefaultAsync(x => x.AccountId == id);
         }
 

@@ -46,6 +46,7 @@ namespace Infrastructure.Repositories.ProductCatalog
         public async Task<(int, List<Product>)> GetAllAsync(int pageNumber, int pageSize, string keyWord)
         {
             var query = _context.Products
+                .Where(x => x.IsDeleted == false)
                 .Include(x => x.ProductCategory)
                 .Include(x => x.Brand)
                 .AsQueryable();
@@ -72,6 +73,7 @@ namespace Infrastructure.Repositories.ProductCatalog
         public async Task<Product> FindByIdAsync(string id)
         {
             return await _context.Products
+                .Where(x => x.IsDeleted == false)
                    .Include(x => x.Brand)
                    .Include(x => x.Units)
                    .Include(x => x.ProductCategory)
@@ -85,7 +87,7 @@ namespace Infrastructure.Repositories.ProductCatalog
 
         public async Task<List<Unit>> GetProductsUnits(List<string> productsIds)
         {
-            var units = await _context.Units.Where(x => productsIds.Contains(x.ProductId.ToString())).ToListAsync();
+            var units = await _context.Units.Where(x => x.IsDeleted == false).Where(x => productsIds.Contains(x.ProductId.ToString())).ToListAsync();
             return units;
         }
 

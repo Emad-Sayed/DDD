@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
 {
-    public class DistributorUser : EntityBase
+    public class DistributorUser : AuditableEntity
     {
         public string AccountId { get; private set; }
         public string FullName { get; private set; }

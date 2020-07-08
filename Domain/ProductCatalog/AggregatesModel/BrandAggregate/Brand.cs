@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Domain.ProductCatalog.AggregatesModel.BrandAggregate
 {
-    public class Brand : EntityBase, IAggregateRoot
+    public class Brand : AuditableEntity, IAggregateRoot
     {
         public string Name { get; private set; }
 

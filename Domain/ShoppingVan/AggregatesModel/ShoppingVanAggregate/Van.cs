@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
 {
-    public class Van : EntityBase, IAggregateRoot
+    public class Van : AuditableEntity, IAggregateRoot
     {
         public ICollection<VanItem> ShoppingVanItems { get; private set; }
         public string CustomerId { get; private set; }

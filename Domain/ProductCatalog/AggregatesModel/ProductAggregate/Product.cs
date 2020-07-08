@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 
 namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 {
-    public class Product : EntityBase, IAggregateRoot
+    public class Product : AuditableEntity, IAggregateRoot
     {
         public string Name { get; private set; }
         public string Barcode { get; private set; }
@@ -28,6 +28,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         public ProductCategory ProductCategory { get; private set; }
 
         public ICollection<Unit> Units { get; private set; }
+        public bool IsDeleted { get; private set; }
 
         private Product()
         {
@@ -69,6 +70,12 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         // delete product
         public void DeleteProduct()
         {
+            IsDeleted = true;
+
+            foreach (var unit in Units)
+            {
+                unit.DeleteUnit();
+            }
             // rais product deleted event
             AddDomainEvent(new ProductDeleted(this));
         }
@@ -104,8 +111,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             var unitToDelete = Units.FirstOrDefault(x => x.Id.ToString() == unitId);
             if (unitToDelete == null) throw new UnitNotFoundException(unitId);
 
-
-            Units.Remove(unitToDelete);
+            unitToDelete.DeleteUnit();
 
             // rais product updated event
             AddDomainEvent(new ProductUpdated(this));
