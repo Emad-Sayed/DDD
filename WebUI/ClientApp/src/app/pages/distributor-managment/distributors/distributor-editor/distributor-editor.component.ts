@@ -40,13 +40,11 @@ export class DistributorEditorComponent implements OnInit {
   getDistributorById(distributorId: string) {
     this.distributorManagmentService.getDistributorById(distributorId).subscribe(res => {
       this.distributor = res;
-      console.log(this.distributor);
       this.distributor.id = distributorId;
     });
   }
 
   changeCurrentDisCity(cityName: string) {
-    console.log(cityName)
     this.areaToDisplay = this.cities.find(x => x.name == cityName).areas;
   }
 
@@ -128,7 +126,7 @@ export class DistributorEditorComponent implements OnInit {
 
   resendInvitationEmail(email: string) {
     this.distributorManagmentService.resendInvitationEmail(email).subscribe(res => {
-      console.log('invitaiton sent');
+      this.core.showSuccessOperation('تم إرسال الدعوة');
     })
   }
   saveData() {

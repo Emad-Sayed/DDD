@@ -43,7 +43,6 @@ export class CustomerEditorComponent implements OnInit {
   }
 
   getCustomerById(customerId: string) {
-    console.log('get customer by id');
     if (customerId == this.customer.id) return;
     this.customerManagmentService.getCustomerById(customerId).subscribe(res => {
       this.customer = res;

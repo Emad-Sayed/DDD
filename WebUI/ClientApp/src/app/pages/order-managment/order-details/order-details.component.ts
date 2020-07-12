@@ -36,14 +36,12 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   getProductById(productId: string) {
-    console.log('get product by id');
     this.productCatalogService.getProductById(productId).subscribe(res => {
       this.product = res;
     });
   }
 
   getOrderById(orderId: string) {
-    console.log('get order by id');
     if (orderId == this.order.id) return;
     this.orderManagmentService.getOrderById(orderId).subscribe(res => {
       this.order = res;

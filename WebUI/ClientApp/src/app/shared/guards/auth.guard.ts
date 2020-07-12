@@ -20,7 +20,6 @@ export class AuthGuard implements CanActivate {
         if (this.jwtHelper.isTokenExpired(token)) {
             this.auth.refreshToken()
                 .then(res => {
-                    console.log('refresh token');
                     return true;
                 })
                 .catch(e => {
