@@ -22,11 +22,13 @@ namespace Application.ProductCatalog.DomainEventHandlers.ProductUpdatedDomainEve
         private readonly ILogger<ProductUpdatedDomainEventHandler> _logger;
         private readonly ICurrentUserService _currentUserService;
 
-        public ProductUpdatedDomainEventHandler(ISearchEngine searchEngine, IMapper mapper, IProductRepository productRepository)
+        public ProductUpdatedDomainEventHandler(ISearchEngine searchEngine, IMapper mapper, IProductRepository productRepository, ILogger<ProductUpdatedDomainEventHandler> logger, ICurrentUserService currentUserService)
         {
             _searchEngine = searchEngine;
             _productRepository = productRepository;
             _mapper = mapper;
+            _logger = logger;
+            _currentUserService = currentUserService;
         }
 
         public async Task Handle(ProductUpdated notification, CancellationToken cancellationToken)

@@ -30,6 +30,7 @@ namespace Application.ShoppingVan.Queries.CurrentVanPricenfo
             public async Task<VanPriceInfoVM> Handle(CurrentVanPriceInfoQuery request, CancellationToken cancellationToken)
             {
                 var vanFromRepo = await _shoppingVanRepository.FindByCustomerIdAsync(_currentUserService.UserId);
+                if (vanFromRepo == null) return new VanPriceInfoVM { TaxValue = 14 };
                 float taxValue = 14;
                 var vanInfo = new VanPriceInfoVM
                 {

@@ -85,7 +85,8 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
             // remove item from Shopping Van
             var command = new RemoveItemFromVanCommand
             {
-                ProductId = productId
+                ProductId = productId,
+                UnitId = unitId
             };
 
             var productCount = await SendAsync(command);
