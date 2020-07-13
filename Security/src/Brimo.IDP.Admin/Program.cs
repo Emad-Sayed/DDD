@@ -61,8 +61,7 @@ namespace Brimo.IDP.Admin
             Host.CreateDefaultBuilder(args)
                  .ConfigureAppConfiguration((hostContext, configApp) =>
                  {
-                    configApp.AddJsonFile("identityserverdata.json", optional: true, reloadOnChange: true);
-                    configApp.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
                      configApp.AddJsonFile("serilog.json", optional: true, reloadOnChange: true);
                      configApp.AddJsonFile("identitydata.json", optional: true, reloadOnChange: true);
 
@@ -70,8 +69,13 @@ namespace Brimo.IDP.Admin
                      if (hostContext.HostingEnvironment.IsDevelopment())
                      {
                          configApp.AddJsonFile("identityserverdata.Devlopment.json", optional: true, reloadOnChange: true);
-                         configApp.AddJsonFile("appsettings.Devlopment.json", optional: true, reloadOnChange: true);
+                         configApp.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
                          configApp.AddUserSecrets<Startup>();
+                     }
+                     else
+                     {
+                         configApp.AddJsonFile("identityserverdata.json", optional: true, reloadOnChange: true);
+                         configApp.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                      }
 
                      configApp.AddEnvironmentVariables();

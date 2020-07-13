@@ -33,7 +33,7 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
         public void AddItem(string productId, string productName, string unitId, string unitName, float unitPrice, string photoUrl, float sellingPrice)
         {
             // Check if the product exist in the shopping van items or not if not will will add it with the required amount
-            var vanItem = ShoppingVanItems.FirstOrDefault(x => x.ProductId == productId);
+            var vanItem = ShoppingVanItems.FirstOrDefault(x => x.ProductId == productId && x.UnitId == unitId);
             if (vanItem == null)
             {
                 vanItem = new VanItem(Id.ToString(), productId, productName, unitId, unitName, unitPrice, photoUrl, sellingPrice);
@@ -50,9 +50,9 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
             AddDomainEvent(new ShoppingVanUpdated(this));
         }
 
-        public void RemoveItem(string productId)
+        public void RemoveItem(string productId, string unitId)
         {
-            var vanItem = ShoppingVanItems.FirstOrDefault(x => x.ProductId == productId);
+            var vanItem = ShoppingVanItems.FirstOrDefault(x => x.ProductId == productId && x.UnitId == unitId);
             if (vanItem != null)
             {
                 TotalItemsCount -= 1;

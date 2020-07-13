@@ -12,6 +12,7 @@ namespace Application.ShoppingVan.Commands.RemoveItemFromVan
     public class RemoveItemFromVanCommand : IRequest<int>
     {
         public string ProductId { get; set; }
+        public string UnitId { get; set; }
 
         public class Handler : IRequestHandler<RemoveItemFromVanCommand, int>
         {
@@ -34,7 +35,7 @@ namespace Application.ShoppingVan.Commands.RemoveItemFromVan
                     van = new Van(_currentUserService.UserId);
                 }
 
-                van.RemoveItem(request.ProductId);
+                van.RemoveItem(request.ProductId, request.UnitId);
 
                 _shoppingVanRepository.Update(van);
 
