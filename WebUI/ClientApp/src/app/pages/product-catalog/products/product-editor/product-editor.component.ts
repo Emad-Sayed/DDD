@@ -33,22 +33,23 @@ export class ProductEditorComponent implements OnInit {
     this.getBrands();
     this.getProductCategories();
     this.productCatalogService.productEditor.subscribe(res => {
-      if(res.productRequestSuccess) return;
+      if (res.productRequestSuccess) return;
       if (res.product) {
-        this.isEditing = true;
+        this.imgURL = null;
         this.getProductById(res.product.id);
       } else {
+        this.isEditing = false;
         this.product = new Product();
-        this.imgURL = null;
       }
     })
   }
 
   getProductById(productId: string) {
+    this.isEditing = true;
     this.productCatalogService.getProductById(productId).subscribe(res => {
       this.product = res;
       this.product.id = productId;
-      this.imgURL = this.BasePhotoUrl + this.product.photoUrl;
+      this.product.photoUrl ? this.imgURL = this.BasePhotoUrl + this.product.photoUrl : 'assets/images/db-bg.png';
     });
   }
 
@@ -122,6 +123,7 @@ export class ProductEditorComponent implements OnInit {
   //#region Product
   createProduct() {
     this.productCatalogService.createProduct(this.product).subscribe(res => {
+      this.getProductById(res.result);
       this.productCatalogService.productEditor.next({ productRequestSuccess: true, openEditor: true });
       this.core.showSuccessOperation();
     });

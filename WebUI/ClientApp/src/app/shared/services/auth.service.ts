@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpService } from './http.service';
-import { Config } from '../confing/config';
 import { HttpClient } from '@angular/common/http';
 import { OAuthService, TokenResponse } from 'angular-oauth2-oidc';
 import { LoginModel } from '../models/login/login.model';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 
@@ -18,7 +15,7 @@ export class AuthService {
         this.oauthService.configure({
             requireHttps: false,
             skipIssuerCheck: true,
-            scope: "openid profile roles brimo_api",
+            scope: "openid profile roles brimo_api offline_access",
             clientId: "BrimoWebUIId",
             dummyClientSecret: "BrimoWebUISecret",
             oidc: false,
@@ -50,7 +47,6 @@ export class AuthService {
         this.oauthService.loadDiscoveryDocument(url).then(() => {
             // Do what ever you want here
             this.oauthService.fetchTokenUsingPasswordFlowAndLoadUserProfile(loginModel.email, loginModel.password).then(() => {
-                let claims = this.oauthService.getIdentityClaims();
                 this.router.navigate(['/products'])
                 // console.log('claims', claims);
                 // if (claims) console.debug('given_name', claims.given_name);
