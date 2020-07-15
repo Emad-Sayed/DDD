@@ -38,7 +38,7 @@ namespace API.Controllers.CustomerManagment
         public async Task<IActionResult> Post([FromBody] CreateCustomerCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(new { result });
+            return Ok( result );
         }
 
 
@@ -46,7 +46,7 @@ namespace API.Controllers.CustomerManagment
         public async Task<IActionResult> Put([FromBody] UpdateCustomerCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(new { result });
+            return Ok(result);
         }
 
 
@@ -55,7 +55,7 @@ namespace API.Controllers.CustomerManagment
         public async Task<IActionResult> Delete([FromQuery] DeleteCustomerCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(new { result });
+            return Ok(result);
         }
 
         [HttpGet("Cities")]

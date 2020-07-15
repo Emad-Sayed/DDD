@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductAggregate.Commands.UpdateProduct;
 using Domain.Common.Exceptions;
 using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
+using Domain.ProductCatalog.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
 using Persistence.ProductCatalog;
@@ -81,5 +83,24 @@ namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
             product.AvailableToSell.Should().Be(false);
         }
 
+        [Test]
+        public void ShouldThrowProductNotFoundException()
+        {
+            // Update Product Command
+            var updateProductCommand = new UpdateProductCommand
+            {
+                AvailableToSell = false,
+                // created brand id
+                BrandId = Guid.NewGuid().ToString(),
+                // created product category id
+                ProductCategoryId = Guid.NewGuid().ToString(),
+                Name = "Test Product Name Update",
+                PhotoUrl = "Test Product PhotoUrl Update",
+                Barcode = "Test Product Barcode Update",
+                Id = Guid.NewGuid().ToString()
+            };
+
+            FluentActions.Invoking(() => SendAsync(updateProductCommand)).Should().Throw<ProductNotFoundException>();
+        }
     }
 }

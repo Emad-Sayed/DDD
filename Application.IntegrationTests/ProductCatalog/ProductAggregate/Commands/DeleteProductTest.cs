@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductAggregate.Commands.DeleteProduct;
 using Domain.Common.Exceptions;
@@ -64,6 +65,14 @@ namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
 
             // Assert
             results.Should().Throw<ProductNotFoundException>();
+        }
+
+        [Test]
+        public void ShouldThrowProductNotFoundException()
+        {
+            // Cancel Order Command
+            var deleteProductCommand = new DeleteProductCommand { ProductId = Guid.NewGuid().ToString() };
+            FluentActions.Invoking(() => SendAsync(deleteProductCommand)).Should().Throw<ProductNotFoundException>();
         }
 
     }

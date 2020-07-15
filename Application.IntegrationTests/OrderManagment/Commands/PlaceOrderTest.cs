@@ -1,15 +1,15 @@
-﻿using System.Threading.Tasks;
-using Application.CustomerManagment.Commands.CreateCustomer;
+﻿using Application.CustomerManagment.Commands.CreateCustomer;
 using Application.OrderManagment.Commands.PlaceOrder;
-using Application.OrderManagment.Queries.ListOrders;
 using Application.OrderManagment.Queries.OrderById;
 using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory;
 using Application.ShoppingVan.Commands.AddItemToVan;
+using Domain.ShoppingVan.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.OrderManagment.Commands
 {
@@ -43,7 +43,7 @@ namespace Application.IntegrationTests.OrderManagment.Commands
             var productCategoryCommand = new CreateProductCategoryCommand { Name = "Test Product Category" };
             var productCategoryId = await SendAsync(productCategoryCommand);
 
-            // Create product 
+            // Create product
             var createProductCommand = new CreateProductCommand
             {
                 AvailableToSell = true,
@@ -96,6 +96,35 @@ namespace Application.IntegrationTests.OrderManagment.Commands
             // Assert
             order.Should().NotBeNull();
             order.OrderItems.Count.Should().Be(1);
+        }
+
+        [Test]
+        public async Task ShouldThrowEmptyShoppingVanException()
+        {
+            // Arrange
+            var accountId = await RunAsDefaultUserAsync();
+
+            var createCustomerCommand = new CreateCustomerCommand
+            {
+                AccountId = accountId,
+                City = "Test City",
+                Area = "Test Area",
+                ShopName = "Test Shop Name",
+                ShopAddress = "Test Shop address",
+                LocationOnMap = "Test LocationOnMap"
+            };
+
+            await SendAsync(createCustomerCommand);
+
+            // Act
+
+            // Place Order Command
+            var placeOrderCommand = new PlaceOrderCommand();
+
+            // Assert
+
+            // Shipp Order Command
+            FluentActions.Invoking(() => SendAsync(placeOrderCommand)).Should().Throw<EmptyShoppingVanException>();
         }
     }
 }

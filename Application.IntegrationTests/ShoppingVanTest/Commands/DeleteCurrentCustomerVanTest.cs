@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
+﻿using Application.ProductCatalog.BrandAggregate.Commands.CreateBrand;
 using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProductCategory;
 using Application.ShoppingVan.Commands.AddItemToVan;
 using Application.ShoppingVan.Commands.DeleteCurrentCustomerVan;
 using Application.ShoppingVan.Queries.CurrentCustomerVan;
-using Domain.Common.Exceptions;
+using Domain.ShoppingVan.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.ShoppingVanTest.Commands
 {
@@ -33,7 +30,7 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
             var productCategoryCommand = new CreateProductCategoryCommand { Name = "Test Product Category" };
             var productCategoryId = await SendAsync(productCategoryCommand);
 
-            // Create product 
+            // Create product
             var createProductCommand = new CreateProductCommand
             {
                 AvailableToSell = true,
@@ -87,5 +84,17 @@ namespace Application.IntegrationTests.ShoppingVanTest.Commands
             currentCustomerVanAfterDeleting.Should().BeNull();
         }
 
+        [Test]
+        public async Task ShouldThrowEmptyShoppingVanException()
+        {
+            // Arrange
+            await RunAsDefaultUserAsync();
+
+            // Act
+
+            var deleteCurrentCustomerVanCommand = new DeleteCurrentCustomerVanCommand();
+
+            FluentActions.Invoking(() => SendAsync(deleteCurrentCustomerVanCommand)).Should().Throw<EmptyShoppingVanException>();
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.CustomerManagment.Commands.CreateCustomer;
+using Application.OrderManagment.Commands.CancelOrder;
 using Application.OrderManagment.Commands.ConfirmOrder;
 using Application.OrderManagment.Commands.DeliverOrder;
 using Application.OrderManagment.Commands.PlaceOrder;
@@ -11,11 +12,10 @@ using Application.ProductCatalog.ProductCategoryAggregate.Commands.CreateProduct
 using Application.ShoppingVan.Commands.AddItemToVan;
 using Domain.Common.Exceptions;
 using Domain.OrderManagment.AggregatesModel.OrderAggregate;
+using Domain.OrderManagment.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.OrderManagment.Commands
@@ -61,7 +61,7 @@ namespace Application.IntegrationTests.OrderManagment.Commands
             var productCategoryCommand = new CreateProductCategoryCommand { Name = "Test Product Category" };
             var productCategoryId = await SendAsync(productCategoryCommand);
 
-            // Create product 
+            // Create product
             var createProductCommand = new CreateProductCommand
             {
                 AvailableToSell = true,
@@ -126,6 +126,96 @@ namespace Application.IntegrationTests.OrderManagment.Commands
             // Assert
             order.Should().NotBeNull();
             order.OrderStatus.Should().Be(OrderStatus.Delivered);
+        }
+
+        [Test]
+        public void ShouldThrowOrderNotFoundException()
+        {
+            // Cancel Order Command
+            var deliverOrderCommand = new DeliverOrderCommand { OrderId = Guid.NewGuid().ToString() };
+            FluentActions.Invoking(() => SendAsync(deliverOrderCommand)).Should().Throw<OrderNotFoundException>();
+        }
+
+        [Test]
+        public async Task ShouldThrowOrderNotShippedException()
+        {
+            // Arrange
+            var accountId = await RunAsDefaultUserAsync();
+
+            var createCustomerCommand = new CreateCustomerCommand
+            {
+                AccountId = accountId,
+                City = "Test City",
+                Area = "Test Area",
+                ShopName = "Test Shop Name",
+                ShopAddress = "Test Shop address",
+                LocationOnMap = "Test LocationOnMap"
+            };
+
+            await SendAsync(createCustomerCommand);
+
+            // Create product brand
+            var brandCommand = new CreateBrandCommand { Name = "Test Brand" };
+            var brandId = await SendAsync(brandCommand);
+
+            // Create product category
+            var productCategoryCommand = new CreateProductCategoryCommand { Name = "Test Product Category" };
+            var productCategoryId = await SendAsync(productCategoryCommand);
+
+            // Create product
+            var createProductCommand = new CreateProductCommand
+            {
+                AvailableToSell = true,
+                // created brand id
+                BrandId = brandId,
+                // created product category id
+                ProductCategoryId = productCategoryId,
+                Name = "Test Product",
+                PhotoUrl = "Test Product",
+                Barcode = "Test Product"
+            };
+
+            var productId = await SendAsync(createProductCommand);
+
+            // Add unit to product
+            var addUnitToCommand = new AddUnitCommand
+            {
+                ProductId = productId,
+                SellingPrice = 92,
+                ContentCount = 2,
+                Price = 33,
+                Count = 6,
+                IsAvailable = true,
+                Name = "Test Unit",
+                Weight = 44
+            };
+
+            var unitId = await SendAsync(addUnitToCommand);
+
+            // AddItem To Shopping Van
+            var addItemToVanCommand = new AddItemToVanCommand
+            {
+                ProductId = productId,
+                UnitId = unitId
+            };
+
+            await SendAsync(addItemToVanCommand);
+            await SendAsync(addItemToVanCommand);
+
+            // Place Order Command
+            var placeOrderCommand = new PlaceOrderCommand();
+            var orderId = await SendAsync(placeOrderCommand);
+
+            // Act
+            var cancelOrderCommand = new CancelOrderCommand { OrderId = orderId };
+            await SendAsync(cancelOrderCommand);
+
+            var deliverOrderCommand = new DeliverOrderCommand { OrderId = orderId };
+
+            // Assert
+
+            // Shipp Order Command
+            FluentActions.Invoking(() => SendAsync(deliverOrderCommand)).Should().Throw<OrderNotShippedException>();
         }
     }
 }

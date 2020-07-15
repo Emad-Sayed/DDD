@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Domain.ShoppingVan.Exceptions;
 using Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate;
 using MediatR;
 using System;
@@ -29,7 +30,8 @@ namespace Application.ShoppingVan.Commands.DeleteCurrentCustomerVan
             {
                 // Get current logged in user shopping van
                 var van = await _shoppingVanRepository.GetCustomerShoppingVan(_currentUserService.UserId);
-              
+                if (van == null) throw new EmptyShoppingVanException();
+
                 _shoppingVanRepository.Delete(van);
 
                 await _shoppingVanRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);

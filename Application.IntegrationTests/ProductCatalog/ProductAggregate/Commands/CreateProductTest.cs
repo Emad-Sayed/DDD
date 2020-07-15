@@ -3,6 +3,7 @@ using Domain.Common.Exceptions;
 using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
+using Domain.ProductCatalog.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
 using Persistence.ProductCatalog;
@@ -61,5 +62,56 @@ namespace Application.IntegrationTests.ProductCatalog.ProductAggregate.Commands
             product.Created.Should().BeCloseTo(DateTime.UtcNow, 10000);
         }
 
+        
+        [Test]
+        public async Task ShouldThrowBrandNotFoundException()
+        {
+            // Arrange
+
+
+            // Create product category
+            var productCategory = await CreateAsync<ProductCategory, ProductCatalogContext>(new ProductCategory("Test ProductCategory"));
+
+            var createProductCommand = new CreateProductCommand
+            {
+                AvailableToSell = true,
+                // created brand id
+                BrandId = Guid.NewGuid().ToString(),
+                // created product category id
+                ProductCategoryId = productCategory.Id.ToString(),
+                Name = "Test Product",
+                PhotoUrl = "Test Product",
+                Barcode = "Test Product"
+            };
+
+            // Act
+            FluentActions.Invoking(() => SendAsync(createProductCommand)).Should().Throw<BrandNotFoundException>();
+        }
+
+        [Test]
+        public async Task ShouldThrowProductCategoryNotFoundException()
+        {
+            // Arrange
+            var brand = await CreateAsync<Brand, ProductCatalogContext>(new Brand("Test Brand"));
+
+
+            // Create product category
+            var productCategory = await CreateAsync<ProductCategory, ProductCatalogContext>(new ProductCategory("Test ProductCategory"));
+
+            var createProductCommand = new CreateProductCommand
+            {
+                AvailableToSell = true,
+                // created brand id
+                BrandId = brand.Id.ToString(),
+                // created product category id
+                ProductCategoryId = Guid.NewGuid().ToString(),
+                Name = "Test Product",
+                PhotoUrl = "Test Product",
+                Barcode = "Test Product"
+            };
+
+            // Act
+            FluentActions.Invoking(() => SendAsync(createProductCommand)).Should().Throw<ProductCategoryNotFoundException>();
+        }
     }
 }

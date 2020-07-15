@@ -66,7 +66,7 @@ namespace Application.IntegrationTests
                 d.ServiceType == typeof(ICurrentUserService));
 
             services.Remove(currentUserServiceDescriptor);
-
+            services.AddSingleton<IConfiguration>(_configuration);
             services.AddTransient<ICurrentUserService, CurrentUserService>();
 
             _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
@@ -151,6 +151,17 @@ namespace Application.IntegrationTests
             _currentUserId = user.Id;
 
             return _currentUserId;
+        }
+
+        public static async Task<UserIdentity> GetUserAsync(string accountId)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var userManager = scope.ServiceProvider.GetService<UserManager<UserIdentity>>();
+
+            var user = await userManager.Users.FirstOrDefaultAsync(x => x.Id == accountId);
+
+            return user;
         }
 
         public static async Task ResetState()
