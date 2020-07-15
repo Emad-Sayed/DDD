@@ -176,8 +176,15 @@ namespace Brimo.IDP.STS.Identity.Controllers
                 // add the curtomer to customer role
                 await _userManager.AddToRoleAsync(user, "Distributor");
 
-                // send invitation to distributer user
-                await SendInvitationMail(user);
+                try
+                {
+
+                    // send invitation to distributer user
+                    await SendInvitationMail(user);
+                }
+                catch (Exception)
+                {
+                }
             }
             else
             {
