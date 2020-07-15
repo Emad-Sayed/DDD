@@ -27,31 +27,31 @@ namespace Application.IntegrationTests.DistributorManagment.Commands
             results.Should().Throw<BaseValidationException>();
         }
 
-        [Test]
-        public async Task ShouldCreateDistributorUser()
-        {
-            // Arrange
-            // Create Distributor
-            var createDistributorCommand = new CreateDistributorCommand
-            {
-                Name = "Test Distributor",
-                Area = "Nasr City",
-                City = "Cairo"
-            };
-            var distributorId = await SendAsync(createDistributorCommand);
+        //[Test]
+        //public async Task ShouldCreateDistributorUser()
+        //{
+        //    // Arrange
+        //    // Create Distributor
+        //    var createDistributorCommand = new CreateDistributorCommand
+        //    {
+        //        Name = "Test Distributor",
+        //        Area = "Nasr City",
+        //        City = "Cairo"
+        //    };
+        //    var distributorId = await SendAsync(createDistributorCommand);
 
 
-            // Act
+        //    // Act
 
-            // Create Distributor User
-            var createDistributorUserCommand = new CreateDistributorUserCommand
-            {
-                DistributorId = distributorId,
-                FullName = "Mohamed Test User",
-                Email = Guid.NewGuid().ToString() + "brimo@mailinator.com"
-            };
+        //    // Create Distributor User
+        //    var createDistributorUserCommand = new CreateDistributorUserCommand
+        //    {
+        //        DistributorId = distributorId,
+        //        FullName = "Mohamed Test User",
+        //        Email = Guid.NewGuid().ToString() + "brimo@mailinator.com"
+        //    };
 
-            await SendAsync(createDistributorUserCommand);
-        }
+        //    await SendAsync(createDistributorUserCommand);
+        //}
     }
 }
