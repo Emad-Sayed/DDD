@@ -46,8 +46,6 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 
             Id = id == default ? Guid.NewGuid() : id;
 
-            // TODO Failer in Db If it will 
-
             // Add the ProductCreated to the domain events collection 
             // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]
             AddDomainEvent(new ProductCreated(this));

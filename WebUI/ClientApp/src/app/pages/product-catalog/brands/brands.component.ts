@@ -1,0 +1,157 @@
+import { Component, OnInit } from '@angular/core';
+import { Brand } from 'src/app/shared/models/product-catalog/brand/brand.model';
+import { Page } from 'src/app/shared/models/shared/page.model';
+import { Config } from 'src/app/shared/confing/config';
+import { Subject } from 'rxjs';
+import { ProductCatalogService } from '../product-catalog.service';
+import { CoreService } from 'src/app/shared/services/core.service';
+import { PopupServiceService } from 'src/app/shared/services/popup-service.service';
+import { UploadService } from 'src/app/shared/services/upload.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { HttpEventType } from '@angular/common/http';
+
+@Component({
+  selector: 'app-brands',
+  templateUrl: './brands.component.html',
+  styleUrls: ['./brands.component.scss']
+})
+export class BrandsComponent implements OnInit {
+
+  brands: Brand[] = [];
+  brandsTotalCount: number = 0;
+  page: Page = new Page();
+  BasePhotoUrl = Config.BasePhotoUrl;
+
+  private subject: Subject<string> = new Subject();
+
+  query: any = {};
+
+  constructor(
+    private productCatalogService: ProductCatalogService,
+    private core: CoreService,
+    private popupService: PopupServiceService,
+    private uploadService: UploadService
+  ) { }
+
+
+  ngOnInit() {
+    this.getBrands();
+    this.subject.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(res => {
+      this.searchInBrands(res);
+    });
+
+  }
+
+  getBrands() {
+    this.query.pageNumber = this.page.pageNumber;
+    this.query.pageSize = this.page.pageSize;
+    this.productCatalogService.getBrands(this.query).subscribe(res => {
+      this.brands = res.data;
+      this.brandsTotalCount = res.totalCount;
+    })
+  }
+
+  deleteBrand(brandId: string) {
+    const brandToDelete = this.brands.find(x => x.id == brandId)
+    if (brandToDelete.isAdding) {
+      this.brands.splice(this.brands.indexOf(brandToDelete), 1);
+      return;
+    }
+    this.productCatalogService.deleteBrand(brandId).subscribe(res => {
+      this.core.showSuccessOperation();
+      this.brands.splice(this.brands.indexOf(brandToDelete), 1);
+    })
+  }
+
+  searchInBrands(value: any) {
+    this.brands = [];
+    this.query.keyWord = value;
+    this.page.pageNumber = 1;
+    this.getBrands();
+  }
+
+  onKeyUp(searchTextValue: string) {
+    this.subject.next(searchTextValue);
+  }
+
+  onScroll() {
+    this.page.pageNumber++;
+    if ((this.page.pageNumber * this.page.pageSize) >= this.brandsTotalCount) return;
+    this.getBrands();
+  }
+
+
+  showDeleteBrandPopup(brand: Brand): void {
+    const dialogRef = this.popupService.deleteElement('حذف المنتج', 'هل انت متاكد؟ سيتم حذف المنتج', {
+      category: '',
+      name: brand.name
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) return;
+      this.deleteBrand(brand.id);
+    });
+  }
+
+  //#region Brand
+  addNewBrandRow() {
+    this.brands.unshift(new Brand('', '', '', '', true, true));
+
+  }
+
+  createBrand(brand: Brand) {
+    this.productCatalogService.createBrand(brand).subscribe(res => {
+      this.core.showSuccessOperation();
+      brand.isEditing = false;
+      brand.id = res.result;
+    });
+  }
+
+  updateBrand(brand: Brand) {
+    brand.brandId = brand.id;
+    this.productCatalogService.updateBrand(brand).subscribe(res => {
+      this.core.showSuccessOperation();
+      brand.isEditing = false;
+      brand.id = res.result;
+    });
+  }
+
+  saveData(brand: Brand) {
+    if (brand.isAdding) this.createBrand(brand);
+    else this.updateBrand(brand);
+  }
+  //#endregion
+
+  //#region editProduct
+  public imagePath;
+  imgURL: any;
+  public message: string;
+
+  preview(files: string | any[], brand: Brand) {
+    if (files.length === 0) return;
+
+    var mimeType = files[0].type;
+    if (mimeType.match(/image\/*/) == null) {
+      this.message = "Only images are supported.";
+      return;
+    }
+
+    var reader = new FileReader();
+    this.imagePath = files;
+    reader.readAsDataURL(files[0]);
+    reader.onload = (_event) => {
+      this.imgURL = reader.result;
+    };
+
+    const formData = new FormData();
+    formData.append('photo', files[0]);
+    this.uploadService.upload(formData).subscribe(res => {
+      if (res.type == HttpEventType.Response) {
+        brand.photoUrl = res.body.photoPath;
+      }
+    }, () => this.core.showErrorOperation());
+  }
+  //#endregion
+}

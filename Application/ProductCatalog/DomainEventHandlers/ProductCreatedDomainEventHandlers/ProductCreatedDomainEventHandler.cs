@@ -34,6 +34,7 @@ namespace Application.ProductCatalog.DomainEventHandlers.ProductCreatedDomainEve
         public async Task Handle(ProductCreated notification, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Brimo API EventHandelr: {Name} {@UserId} {@UserName} {@Request}", nameof(ProductCreated), _currentUserService.UserId, _currentUserService.Name, notification);
+           
             var productWithBrandAndCategory = await _productRepository.FindByIdAsync(notification.Product.Id.ToString());
 
             var productToAddToAlgoia = _mapper.Map<AlgoliaProductVM>(productWithBrandAndCategory);

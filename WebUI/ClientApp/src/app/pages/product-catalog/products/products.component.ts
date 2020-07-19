@@ -44,7 +44,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
     this.subject.pipe(
       debounceTime(500),
-      distinctUntilChanged()
+      // distinctUntilChanged()
     ).subscribe(res => {
       this.searchInProducts(res);
     });

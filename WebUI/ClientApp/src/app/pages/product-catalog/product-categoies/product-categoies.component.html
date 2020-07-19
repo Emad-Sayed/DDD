@@ -1,0 +1,83 @@
+<div class="row">
+    <div class="col">
+        <!-- search box -->
+        <div class="w-100 card mb-3">
+            <div class="ais-SearchBox card-search">
+                <form class="ais-SearchBox-form w-100 form-group d-flex" novalidate>
+                    <input class="ais-SearchBox-input form-control col-5" autocomplete="off" autocorrect="off"
+                        (keydown)="onKeyUp($event.target.value)" autocapitalize="off" placeholder="الصنف"
+                        spellcheck="false" maxlength="512" type="search" value="" />
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-2">
+        <button (click)="addNewProductCategoryRow()" class="btn btn-primary btn-sm">
+            إضافة
+        </button>
+    </div>
+</div>
+
+<div class="table-responsive" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+    (scrolled)="onScroll()" [scrollWindow]="false">
+    <table class="table table-hover mb-0">
+        <thead>
+            <tr>
+                <th scope="col" class="border-top-0">رقم</th>
+                <th scope="col" class="border-top-0">إسم الفئة</th>
+                <th scope="col" class="border-top-0"> الصورة</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="productCategories.length == 0">
+                <td colspan="4">
+                    <img src="assets/images/nodata.svg" class="nodata-img">
+                </td>
+            </tr>
+            <tr *ngFor="let productCategory of productCategories; let i = index" rel="off-canvas" class="canvas-btn">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>
+                    <p *ngIf="!productCategory.isEditing">{{ productCategory?.name }}</p>
+                    <input *ngIf="productCategory.isEditing" class="form-control fit-content" type="text" name="name"
+                        [(ngModel)]="productCategory.name">
+                </td>
+                <td>
+                    <div class="product-img-wrapper">
+                        <img [src]="BasePhotoUrl + productCategory.photoUrl" style="width: 60px;"
+                            onerror="this.src='assets/images/placeholder.png';">
+                        <label [for]="'product-img' + i" class="mt-2" *ngIf="productCategory.isEditing">
+                            <ng-container *ngIf="imgURL; else add">
+                                <span class="text-primary">استبدال الصورة</span>
+                            </ng-container>
+                            <ng-template #add>
+                                <span class="text-primary">إضافة صورة</span>
+                            </ng-template>
+                        </label>
+                        <input #file type="file" [id]="'product-img' + i" hidden accept='image/*'
+                            (change)="preview(file.files, productCategory)" />
+                    </div>
+                </td>
+                <td>
+                    <div class="text-center">
+                        <button (click)="showDeleteProductCategoryPopup(productCategory)" class="btn p-0">
+                            <i class="fas fa-trash-alt text-danger"></i>
+                        </button>
+                        <button *ngIf="!productCategory.isEditing" (click)="productCategory.isEditing = true"
+                            class="btn p-0 m-2">
+                            <i class="fas fa-edit text-warning"></i>
+                        </button>
+                        <button *ngIf="productCategory.isEditing" (click)="saveData(productCategory)"
+                            class="btn p-0 m-2">
+                            <i class="fas fa-save text-success"></i>
+                        </button>
+                        <button *ngIf="productCategory.isEditing && !productCategory.isAdding"
+                            (click)="productCategory.isEditing = false" class="btn p-0 m-2">
+                            <i class="fas fa-remove text-warning"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -12,9 +12,10 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate
     public interface IProductCategoryRepository : IRepository<ProductCategory>
     {
         ProductCategory Add(ProductCategory productCategory);
-        ProductCategory Update(ProductCategory productCategory);
-        Task<ProductCategory> FindAsync(string id);
-        Task<ProductCategory> FindByIdAsync(string id);
+        void Update(ProductCategory productCategory);
+        void Delete(ProductCategory productCategory);
+        Task<ProductCategory> FindByIdAsync(string productCategoryId);
         Task<(int, List<ProductCategory>)> GetAllProductCategorys();
+        Task<(int, List<ProductCategory>)> GetProductCategorys(int pageNumber, int pageSize, string keyWord);
     }
 }

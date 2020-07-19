@@ -30,24 +30,22 @@ namespace Infrastructure.Repositories.ProductCatalog
 
         public Brand Add(Brand brand)
         {
-            return _context.Brands
-                   .Add(brand)
-                   .Entity;
+            return _context.Brands.Add(brand).Entity;
         }
 
-        public Brand Update(Brand brand)
+        public void Update(Brand brand)
         {
-            throw new NotImplementedException();
+            _context.Entry(brand).State = EntityState.Modified;
         }
 
-        public Task<Brand> FindAsync(string id)
+        public void Delete(Brand brand)
         {
-            throw new NotImplementedException();
+            _context.Brands.Remove(brand);
         }
 
-        public Task<Brand> FindByIdAsync(string id)
+        public async Task<Brand> FindByIdAsync(string brandId)
         {
-            throw new NotImplementedException();
+            return await _context.Brands.Include(x => x.Products).FirstOrDefaultAsync(x => x.Id.ToString() == brandId);
         }
 
         public async Task<(int, List<Brand>)> GetAllBrands()
@@ -59,6 +57,27 @@ namespace Infrastructure.Repositories.ProductCatalog
             var brandsFromRepo = await query.ToListAsync();
 
             return (totalBrands, brandsFromRepo);
+        }
+
+        public async Task<(int, List<Brand>)> GetBrands(int pageNumber, int pageSize, string keyWord)
+        {
+            var query = _context.Brands
+                .AsQueryable();
+
+            // fillter by keyword
+            if (!string.IsNullOrEmpty(keyWord))
+            {
+                query = query.Where(x =>
+                x.Id.ToString().Contains(keyWord) ||
+                x.Name.Contains(keyWord)
+                );
+            }
+
+            // apply pagination to products
+            var brands = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            var count = query.Count();
+
+            return (count, brands);
         }
     }
 }

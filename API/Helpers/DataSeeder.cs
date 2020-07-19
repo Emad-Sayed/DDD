@@ -53,9 +53,9 @@ namespace API.Helpers
             {
                 var brands = new List<Brand>
             {
-                new Brand(  "كوسونز بيور", new Guid("8752f3e1-d4d2-4eb0-b616-4a88f915a21b") ),
-                new Brand(  "لافو", new Guid("73ca8334-3d0c-4cf7-a0b0-048f657203ae") ),
-                new Brand(  "ابو عوف", new Guid("a03f13c1-0f7e-443d-8296-e2660348171a") ),
+                new Brand(  "كوسونز بيور", "",  new Guid("8752f3e1-d4d2-4eb0-b616-4a88f915a21b") ),
+                new Brand(  "لافو", "",  new Guid("73ca8334-3d0c-4cf7-a0b0-048f657203ae") ),
+                new Brand(  "ابو عوف", "",  new Guid("a03f13c1-0f7e-443d-8296-e2660348171a") ),
             };
                 context.AddRange(brands);
                 context.SaveChanges();
@@ -68,9 +68,9 @@ namespace API.Helpers
             {
                 var productCategories = new List<ProductCategory>
             {
-                new ProductCategory("مشروبات", new Guid("f4e3ec20-72c8-4e59-9d2b-34cee989e108") ),
-                new ProductCategory("مأكولات", new Guid("0309710f-d381-4229-adc0-ede1e7933932") ),
-                new ProductCategory("مكسرات", new Guid("9a750ed2-bfa3-4081-a18b-94c5df872f57") ),
+                new ProductCategory("مشروبات", "",  new Guid("f4e3ec20-72c8-4e59-9d2b-34cee989e108") ),
+                new ProductCategory("مأكولات",  "", new Guid("0309710f-d381-4229-adc0-ede1e7933932") ),
+                new ProductCategory("مكسرات", "", new Guid("9a750ed2-bfa3-4081-a18b-94c5df872f57") ),
             };
                 context.AddRange(productCategories);
                 context.SaveChanges();

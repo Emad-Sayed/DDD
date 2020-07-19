@@ -36,8 +36,8 @@ export class CoreService {
 
     public handleError(error: any) {
         if (error.error.Errors != null) {
-            error.error.Errors.forEach((err: { ErrorMessage: string; }) => {
-                this.showErrorOperation(err.ErrorMessage);
+            error.error.Errors.forEach((err: { ErrorMessage: string; ErrorCode: string; }) => {
+                this.showErrorOperation(ErrorsKey[err.ErrorCode] ? ErrorsKey[err.ErrorCode] : err.ErrorMessage);
             });
         }
         return throwError(error);

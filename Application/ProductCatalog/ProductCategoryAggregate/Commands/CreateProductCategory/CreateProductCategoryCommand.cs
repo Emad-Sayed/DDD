@@ -11,6 +11,7 @@ namespace Application.ProductCatalog.ProductCategoryAggregate.Commands.CreatePro
     public class CreateProductCategoryCommand : IRequest<string>
     {
         public string Name { get; set; }
+        public string PhotoUrl { get; set; }
 
         public class Handler : IRequestHandler<CreateProductCategoryCommand, string>
         {
@@ -23,11 +24,11 @@ namespace Application.ProductCatalog.ProductCategoryAggregate.Commands.CreatePro
 
             public async Task<string> Handle(CreateProductCategoryCommand request, CancellationToken cancellationToken)
             {
-                var newProductCategoryToAdd = new ProductCategory(request.Name);
+                var newProductCategoryToAdd = new ProductCategory(request.Name, request.PhotoUrl);
 
                 _productCategoryRepository.Add(newProductCategoryToAdd);
 
-                await _productCategoryRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+                await _productCategoryRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
 
                 return newProductCategoryToAdd.Id.ToString();
             }

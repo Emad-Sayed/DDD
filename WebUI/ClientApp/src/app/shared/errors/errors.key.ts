@@ -10,5 +10,7 @@ export const ErrorsKey = {
     'order_cancel_after_confirmed': 'لا يمكن إلغاء طلب تم تاكيده',
     'order_item_notfound': 'لم يتم العثور علي هذا المنتج داخل الطلب',
     'order_not_confirmed': 'لم يتم تاكيد الطلب',
-    'order_notfound': 'لم يتم العثور علي الطلب'
+    'order_notfound': 'لم يتم العثور علي الطلب',
+    "product_category_contains_products": 'لا يمكنك حذف هذه الفئة لانها تحتوي علي منتجات',
+    "brand_contains_products": 'لا يمكنك حذف هذه الشركة لانها تحتوي علي منتجات'
 } 

@@ -1,0 +1,15 @@
+.fit-content {
+    max-width: fit-content;
+}
+.product-img-wrapper {
+    position: relative;
+    label {
+        i {
+            font-size: 3rem;
+            opacity: 0.8;
+        }
+        i:hover {
+            opacity: 1;
+        }
+    }
+}

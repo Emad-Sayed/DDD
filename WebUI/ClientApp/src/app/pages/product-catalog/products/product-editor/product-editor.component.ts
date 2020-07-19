@@ -54,13 +54,13 @@ export class ProductEditorComponent implements OnInit {
   }
 
   getBrands() {
-    this.productCatalogService.getBrands().subscribe(res => {
+    this.productCatalogService.getAllBrands().subscribe(res => {
       this.brands.push(...res.data)
     });
   }
 
   getProductCategories() {
-    this.productCatalogService.getProductCategories().subscribe(res => {
+    this.productCatalogService.getAllProductCategories().subscribe(res => {
       this.productCategories.push(...res.data)
     });
   }

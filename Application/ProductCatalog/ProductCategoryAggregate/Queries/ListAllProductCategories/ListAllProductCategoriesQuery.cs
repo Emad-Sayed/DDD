@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Application.ProductCatalog.ProductCategoryAggregate.Queries.ProductCategoryList
 {
-    public class ProductCategoryListQuery : IRequest<ListEntityVM<ProductCategoryVM>>
+    public class ListAllProductCategoriesQuery : IRequest<ListEntityVM<ProductCategoryVM>>
     {
 
-        public class Handler : IRequestHandler<ProductCategoryListQuery, ListEntityVM<ProductCategoryVM>>
+        public class Handler : IRequestHandler<ListAllProductCategoriesQuery, ListEntityVM<ProductCategoryVM>>
         {
             private readonly IProductCategoryRepository _productCategoryRepository;
             private readonly IMapper _mapper;
@@ -25,7 +25,7 @@ namespace Application.ProductCatalog.ProductCategoryAggregate.Queries.ProductCat
                 _mapper = mapper;
             }
 
-            public async Task<ListEntityVM<ProductCategoryVM>> Handle(ProductCategoryListQuery request, CancellationToken cancellationToken)
+            public async Task<ListEntityVM<ProductCategoryVM>> Handle(ListAllProductCategoriesQuery request, CancellationToken cancellationToken)
             {
                 var (totalCount, productCategorysFromRepo) = await _productCategoryRepository.GetAllProductCategorys();
 

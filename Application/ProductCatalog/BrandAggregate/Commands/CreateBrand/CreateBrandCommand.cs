@@ -11,6 +11,7 @@ namespace Application.ProductCatalog.BrandAggregate.Commands.CreateBrand
     public class CreateBrandCommand : IRequest<string>
     {
         public string Name { get; set; }
+        public string PhotoUrl { get; set; }
 
         public class Handler : IRequestHandler<CreateBrandCommand, string>
         {
@@ -23,11 +24,11 @@ namespace Application.ProductCatalog.BrandAggregate.Commands.CreateBrand
 
             public async Task<string> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
             {
-                var newBrandToAdd = new Brand(request.Name);
+                var newBrandToAdd = new Brand(request.Name, request.PhotoUrl);
 
                 _brandRepository.Add(newBrandToAdd);
 
-                await _brandRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+                await _brandRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
 
                 return newBrandToAdd.Id.ToString();
             }

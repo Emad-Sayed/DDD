@@ -16,14 +16,48 @@ export class ProductCatalogService {
     public constructor(private httpService: HttpService) { }
 
     //#region Brand
-    getBrands(): Observable<ApiResponse<Brand>> {
-        return this.httpService.getAll<ApiResponse<Brand>>(`${Config.Brands}`);
+    getAllBrands(): Observable<ApiResponse<Brand>> {
+        return this.httpService.getAll<ApiResponse<Brand>>(`${Config.Brands}/All`);
+    }
+
+    getBrands(query: any = {}): Observable<ApiResponse<Brand>> {
+        return this.httpService.getAll<ApiResponse<Brand>>(`${Config.Brands}`, query);
+    }
+
+    createBrand(brand: Brand): Observable<any> {
+        return this.httpService.post(`${Config.Brands}`, brand);
+    }
+
+    updateBrand(brand: Brand): Observable<any> {
+        return this.httpService.put(`${Config.Brands}`, brand);
+    }
+
+    deleteBrand(brandId: string): Observable<any> {
+        const params: any = { brandId: brandId }
+        return this.httpService.delete(`${Config.Brands}`, params);
     }
     //#endregion
 
     //#region ProductCategory
-    getProductCategories(): Observable<ApiResponse<ProductCategory>> {
-        return this.httpService.getAll<ApiResponse<ProductCategory>>(`${Config.ProductCategories}`);
+    getAllProductCategories(): Observable<ApiResponse<ProductCategory>> {
+        return this.httpService.getAll<ApiResponse<ProductCategory>>(`${Config.ProductCategories}/All`);
+    }
+
+    getProductCategories(query: any = {}): Observable<ApiResponse<ProductCategory>> {
+        return this.httpService.getAll<ApiResponse<ProductCategory>>(`${Config.ProductCategories}`, query);
+    }
+
+    createProductCategory(productCategory: ProductCategory): Observable<any> {
+        return this.httpService.post(`${Config.ProductCategories}`, productCategory);
+    }
+
+    updateProductCategory(productCategory: ProductCategory): Observable<any> {
+        return this.httpService.put(`${Config.ProductCategories}`, productCategory);
+    }
+
+    deleteProductCategory(productCategoryId: string): Observable<any> {
+        const params: any = { productCategoryId: productCategoryId }
+        return this.httpService.delete(`${Config.ProductCategories}`, params);
     }
     //#endregion
 
@@ -45,7 +79,7 @@ export class ProductCatalogService {
     }
 
     deleteProduct(productId: string): Observable<any> {
-        const params: any = { productId: productId + '/' }
+        const params: any = { productId: productId }
         return this.httpService.delete(`${Config.Products}`, params);
     }
     //#endregion

@@ -9,12 +9,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.ProductCatalog.BrandAggregate.Queries.BrandList
+namespace Application.ProductCatalog.BrandAggregate.Queries.ListBrands
 {
-    public class BrandListQuery : IRequest<ListEntityVM<BrandVM>>
+    public class ListBrandsQuery : IRequest<ListEntityVM<BrandVM>>
     {
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+        public string KeyWord { get; set; }
 
-        public class Handler : IRequestHandler<BrandListQuery, ListEntityVM<BrandVM>>
+        public class Handler : IRequestHandler<ListBrandsQuery, ListEntityVM<BrandVM>>
         {
             private readonly IBrandRepository _brandRepository;
             private readonly IMapper _mapper;
@@ -25,9 +28,9 @@ namespace Application.ProductCatalog.BrandAggregate.Queries.BrandList
                 _mapper = mapper;
             }
 
-            public async Task<ListEntityVM<BrandVM>> Handle(BrandListQuery request, CancellationToken cancellationToken)
+            public async Task<ListEntityVM<BrandVM>> Handle(ListBrandsQuery request, CancellationToken cancellationToken)
             {
-                var (totalCount, brandsFromRepo) = await _brandRepository.GetAllBrands();
+                var (totalCount, brandsFromRepo) = await _brandRepository.GetBrands(request.PageNumber, request.PageSize, request.KeyWord);
 
                 var brandsToReturn = _mapper.Map<List<BrandVM>>(brandsFromRepo);
 

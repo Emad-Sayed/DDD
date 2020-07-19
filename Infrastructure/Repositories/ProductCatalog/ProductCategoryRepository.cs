@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Persistence.ProductCatalog;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,35 +30,54 @@ namespace Infrastructure.Repositories.ProductCatalog
 
         public ProductCategory Add(ProductCategory productCategory)
         {
-            return _context.ProductCategories
-                   .Add(productCategory)
-                   .Entity;
+            return _context.ProductCategories.Add(productCategory).Entity;
         }
 
-        public ProductCategory Update(ProductCategory productCategory)
+        public void Update(ProductCategory productCategory)
         {
-            throw new NotImplementedException();
+            _context.Entry(productCategory).State = EntityState.Modified;
         }
 
-        public Task<ProductCategory> FindAsync(string id)
+        public void Delete(ProductCategory productCategory)
         {
-            throw new NotImplementedException();
+            _context.ProductCategories.Remove(productCategory);
         }
 
-        public Task<ProductCategory> FindByIdAsync(string id)
+        public async Task<ProductCategory> FindByIdAsync(string productCategoryId)
         {
-            throw new NotImplementedException();
+            return await _context.ProductCategories.Include(x => x.Products).FirstOrDefaultAsync(x => x.Id.ToString() == productCategoryId);
         }
 
         public async Task<(int, List<ProductCategory>)> GetAllProductCategorys()
         {
             var query = _context.ProductCategories.AsQueryable();
 
-            var totalProductCategories = await query.CountAsync();
+            var totalProductCategorys = await query.CountAsync();
 
-            var productCategoriesFromRepo = await query.ToListAsync();
+            var productCategorysFromRepo = await query.ToListAsync();
 
-            return (totalProductCategories, productCategoriesFromRepo);
+            return (totalProductCategorys, productCategorysFromRepo);
+        }
+
+        public async Task<(int, List<ProductCategory>)> GetProductCategorys(int pageNumber, int pageSize, string keyWord)
+        {
+            var query = _context.ProductCategories
+                .AsQueryable();
+
+            // fillter by keyword
+            if (!string.IsNullOrEmpty(keyWord))
+            {
+                query = query.Where(x =>
+                x.Id.ToString().Contains(keyWord) ||
+                x.Name.Contains(keyWord)
+                );
+            }
+
+            // apply pagination to products
+            var productCategories = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            var count = query.Count();
+
+            return (count, productCategories);
         }
     }
 }
