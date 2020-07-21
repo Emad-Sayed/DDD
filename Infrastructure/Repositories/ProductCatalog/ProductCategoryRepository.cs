@@ -52,6 +52,8 @@ namespace Infrastructure.Repositories.ProductCatalog
         {
             var query = _context.ProductCategories.AsQueryable();
 
+            query = query.OrderByDescending(x => x.Created);
+
             var totalProductCategorys = await query.CountAsync();
 
             var productCategorysFromRepo = await query.ToListAsync();
@@ -72,6 +74,8 @@ namespace Infrastructure.Repositories.ProductCatalog
                 x.Name.Contains(keyWord)
                 );
             }
+
+            query = query.OrderByDescending(x => x.Created);
 
             // apply pagination to products
             var productCategories = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();

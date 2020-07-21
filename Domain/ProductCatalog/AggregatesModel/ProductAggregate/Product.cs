@@ -30,7 +30,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         public ICollection<Unit> Units { get; private set; }
         public bool IsDeleted { get; private set; }
 
-        private Product()
+        public Product()
         {
             Units = new List<Unit>();
         }

@@ -43,7 +43,7 @@ namespace Infrastructure.Repositories.ProductCatalog
             _context.Entry(product).State = EntityState.Modified;
         }
 
-        public async Task<(int, List<Product>)> GetAllAsync(int pageNumber, int pageSize, string keyWord)
+        public async Task<(int, List<Product>)> GetAllAsync(int pageNumber, int pageSize, string keyWord, string brandId, string productCategoryId)
         {
             var query = _context.Products
                 .Where(x => x.IsDeleted == false)
@@ -62,6 +62,14 @@ namespace Infrastructure.Repositories.ProductCatalog
                 x.ProductCategory.Name.Contains(keyWord)
                 );
             }
+
+            if (!string.IsNullOrEmpty(brandId))
+                query = query.Where(x => x.BrandId == new Guid(brandId));
+
+            if (!string.IsNullOrEmpty(productCategoryId))
+                query = query.Where(x => x.ProductCategoryId == new Guid(productCategoryId));
+
+            query = query.OrderByDescending(x => x.Created);
 
             // apply pagination to products
             var products = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();

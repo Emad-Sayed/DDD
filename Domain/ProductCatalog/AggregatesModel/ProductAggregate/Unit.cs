@@ -31,7 +31,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         public Product Product { get; private set; }
         public bool IsDeleted { get; private set; }
 
-        private Unit() { }
+        public Unit() { }
 
         public Unit(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable, Guid productId)
         {

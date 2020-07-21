@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Page } from 'src/app/shared/models/shared/page.model';
 import { PopupServiceService } from 'src/app/shared/services/popup-service.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -27,7 +28,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
   constructor(
     private productCatalogService: ProductCatalogService,
     private core: CoreService,
-    private popupService: PopupServiceService
+    private popupService: PopupServiceService,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnDestroy(): void {
@@ -35,7 +37,11 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getProducts();
+    this.activatedRoute.queryParams.subscribe(res => {
+      if (res.brandId) this.query.brandId = res.brandId;
+      if (res.productCategoryId) this.query.productCategoryId = res.productCategoryId;
+      this.getProducts();
+    });
     this.productCatalogService.productEditor.subscribe(res => {
       this.openEditor = res.openEditor;
       if (res.productRequestSuccess)
@@ -55,7 +61,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.query.pageNumber = this.page.pageNumber;
     this.query.pageSize = this.page.pageSize;
     this.productCatalogService.getProducts(this.query).subscribe(res => {
-      this.products = res.data;
+      this.products.push(...res.data);
       this.productsTotalCount = res.totalCount;
     })
   }

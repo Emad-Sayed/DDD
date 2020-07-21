@@ -16,6 +16,8 @@ namespace Application.ProductCatalog.ProductAggregate.Queries.ListProducts
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         public string KeyWord { get; set; }
+        public string BrandId { get; set; }
+        public string ProductCategoryId { get; set; }
 
         public class Handler : IRequestHandler<ListProductsQuery, ListEntityVM<ProductVM>>
         {
@@ -30,7 +32,7 @@ namespace Application.ProductCatalog.ProductAggregate.Queries.ListProducts
 
             public async Task<ListEntityVM<ProductVM>> Handle(ListProductsQuery request, CancellationToken cancellationToken)
             {
-                var productsFromRepo = await _productsRepository.GetAllAsync(request.PageNumber, request.PageSize, request.KeyWord);
+                var productsFromRepo = await _productsRepository.GetAllAsync(request.PageNumber, request.PageSize, request.KeyWord, request.BrandId, request.ProductCategoryId);
 
                 var productsToReturn = _mapper.Map<List<ProductVM>>(productsFromRepo.Item2);
 

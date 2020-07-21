@@ -16,7 +16,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate
         public ICollection<Product> Products { get; private set; }
 
 
-        private ProductCategory() { }
+        public ProductCategory() { }
 
         public ProductCategory(string name,string photoUrl = null, Guid id = default)
         {

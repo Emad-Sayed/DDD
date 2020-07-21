@@ -14,7 +14,7 @@ namespace Domain.ProductCatalog.AggregatesModel.BrandAggregate
 
         public ICollection<Product> Products { get; private set; }
 
-        private Brand() { }
+        public Brand() { }
 
         public Brand(string name,string photoUrl = null, Guid id = default)
         {

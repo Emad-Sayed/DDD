@@ -49,7 +49,7 @@ export class ProductEditorComponent implements OnInit {
     this.productCatalogService.getProductById(productId).subscribe(res => {
       this.product = res;
       this.product.id = productId;
-      this.product.photoUrl ? this.imgURL = this.BasePhotoUrl + this.product.photoUrl : 'assets/images/db-bg.png';
+      this.product.photoUrl ? this.imgURL = this.product.photoUrl.includes('https://via.') ? this.product.photoUrl : this.BasePhotoUrl + this.product.photoUrl : 'assets/images/db-bg.png';
     });
   }
 

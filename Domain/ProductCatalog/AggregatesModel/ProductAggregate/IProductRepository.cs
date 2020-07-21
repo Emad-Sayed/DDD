@@ -13,7 +13,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 
     public interface IProductRepository : IRepository<Product>
     {
-        Task<(int, List<Product>)> GetAllAsync(int pageNumber, int pageSize, string keyWord);
+        Task<(int, List<Product>)> GetAllAsync(int pageNumber, int pageSize, string keyWord, string brandId, string productCategoryId);
         Task<List<Unit>> GetProductsUnits(List<string> productsIds);
         Product Add(Product product);
         void Update(Product product);

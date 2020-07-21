@@ -1,8 +1,8 @@
-﻿using Domain.CustomerManagment.AggregatesModel.CustomerAggregate;
+﻿using Bogus;
+using Domain.CustomerManagment.AggregatesModel.CustomerAggregate;
 using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,7 +14,6 @@ using Persistence.ShoppingVan;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Helpers
 {
@@ -38,56 +37,61 @@ namespace API.Helpers
                     shoppingVanContext.Database.Migrate();
                 }
                 catch (Exception) { }
-                SeedBrands(productCatalogContext);
-                SeedProductCategories(productCatalogContext);
-                SeedProducts(productCatalogContext);
+                SeedProductCatalogData(productCatalogContext);
                 SeedCities(customerManagmentContext);
                 SeedAreas(customerManagmentContext);
             }
             return host;
         }
 
-        public static void SeedBrands(ProductCatalogContext context)
+        public static void SeedProductCatalogData(ProductCatalogContext context)
         {
-            if (!context.Brands.Any())
+            if (context.Products.Count() < 10)
             {
-                var brands = new List<Brand>
-            {
-                new Brand(  "كوسونز بيور", "",  new Guid("8752f3e1-d4d2-4eb0-b616-4a88f915a21b") ),
-                new Brand(  "لافو", "",  new Guid("73ca8334-3d0c-4cf7-a0b0-048f657203ae") ),
-                new Brand(  "ابو عوف", "",  new Guid("a03f13c1-0f7e-443d-8296-e2660348171a") ),
-            };
-                context.AddRange(brands);
-                context.SaveChanges();
-            }
-        }
+                var random = new Randomizer();
 
-        public static void SeedProductCategories(ProductCatalogContext context)
-        {
-            if (!context.ProductCategories.Any())
-            {
-                var productCategories = new List<ProductCategory>
-            {
-                new ProductCategory("مشروبات", "",  new Guid("f4e3ec20-72c8-4e59-9d2b-34cee989e108") ),
-                new ProductCategory("مأكولات",  "", new Guid("0309710f-d381-4229-adc0-ede1e7933932") ),
-                new ProductCategory("مكسرات", "", new Guid("9a750ed2-bfa3-4081-a18b-94c5df872f57") ),
-            };
-                context.AddRange(productCategories);
-                context.SaveChanges();
-            }
-        }
+                var testProductCategories = new Faker<ProductCategory>("ar")
+                           .RuleFor(x => x.Id, x => Guid.NewGuid())
+                           .RuleFor(x => x.Created, x => DateTime.UtcNow)
+                           .RuleFor(x => x.CreatedBy, x => "Seeder")
+                           .RuleFor(x => x.Name, x => x.Company.CompanyName())
+                           .RuleFor(x => x.PhotoUrl, x => x.Image.PlaceholderUrl(200, 200, "Brimo Product Category", "#607d8b"));
 
-        public static void SeedProducts(ProductCatalogContext context)
-        {
-            if (!context.Products.Any())
-            {
-                var products = new List<Product>
-            {
-                new Product("كريم استحمام بخلاصة التوت والفاوانيا من لو بوتي مارسيليه - 250 مل","DSOFOSIDF43","photo.png",true, "a03f13c1-0f7e-443d-8296-e2660348171a","0309710f-d381-4229-adc0-ede1e7933932",new Guid("25c5aa39-d1f9-44f9-890c-365465cb2a5e")),
-                new Product("قهوة كلاسيك من جراند كافيه، 300 جم","KLSDFKJF233","photo.png",true, "8752f3e1-d4d2-4eb0-b616-4a88f915a21b","0309710f-d381-4229-adc0-ede1e7933932",new Guid("052216e4-25f6-4a0d-93b6-c792dc9cbd1b")),
-                new Product("منظف سائل مركز للأغراض المنزلية برائحة التفاح من لافو - 750 مل","SDKFLURO454","photo.png",true, "8752f3e1-d4d2-4eb0-b616-4a88f915a21b","0309710f-d381-4229-adc0-ede1e7933932",new Guid("d04c2462-82a1-40a7-8234-6967b942b835")),
-            };
-                context.AddRange(products);
+                var testBrands = new Faker<Brand>("ar")
+                       .RuleFor(x => x.Id, x => Guid.NewGuid())
+                       .RuleFor(x => x.Created, x => DateTime.UtcNow)
+                       .RuleFor(x => x.CreatedBy, x => "Seeder")
+                       .RuleFor(x => x.Name, x => x.Commerce.Department())
+                       .RuleFor(x => x.PhotoUrl, x => x.Image.PlaceholderUrl(200, 200, "Brimo Brand", "#eeeeee"));
+
+                var testUnits = new Faker<Unit>("ar")
+                       .RuleFor(x => x.Id, x => Guid.NewGuid())
+                       .RuleFor(x => x.Created, x => DateTime.UtcNow)
+                       .RuleFor(x => x.CreatedBy, x => "Seeder")
+                       .RuleFor(x => x.ContentCount, x => x.Random.Int(1, 2000))
+                       .RuleFor(x => x.Count, x => x.Random.Int(1, 2000))
+                       .RuleFor(x => x.IsAvailable, x => x.Random.Bool(0.7f))
+                       .RuleFor(x => x.Price, x => x.Random.Float(10, 1000))
+                       .RuleFor(x => x.SellingPrice, x => x.Random.Float(100, 10000))
+                       .RuleFor(x => x.Weight, x => x.Random.Float(1, 200))
+                       .RuleFor(x => x.Name, x => x.Company.CompanyName());
+
+                var brands = testBrands.Generate(100);
+                var productCategories = testProductCategories.Generate(100);
+
+                var testProducts = new Faker<Product>("ar")
+                       .RuleFor(x => x.Name, x => x.Commerce.ProductName())
+                       .RuleFor(x => x.Created, x => DateTime.UtcNow)
+                       .RuleFor(x => x.CreatedBy, x => "Seeder")
+                       .RuleFor(x => x.PhotoUrl, x => x.Image.PlaceholderUrl(200, 200, "Brimo Product", "#9e9e9e"))
+                       .RuleFor(x => x.AvailableToSell, x => x.Random.Bool(0.7f))
+                       .RuleFor(x => x.Barcode, x => x.Commerce.Ean13())
+                       .RuleFor(x => x.Units, x => testUnits.Generate(4))
+                       .RuleFor(x => x.Brand, x => random.ListItem(brands))
+                       .RuleFor(x => x.ProductCategory, x => random.ListItem(productCategories));
+
+                var products = testProducts.Generate(2000);
+                context.Products.AddRange(products);
                 context.SaveChanges();
             }
         }
@@ -135,7 +139,6 @@ namespace API.Helpers
                     new Area ("سيوة", "899dd7e2-8b12-41a4-8b6c-1f1352daab96", new Guid("c84f8619-8965-4aeb-aaed-b87e9d5bfc61")),
                     new Area ("السرو", "899dd7e2-8b12-41a4-8b6c-1f1352daab96", new Guid("39f97a4f-221f-49bc-af60-d71ff0c4e836")),
                     new Area ("طلخا", "899dd7e2-8b12-41a4-8b6c-1f1352daab96", new Guid("2ac90763-52fc-406b-974e-c15e005cb442")),
-
                 };
 
                 context.AddRange(cities);

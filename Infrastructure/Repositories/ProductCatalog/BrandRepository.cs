@@ -52,6 +52,8 @@ namespace Infrastructure.Repositories.ProductCatalog
         {
             var query = _context.Brands.AsQueryable();
 
+            query = query.OrderByDescending(x => x.Created);
+
             var totalBrands = await query.CountAsync();
 
             var brandsFromRepo = await query.ToListAsync();
@@ -72,6 +74,8 @@ namespace Infrastructure.Repositories.ProductCatalog
                 x.Name.Contains(keyWord)
                 );
             }
+
+            query = query.OrderByDescending(x => x.Created);
 
             // apply pagination to products
             var brands = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
