@@ -57,9 +57,7 @@ namespace Infrastructure.Repositories.ProductCatalog
                 query = query.Where(x =>
                 x.Barcode.Contains(keyWord) ||
                 x.Id.ToString().Contains(keyWord) ||
-                x.Name.Contains(keyWord) ||
-                x.Brand.Name.Contains(keyWord) ||
-                x.ProductCategory.Name.Contains(keyWord)
+                x.Name.Contains(keyWord) 
                 );
             }
 

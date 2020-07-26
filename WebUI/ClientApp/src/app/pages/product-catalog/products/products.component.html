@@ -11,6 +11,9 @@
             <i class="fas fa-search ml-2"></i>
             بحث
           </a> -->
+          <a class="btn btn-outline-info mr-auto" type="button" (click)="resetSearch()">
+            مسح الفلتر
+          </a>
           <a class="btn btn-outline-info mr-auto" type="button" (click)="openEditorToAddProduct()">
             اضافة
           </a>
@@ -19,6 +22,37 @@
 
     </div>
   </div>
+  <div class="col-12">
+    <div class="w-100 card  p-2 mb-3">
+      <div class="row">
+        <div class="col">
+          <div class="row mt-2">
+            <label for="select-brand" class="col-3 col-form-label">الشركة</label>
+            <select class="col-8 form-control" id="select-brand" name="brandId" [(ngModel)]="query.brandId"
+              (change)="onChangeBrand()">
+              <option selected>إختر النوع</option>
+              <option *ngFor="let brand of brands" [value]="brand.id">{{
+                brand.name
+              }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row mt-2">
+            <label for="select-brand" class="col-3 col-form-label"> نوع الصنف</label>
+            <select class="col-8 form-control" id="select-brand" name="productCategoryId"
+              [(ngModel)]="query.productCategoryId" (change)="onChangeProductCategory()">
+              <option selected [value]="'empty'">إختر الشركة</option>
+              <option *ngFor="let productCategory of productCategories" [value]="productCategory.id">
+                {{ productCategory.name }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <div class="col-12">
     <div class="card">
       <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
@@ -30,6 +64,7 @@
                 <th scope="col" class="border-top-0">رقم</th>
                 <th scope="col" class="border-top-0">كود الصنف</th>
                 <th scope="col" class="border-top-0">إسم الصنف</th>
+                <th scope="col" class="border-top-0">الشركة</th>
                 <th scope="col" class="border-top-0">نوع الصنف</th>
               </tr>
             </thead>
@@ -48,6 +83,7 @@
                   {{ product?.name }}
                 </td>
                 <td (click)="openEditorToUpdateProduct(product)">{{ product?.brand?.name }}</td>
+                <td (click)="openEditorToUpdateProduct(product)">{{ product?.productCategory?.name }}</td>
                 <td class="text-center">
                   <button (click)="showDeleteProductPopup(product)" class="btn p-0">
                     <i class="fas fa-trash-alt text-danger"></i>

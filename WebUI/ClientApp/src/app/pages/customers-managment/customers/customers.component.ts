@@ -51,7 +51,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
   }
 
   getCustomers() {
-    this.query.pageNumber = this.page.pageNumber;
+    this.query.pageNumber = ++this.page.pageNumber;
     this.query.pageSize = this.page.pageSize;
     this.customerManagmentService.getCustomers(this.query).subscribe(res => {
       this.customers = res.data;
@@ -86,7 +86,6 @@ export class CustomersComponent implements OnInit, OnDestroy {
   }
 
   onScroll() {
-    this.page.pageNumber++;
     if ((this.page.pageNumber * this.page.pageSize) >= this.customersTotalCount) return;
     this.getCustomers();
   }

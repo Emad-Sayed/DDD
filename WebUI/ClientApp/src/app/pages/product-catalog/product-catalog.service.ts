@@ -13,6 +13,7 @@ import { Unit } from 'src/app/shared/models/product-catalog/product/unit.model';
 })
 export class ProductCatalogService {
     productEditor = new BehaviorSubject<any>({ openEditor: false });
+    brandEditor = new BehaviorSubject<any>({ openEditor: false });
     public constructor(private httpService: HttpService) { }
 
     //#region Brand
@@ -24,6 +25,11 @@ export class ProductCatalogService {
         return this.httpService.getAll<ApiResponse<Brand>>(`${Config.Brands}`, query);
     }
 
+    getBrandById(brandId: string): Observable<Brand> {
+        const params: any = { brandId: brandId }
+        return this.httpService.getAll<Brand>(`${Config.Brands}`, params);
+    }
+    
     createBrand(brand: Brand): Observable<any> {
         return this.httpService.post(`${Config.Brands}`, brand);
     }

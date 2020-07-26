@@ -25,6 +25,7 @@ export class BrandsComponent implements OnInit {
   private subject: Subject<string> = new Subject();
 
   query: any = {};
+  openEditor = true;
 
   constructor(
     private productCatalogService: ProductCatalogService,
@@ -35,7 +36,16 @@ export class BrandsComponent implements OnInit {
 
 
   ngOnInit() {
+
     this.getBrands();
+
+    this.productCatalogService.brandEditor.subscribe(res => {
+      console.log(res);
+      this.openEditor = res.openEditor;
+      if (res.productRequestSuccess)
+        this.getBrands();
+    });
+
     this.subject.pipe(
       debounceTime(500),
       distinctUntilChanged()
@@ -45,13 +55,25 @@ export class BrandsComponent implements OnInit {
 
   }
 
+  ngOnDestroy(): void {
+    this.productCatalogService.brandEditor.next({ openEditor: false });
+  }
+
   getBrands() {
-    this.query.pageNumber = this.page.pageNumber;
+    this.query.pageNumber = ++this.page.pageNumber;
     this.query.pageSize = this.page.pageSize;
     this.productCatalogService.getBrands(this.query).subscribe(res => {
-      this.brands = res.data;
+      this.brands.push(...res.data);
       this.brandsTotalCount = res.totalCount;
     })
+  }
+
+  openEditorToUpdateBrand(brand: Brand) {
+    this.productCatalogService.brandEditor.next({ openEditor: true, brand: brand });
+  }
+
+  openEditorToAddBrand() {
+    this.productCatalogService.brandEditor.next({ openEditor: true });
   }
 
   deleteBrand(brandId: string) {
@@ -69,7 +91,7 @@ export class BrandsComponent implements OnInit {
   searchInBrands(value: any) {
     this.brands = [];
     this.query.keyWord = value;
-    this.page.pageNumber = 1;
+    this.page.pageNumber = 0;
     this.getBrands();
   }
 
@@ -78,7 +100,6 @@ export class BrandsComponent implements OnInit {
   }
 
   onScroll() {
-    this.page.pageNumber++;
     if ((this.page.pageNumber * this.page.pageSize) >= this.brandsTotalCount) return;
     this.getBrands();
   }

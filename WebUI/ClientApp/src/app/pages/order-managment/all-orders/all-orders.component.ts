@@ -50,7 +50,7 @@ export class AllOrdersComponent implements OnInit, OnDestroy {
   }
 
   getOrders() {
-    this.query.pageNumber = this.page.pageNumber;
+    this.query.pageNumber = ++this.page.pageNumber;
     this.query.pageSize = this.page.pageSize;
     this.orderManagmentService.getOrders(this.query).subscribe(res => {
       this.orders.push(...res.data);
@@ -65,7 +65,7 @@ export class AllOrdersComponent implements OnInit, OnDestroy {
   searchInOrders(value: any) {
     this.orders = [];
     this.query.keyWord = value;
-    this.page.pageNumber = 1;
+    this.page.pageNumber = 0;
     this.getOrders();
   }
 
@@ -74,7 +74,6 @@ export class AllOrdersComponent implements OnInit, OnDestroy {
   }
 
   onScroll() {
-    this.page.pageNumber++;
     if ((this.page.pageNumber * this.page.pageSize) >= this.ordersTotalCount) return;
     this.getOrders();
   }

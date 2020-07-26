@@ -52,7 +52,7 @@ export class DistributorsComponent implements OnInit, OnDestroy {
   }
 
   getDistributors() {
-    this.query.pageNumber = this.page.pageNumber;
+    this.query.pageNumber = ++this.page.pageNumber;
     this.query.pageSize = this.page.pageSize;
     this.distributorManagmentService.getDistributors(this.query).subscribe(res => {
       this.distributors = res.data;
@@ -78,7 +78,7 @@ export class DistributorsComponent implements OnInit, OnDestroy {
   searchInDistributors(value: any) {
     this.distributors = [];
     this.query.keyWord = value;
-    this.page.pageNumber = 1;
+    this.page.pageNumber = 0;
     this.getDistributors();
   }
 
@@ -87,7 +87,6 @@ export class DistributorsComponent implements OnInit, OnDestroy {
   }
 
   onScroll() {
-    this.page.pageNumber++;
     if ((this.page.pageNumber * this.page.pageSize) >= this.distributorsTotalCount) return;
     this.getDistributors();
   }

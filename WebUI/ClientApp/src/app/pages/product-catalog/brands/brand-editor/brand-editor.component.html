@@ -1,0 +1,71 @@
+<div class="container pb-5 product-editor">
+    <div class="row editor-header mb-4 pb-3 justify-content-between">
+        <button class="btn btn-large" (click)="openClose()">
+            <span class="fa fa-times fx-2"></span>
+        </button>
+        <button (click)="saveData()" class="btn btn-primary save-edit-btn">حفظ</button>
+    </div>
+    <div class="editor-content">
+        <div class="row mb-3">
+            <div class="col-6">
+                <div class="row">
+                    <label for="product-name" class="col-4 col-form-label">إسم الشركة</label>
+                    <input type="text" id="product-name" name="name" [(ngModel)]="brand.name" class="col-8 form-control"
+                        placeholder="إسم الشركة" />
+                </div>
+            </div>
+            <div class="col-5">
+                <img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" />
+                <div class="progress m-3" *ngIf="uploadPercent > 0">
+                    <div class="progress-bar" role="progressbar" [style.width.%]="uploadPercent" aria-valuemin="0"
+                        aria-valuemax="100">{{uploadPercent}}%</div>
+                </div>
+                <button class="btn btn-small btn-success m-3" (click)="uploadImage()" *ngIf="showUploadButton">رفع
+                    الصورة</button>
+            </div>
+            <!-- <div class="col-5 product-img-wrapper"> 
+                    <img [src]="imgURL" class="img-fluid" *ngIf="imgURL">
+                    <label for="product-img" class="mt-2">
+                        <ng-container *ngIf="imgURL; else add">
+                            <span class="btn btn-outline-secondary">استبدال الصورة</span>
+                        </ng-container>
+                        <ng-template #add>
+                            <span class="btn btn-outline-secondary">إضافة صورة</span>
+                        </ng-template>
+                    </label>
+                    <input #file type="file" id="product-img" hidden accept='image/*' (change)="preview(file.files)" />
+                </div> -->
+
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+                    [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 3" [resizeToWidth]="256"
+                    [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false"
+                    [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'left'"
+                    [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)"
+                    (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)"
+                    (loadImageFailed)="loadImageFailed()"></image-cropper>
+            </div>
+            <div class="col-6">
+                <input type="file" (change)="fileChangeEvent($event)" />
+                <br />
+                <br />
+                <button class="btn btn-sm btn-primary" (click)="rotateLeft()">تدوير لليسار</button>
+                <button class="btn btn-sm btn-primary" (click)="rotateRight()">تدوير لليمين</button>
+                <button class="btn btn-sm btn-primary" (click)="flipHorizontal()">قلب افقيا</button>
+                <button class="btn btn-sm btn-primary" (click)="flipVertical()">قلب راسيا</button>
+                <br />
+                <br />
+
+                <button class="btn btn-sm btn-primary"
+                    (click)="toggleContainWithinAspectRatio()">{{containWithinAspectRatio?'ملء نسبة العرض إلى الارتفاع':'تحتوي على نسبة العرض إلى الارتفاع'}}</button>
+                <button class="btn btn-sm btn-primary" (click)="resetImage()">إلغاء التغيرات</button>
+                <br />
+                <br />
+                <button class="btn btn-sm btn-primary" (click)="zoomOut()">تصغير -</button>
+                <button class="btn btn-sm btn-primary" (click)="zoomIn()">تكبير +</button>
+            </div>
+        </div>
+    </div>

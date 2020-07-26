@@ -6,7 +6,9 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Page } from 'src/app/shared/models/shared/page.model';
 import { PopupServiceService } from 'src/app/shared/services/popup-service.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Brand } from 'src/app/shared/models/product-catalog/brand/brand.model';
+import { ProductCategory } from 'src/app/shared/models/product-catalog/product-category/product-category.model';
 
 
 @Component({
@@ -19,7 +21,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   productsTotalCount: number = 0;
   page: Page = new Page();
-
+  brands: Brand[] = [];
+  productCategories: ProductCategory[] = [];
   private subject: Subject<string> = new Subject();
 
   openEditor = true;
@@ -29,7 +32,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
     private productCatalogService: ProductCatalogService,
     private core: CoreService,
     private popupService: PopupServiceService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnDestroy(): void {
@@ -37,6 +41,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getBrands();
+    this.getProductCategories();
     this.activatedRoute.queryParams.subscribe(res => {
       if (res.brandId) this.query.brandId = res.brandId;
       if (res.productCategoryId) this.query.productCategoryId = res.productCategoryId;
@@ -57,8 +63,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   }
 
+
   getProducts() {
-    this.query.pageNumber = this.page.pageNumber;
+    this.query.pageNumber = ++this.page.pageNumber;
     this.query.pageSize = this.page.pageSize;
     this.productCatalogService.getProducts(this.query).subscribe(res => {
       this.products.push(...res.data);
@@ -66,6 +73,45 @@ export class ProductsComponent implements OnInit, OnDestroy {
     })
   }
 
+  getBrands() {
+    this.productCatalogService.getAllBrands().subscribe(res => {
+      this.brands.push(...res.data)
+    });
+  }
+
+  getProductCategories() {
+    this.productCatalogService.getAllProductCategories().subscribe(res => {
+      this.productCategories.push(...res.data)
+    });
+  }
+
+  onChangeBrand() {
+    this.page = new Page();
+    this.products = [];
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.activatedRoute,
+        queryParams: { brandId: this.query.brandId },
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      });
+  }
+  resetSearch() {
+    this.page = new Page();
+    this.query = {};
+    this.router.navigate(['/product-catalog/products']);
+  }
+  onChangeProductCategory() {
+    this.page = new Page();
+    this.products = [];
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.activatedRoute,
+        queryParams: { productCategoryId: this.query.productCategoryId },
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      });
+  }
   openEditorToUpdateProduct(product: Product) {
     this.productCatalogService.productEditor.next({ openEditor: true, product: product });
   }
@@ -84,7 +130,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   searchInProducts(value: any) {
     this.products = [];
     this.query.keyWord = value;
-    this.page.pageNumber = 1;
+    this.page.pageNumber = 0;
     this.getProducts();
   }
 
@@ -93,7 +139,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   onScroll() {
-    this.page.pageNumber++;
     if ((this.page.pageNumber * this.page.pageSize) >= this.productsTotalCount) return;
     this.getProducts();
   }

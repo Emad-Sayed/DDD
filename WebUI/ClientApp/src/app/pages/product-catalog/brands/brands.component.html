@@ -1,84 +1,76 @@
 <div class="row">
-    <div class="col">
+    <div class="col-12">
         <!-- search box -->
         <div class="w-100 card mb-3">
             <div class="ais-SearchBox card-search">
                 <form class="ais-SearchBox-form w-100 form-group d-flex" novalidate>
                     <input class="ais-SearchBox-input form-control col-5" autocomplete="off" autocorrect="off"
-                        (keydown)="onKeyUp($event.target.value)" autocapitalize="off" placeholder="إسم الفئة"
+                        (keydown)="onKeyUp($event.target.value)" autocapitalize="off" placeholder="اسم الشركة"
                         spellcheck="false" maxlength="512" type="search" value="" />
+                    <a class="btn btn-outline-info mr-auto" type="button" (click)="openEditorToAddBrand()">
+                        اضافة
+                    </a>
                 </form>
             </div>
 
         </div>
     </div>
-    <div class="col-2">
-        <button (click)="addNewBrandRow()" class="btn btn-primary btn-sm">
-            إضافة
-        </button>
-    </div>
-</div>
 
-<div class="table-responsive" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
-    (scrolled)="onScroll()" [scrollWindow]="false">
-    <table class="table table-hover mb-0">
-        <thead>
-            <tr>
-                <th scope="col" class="border-top-0">رقم</th>
-                <th scope="col" class="border-top-0">إسم الشركة</th>
-                <th scope="col" class="border-top-0"> الصورة</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngIf="brands.length == 0">
-                <td colspan="4">
-                    <img src="assets/images/nodata.svg" class="nodata-img">
-                </td>
-            </tr>
-            <tr *ngFor="let brand of brands; let i = index;" [id]="'tr' + i" rel="off-canvas" class="canvas-btn">
-                <th scope="row">{{ i + 1 }}</th>
-                <td>
-                    <p *ngIf="!brand.isEditing">{{ brand?.name }}</p>
-                    <input *ngIf="brand.isEditing" class="form-control fit-content" type="text" name="name"
-                        [(ngModel)]="brand.name">
-                </td>
-                <td>
-                    <div class="product-img-wrapper">
-                        <img [src]="BasePhotoUrl + brand.photoUrl" style="width: 60px;"
-                            onerror="this.src='assets/images/placeholder.png';">
-                        <label [for]="'product-img' + i" class="mt-2" *ngIf="brand.isEditing" [id]="'la' + i">
-                            <ng-container *ngIf="imgURL; else add">
-                                <span class="text-primary">استبدال الصورة</span>
-                            </ng-container>
-                            <ng-template #add>
-                                <span class="text-primary">إضافة صورة</span>
-                            </ng-template>
-                        </label>
-                        <input #file type="file" [id]="'product-img' + i" hidden accept='image/*'
-                            (change)="preview(file.files, brand)" />
-                    </div>
-                </td>
-                <td>
-                    <div class="text-center">
-                        <button (click)="showDeleteBrandPopup(brand)" class="btn p-0">
-                            <i class="fas fa-trash-alt text-danger"></i>
-                        </button>
-                        <button *ngIf="!brand.isEditing" (click)="brand.isEditing = true" class="btn p-0 m-2">
-                            <i class="fas fa-edit text-warning"></i>
-                        </button>
-                        <button *ngIf="brand.isEditing" (click)="saveData(brand)" class="btn p-0 m-2">
-                            <i class="fas fa-save text-success"></i>
-                        </button>
-                        <button *ngIf="brand.isEditing && !brand.isAdding" (click)="brand.isEditing = false"
-                            class="btn p-0 m-2">
-                            <i class="fas fa-remove text-warning"></i>
-                        </button>
-                        <button [routerLink]="['../products', {brandId: brand.id}]" class="btn p-0 m-2">
-                            <i class="fas fa-eye text-warning"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
+                <div class="table-responsive" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+                    (scrolled)="onScroll()" [scrollWindow]="false">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="border-top-0">رقم</th>
+                                <th scope="col" class="border-top-0">إسم الشركة</th>
+                                <th scope="col" class="border-top-0"> الصورة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf="brands.length == 0">
+                                <td colspan="4">
+                                    <img src="assets/images/nodata.svg" class="nodata-img">
+                                </td>
+                            </tr>
+                            <tr *ngFor="let brand of brands; let i = index;" [id]="'tr' + i" rel="off-canvas"
+                                class="canvas-btn">
+                                <th scope="row">{{ i + 1 }}</th>
+                                <td>
+                                    <p>{{ brand?.name }}</p>
+                                </td>
+                                <td>
+                                    <div class="product-img-wrapper">
+                                        <img [src]="BasePhotoUrl + brand.photoUrl" style="width: 60px;"
+                                            onerror="this.src='assets/images/placeholder.png';">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-center">
+                                        <button (click)="showDeleteBrandPopup(brand)" class="btn p-0">
+                                            <i class="fas fa-trash-alt text-danger"></i>
+                                        </button>
+                                        <button (click)="openEditorToUpdateBrand(brand)" class="btn p-0 m-2">
+                                            <i class="fas fa-edit text-warning"></i>
+                                        </button>
+                                        <button [routerLink]="['../products']" [queryParams]="{ brandId: brand.id }"
+                                            class="btn p-0 m-2">
+                                            <i class="fas fa-eye text-primary"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <app-brand-editor class="box" [ngClass]="{ active: openEditor }"></app-brand-editor>
+    </div>
 </div>

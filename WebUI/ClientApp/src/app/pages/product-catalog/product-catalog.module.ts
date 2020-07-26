@@ -8,6 +8,9 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { BrandsComponent } from './brands/brands.component';
 import { ProductCategoiesComponent } from './product-categoies/product-categoies.component';
 import { ProductCatalogComponent } from './product-catalog.component';
+import { BrandEditorComponent } from './brands/brand-editor/brand-editor.component';
+import { ProductCategoryEditorComponent } from './product-categoies/product-category-editor/product-category-editor.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 
 const routes: Routes = [
@@ -27,13 +30,16 @@ const routes: Routes = [
     ProductEditorComponent,
     BrandsComponent,
     ProductCategoiesComponent,
-    ProductCatalogComponent
+    ProductCatalogComponent,
+    BrandEditorComponent,
+    ProductCategoryEditorComponent
   ],
   imports: [
     RouterModule.forChild(routes),
     CommonModule,
     SharedModuleModule,
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    ImageCropperModule
   ],
   providers: [
   ]

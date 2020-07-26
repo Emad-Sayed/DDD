@@ -46,10 +46,10 @@ export class ProductCategoiesComponent implements OnInit {
   }
 
   getProductCategories() {
-    this.query.pageNumber = this.page.pageNumber;
+    this.query.pageNumber = ++this.page.pageNumber;
     this.query.pageSize = this.page.pageSize;
     this.productCatalogService.getProductCategories(this.query).subscribe(res => {
-      this.productCategories = res.data;
+      this.productCategories.push(...res.data);
       this.productCategoriesTotalCount = res.totalCount;
     })
   }
@@ -69,7 +69,7 @@ export class ProductCategoiesComponent implements OnInit {
   searchInProductCategories(value: any) {
     this.productCategories = [];
     this.query.keyWord = value;
-    this.page.pageNumber = 1;
+    this.page.pageNumber = 0;
     this.getProductCategories();
   }
 
@@ -78,7 +78,6 @@ export class ProductCategoiesComponent implements OnInit {
   }
 
   onScroll() {
-    this.page.pageNumber++;
     if ((this.page.pageNumber * this.page.pageSize) >= this.productCategoriesTotalCount) return;
     this.getProductCategories();
   }
