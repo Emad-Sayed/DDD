@@ -1,1 +1,62 @@
-<p>product-category-editor works!</p>
+<div class="container pb-5 product-editor">
+    <div class="row editor-header mb-4 pb-3 justify-content-between">
+        <button class="btn btn-large" (click)="openClose()">
+            <span class="fa fa-times fx-2"></span>
+        </button>
+        <button (click)="saveData()" class="btn btn-primary save-edit-btn">حفظ</button>
+    </div>
+    <div class="editor-content">
+        <div class="row mb-3">
+            <div class="col-6">
+                <div class="row">
+                    <label for="product-name" class="col-4 col-form-label">إسم الشركة</label>
+                    <input type="text" id="product-name" name="name" [(ngModel)]="productCategory.name"
+                        class="col-8 form-control" placeholder="إسم الشركة" />
+                </div>
+            </div>
+            <div class="col-5">
+                <img [src]="BasePhotoUrl + productCategory.photoUrl" style="width: 60px;" [hidden]="croppedImage"
+                    onerror="this.src='assets/images/placeholder.png';">
+                <img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" />
+                <div class="progress m-3" *ngIf="uploadPercent > 0">
+                    <div class="progress-bar" role="progressbar" [style.width.%]="uploadPercent" aria-valuemin="0"
+                        aria-valuemax="100">{{uploadPercent}}%</div>
+                </div>
+                <button class="btn btn-small btn-success m-3" (click)="uploadImage()" [hidden]="!croppedImage">رفع
+                    الصورة</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+                    [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 3" [resizeToWidth]="256"
+                    [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false"
+                    [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'left'"
+                    [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)"
+                    (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)"
+                    (loadImageFailed)="loadImageFailed()"></image-cropper>
+            </div>
+            <div class="col-6">
+                <input type="file" (change)="fileChangeEvent($event)" />
+                <div [hidden]="!croppedImage">
+                    <br />
+                    <br />
+                    <button class="btn btn-sm btn-primary" (click)="rotateLeft()">تدوير لليسار</button>
+                    <button class="btn btn-sm btn-primary" (click)="rotateRight()">تدوير لليمين</button>
+                    <button class="btn btn-sm btn-primary" (click)="flipHorizontal()">قلب افقيا</button>
+                    <button class="btn btn-sm btn-primary" (click)="flipVertical()">قلب راسيا</button>
+                    <br />
+                    <br />
+
+                    <button class="btn btn-sm btn-primary"
+                        (click)="toggleContainWithinAspectRatio()">{{containWithinAspectRatio?'ملء نسبة العرض إلى الارتفاع':'تحتوي على نسبة العرض إلى الارتفاع'}}</button>
+                    <button class="btn btn-sm btn-primary" (click)="resetImage()">إلغاء التغيرات</button>
+                    <br />
+                    <br />
+                    <button class="btn btn-sm btn-primary" (click)="zoomOut()">تصغير -</button>
+                    <button class="btn btn-sm btn-primary" (click)="zoomIn()">تكبير +</button>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -17,14 +17,15 @@ import { Config } from 'src/app/shared/confing/config';
 })
 export class ProductCategoiesComponent implements OnInit {
 
-  productCategories: ProductCategory[] = [];
-  productCategoriesTotalCount: number = 0;
+  productCategorys: ProductCategory[] = [];
+  productCategorysTotalCount: number = 0;
   page: Page = new Page();
   BasePhotoUrl = Config.BasePhotoUrl;
 
   private subject: Subject<string> = new Subject();
 
   query: any = {};
+  openEditor = true;
 
   constructor(
     private productCatalogService: ProductCatalogService,
@@ -35,42 +36,61 @@ export class ProductCategoiesComponent implements OnInit {
 
 
   ngOnInit() {
-    this.getProductCategories();
+
+    this.getProductCategorys();
+
+    this.productCatalogService.productCategoryEditor.subscribe(res => {
+      console.log(res);
+      this.openEditor = res.openEditor;
+      if (res.productRequestSuccess)
+        this.getProductCategorys();
+    });
+
     this.subject.pipe(
       debounceTime(500),
       distinctUntilChanged()
     ).subscribe(res => {
-      this.searchInProductCategories(res);
+      this.searchInProductCategorys(res);
     });
 
   }
 
-  getProductCategories() {
+  ngOnDestroy(): void {
+    this.productCatalogService.productCategoryEditor.next({ openEditor: false });
+  }
+
+  getProductCategorys() {
     this.query.pageNumber = ++this.page.pageNumber;
     this.query.pageSize = this.page.pageSize;
     this.productCatalogService.getProductCategories(this.query).subscribe(res => {
-      this.productCategories.push(...res.data);
-      this.productCategoriesTotalCount = res.totalCount;
+      this.productCategorys.push(...res.data);
+      this.productCategorysTotalCount = res.totalCount;
     })
+  }
+
+  openEditorToUpdateProductCategory(productCategory: ProductCategory) {
+    this.productCatalogService.productCategoryEditor.next({ openEditor: true, productCategory: productCategory });
+  }
+
+  openEditorToAddProductCategory() {
+    this.productCatalogService.productCategoryEditor.next({ openEditor: true });
   }
 
   deleteProductCategory(productCategoryId: string) {
-    const productToDelete = this.productCategories.find(x => x.id == productCategoryId)
-    if (productToDelete.isAdding) {
-      this.productCategories.splice(this.productCategories.indexOf(productToDelete), 1);
-      return;
-    }
+    const productCategoryToDelete = this.productCategorys.find(x => x.id == productCategoryId)
     this.productCatalogService.deleteProductCategory(productCategoryId).subscribe(res => {
       this.core.showSuccessOperation();
-      this.productCategories.splice(this.productCategories.indexOf(productToDelete), 1);
+      this.page = new Page();
+      this.productCategorys = [];
+      this.getProductCategorys();
     })
   }
 
-  searchInProductCategories(value: any) {
-    this.productCategories = [];
+  searchInProductCategorys(value: any) {
+    this.productCategorys = [];
     this.query.keyWord = value;
     this.page.pageNumber = 0;
-    this.getProductCategories();
+    this.getProductCategorys();
   }
 
   onKeyUp(searchTextValue: string) {
@@ -78,13 +98,13 @@ export class ProductCategoiesComponent implements OnInit {
   }
 
   onScroll() {
-    if ((this.page.pageNumber * this.page.pageSize) >= this.productCategoriesTotalCount) return;
-    this.getProductCategories();
+    if ((this.page.pageNumber * this.page.pageSize) >= this.productCategorysTotalCount) return;
+    this.getProductCategorys();
   }
 
 
   showDeleteProductCategoryPopup(productCategory: ProductCategory): void {
-    const dialogRef = this.popupService.deleteElement('حذف المنتج', 'هل انت متاكد؟ سيتم حذف المنتج', {
+    const dialogRef = this.popupService.deleteElement('حذف الفئة', 'هل انت متاكد؟ سيتم حذف الفئة', {
       category: '',
       name: productCategory.name
     });
@@ -96,7 +116,7 @@ export class ProductCategoiesComponent implements OnInit {
 
   //#region ProductCategory
   addNewProductCategoryRow() {
-    this.productCategories.unshift(new ProductCategory('', '', '', '', true, true));
+    this.productCategorys.unshift(new ProductCategory('', '', '', '', true, true));
 
   }
 
@@ -148,7 +168,6 @@ export class ProductCategoiesComponent implements OnInit {
     formData.append('photo', files[0]);
     this.uploadService.upload(formData).subscribe(res => {
       if (res.type == HttpEventType.Response) {
-        // this.produca.photoUrl = res.body.photoPath;
         productCategory.photoUrl = res.body.photoPath;
       }
     }, () => this.core.showErrorOperation());
