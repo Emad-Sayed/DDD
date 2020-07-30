@@ -30,14 +30,14 @@ export class BrandEditorComponent implements OnInit {
 
   ngOnInit() {
     this.productCatalogService.brandEditor.subscribe(res => {
+      this.resetPhotoUploader();
       if (res.brandRequestSuccess) return;
       if (res.brand) {
+        this.isEditing = true;
         this.brand = res.brand;
-        this.resetPhotoUploader();
       } else {
         this.isEditing = false;
         this.brand = new Brand();
-        this.resetPhotoUploader();
       }
     })
   }
@@ -61,6 +61,7 @@ export class BrandEditorComponent implements OnInit {
     this.containWithinAspectRatio = false;
     this.transform = {};
     this.imageToUpload = null;
+    this.uploadPercent = 0;
   }
   fileChangeEvent(event: any): void {
     this.imageChangedEvent = event;
@@ -153,14 +154,6 @@ export class BrandEditorComponent implements OnInit {
       rotate: this.rotation
     };
   }
-  getBrandById(brandId: string) {
-    this.isEditing = true;
-    this.productCatalogService.getBrandById(brandId).subscribe(res => {
-      this.brand = res;
-      this.brand.id = brandId;
-      this.brand.photoUrl ? this.BasePhotoUrl + this.brand.photoUrl : 'assets/images/db-bg.png';
-    });
-  }
 
   openEditor() {
     this.brand = new Brand();
@@ -175,15 +168,17 @@ export class BrandEditorComponent implements OnInit {
   //#region Brand
   createBrand() {
     this.productCatalogService.createBrand(this.brand).subscribe(res => {
-      this.getBrandById(res.result);
       this.productCatalogService.brandEditor.next({ brandRequestSuccess: true, openEditor: true });
+      this.resetPhotoUploader();
       this.core.showSuccessOperation();
     });
   }
 
   updateBrand() {
+    this.brand.brandId = this.brand.id;
     this.productCatalogService.updateBrand(this.brand).subscribe(res => {
-      this.productCatalogService.brandEditor.next({ brand: this.brand, openEditor: true });
+      this.productCatalogService.brandEditor.next({ brandRequestSuccess: true, openEditor: true });
+      this.resetPhotoUploader();
       this.core.showSuccessOperation();
     });
   }

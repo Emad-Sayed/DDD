@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Persistence.CustomerManagment;
 using Persistence.DistributorManagment;
+using Persistence.OfferManagment;
 using Persistence.OrderManagment;
 using Persistence.ProductCatalog;
 using Persistence.ShoppingVan;
@@ -28,8 +29,10 @@ namespace API.Helpers
                 var customerManagmentContext = scope.ServiceProvider.GetService<CustomerManagmentContext>();
                 var shoppingVanContext = scope.ServiceProvider.GetService<ShoppingVanContext>();
                 var distributorManagmentContext = scope.ServiceProvider.GetService<DistributorManagmentContext>();
+                var offerContext = scope.ServiceProvider.GetService<OfferContext>();
                 try
                 {
+                    offerContext.Database.Migrate();
                     distributorManagmentContext.Database.Migrate();
                     productCatalogContext.Database.Migrate();
                     orderContext.Database.Migrate();

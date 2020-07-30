@@ -13,6 +13,7 @@ export class Product {
         public brand?: Brand,
         public productCategoryId?: string,
         public productCategory?: ProductCategory,
-        public units?: Unit[]
-    ) { }
+        public units?: Unit[],
+        public newAdded: boolean = false,
+        ) { }
 }

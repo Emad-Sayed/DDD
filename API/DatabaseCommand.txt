@@ -17,3 +17,7 @@ Update-Database -Context OrderContext -StartupProject API -Project Persistence
 Add-Migration -Context ShoppingVanContext -OutputDir ShoppingVan/Migrations -StartupProject API -Project Persistence
 Drop-Database -Context ShoppingVanContext -StartupProject API -Project Persistence
 Update-Database -Context ShoppingVanContext -StartupProject API -Project Persistence
+
+Add-Migration -Context OfferContext -OutputDir OfferManagment/Migrations -StartupProject API -Project Persistence
+Drop-Database -Context OfferContext -StartupProject API -Project Persistence
+Update-Database -Context OfferContext -StartupProject API -Project Persistence

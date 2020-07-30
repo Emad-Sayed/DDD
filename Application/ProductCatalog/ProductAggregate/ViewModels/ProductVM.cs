@@ -9,6 +9,7 @@ namespace Application.ProductCatalog.ProductAggregate.ViewModels
     public class ProductVM
     {
         public string Id { get; set; }
+        public DateTime Created { get; set; }
         public string Name { get; set; }
         public string Barcode { get; set; }
         public string PhotoUrl { get; set; }

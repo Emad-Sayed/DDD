@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Campaign\" />
+    <Folder Include="OffersManagment\DomainEventHandlers\" />
   </ItemGroup>
 
 </Project>

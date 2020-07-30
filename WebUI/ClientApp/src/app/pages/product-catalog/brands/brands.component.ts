@@ -78,13 +78,11 @@ export class BrandsComponent implements OnInit {
 
   deleteBrand(brandId: string) {
     const brandToDelete = this.brands.find(x => x.id == brandId)
-    if (brandToDelete.isAdding) {
-      this.brands.splice(this.brands.indexOf(brandToDelete), 1);
-      return;
-    }
     this.productCatalogService.deleteBrand(brandId).subscribe(res => {
       this.core.showSuccessOperation();
-      this.brands.splice(this.brands.indexOf(brandToDelete), 1);
+      this.page = new Page();
+      this.brands = [];
+      this.getBrands();
     })
   }
 
@@ -106,7 +104,7 @@ export class BrandsComponent implements OnInit {
 
 
   showDeleteBrandPopup(brand: Brand): void {
-    const dialogRef = this.popupService.deleteElement('حذف المنتج', 'هل انت متاكد؟ سيتم حذف المنتج', {
+    const dialogRef = this.popupService.deleteElement('حذف الشركة', 'هل انت متاكد؟ سيتم حذف الشركة', {
       category: '',
       name: brand.name
     });

@@ -12,6 +12,9 @@ export class Config {
   public static DistributorManagment = 'DistributorManagment';
   public static Distributors = `${Config.DistributorManagment}/Distributors`;
 
+  public static OfferManagment = 'OfferManagment';
+  public static Offers = `${Config.OfferManagment}/Offers`;
+
   public static PhotoUploader = `PhotoUploader`;
   public static BasePhotoUrl = `https://brimodevcdnendpoint.azureedge.net/images/`
 

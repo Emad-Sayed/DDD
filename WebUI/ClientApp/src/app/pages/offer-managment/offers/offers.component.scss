@@ -1,0 +1,38 @@
+.active {
+    left: 0px;
+    opacity: 1;
+  }
+  
+  /* .ais-SearchBox { margin-bottom: 1em } */
+  .pagination-wrapper {
+    margin: 1rem auto;
+  }
+  .ais-Pagination-item {
+    padding: 0.5rem;
+  }
+  
+  .search-btn {
+    position: absolute;
+    left: 1rem;
+  }
+  
+  .page-item:first-child .page-link {
+    margin-left: 0;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .page-item:last-child .page-link {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+  }
+  .nodata-img {
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+    display: block;
+  }
+  

@@ -1,0 +1,98 @@
+<div class="container pb-5 offer-editor">
+    <div class="row editor-header mb-4 pb-3 justify-content-between">
+        <button class="btn btn-large" (click)="openClose()">
+            <span class="fa fa-times fx-2"></span>
+        </button>
+        <button (click)="saveData()" class="btn btn-primary save-edit-btn">حفظ</button>
+    </div>
+    <div class="editor-content">
+        <div class="row mb-3">
+            <div class="col-7">
+                <div class="row mt-2">
+                    <label for="offer-name" class="col-4 col-form-label">إسم العرض</label>
+                    <input type="text" id="offer-name" name="name" [(ngModel)]="offer.name" class="col-8 form-control"
+                        placeholder="إسم العرض" />
+                </div>
+            </div>
+            <div class="col-5 offer-img-wrapper">
+                <img [src]="imgURL" class="img-fluid" *ngIf="imgURL">
+                <label for="offer-img" class="mt-2">
+                    <ng-container *ngIf="imgURL; else add">
+                        <span class="btn btn-outline-secondary">استبدال الصورة</span>
+                    </ng-container>
+                    <ng-template #add>
+                        <span class="btn btn-outline-secondary">إضافة صورة</span>
+                    </ng-template>
+                </label>
+                <input #file type="file" id="offer-img" hidden accept='image/*' (change)="preview(file.files)" />
+            </div>
+        </div>
+        <div class="row mb-3 w-100">
+            <div class="col">
+                <mat-form-field appearance="fill">
+                    <mat-label>تاريخ بداية العرض</mat-label>
+                    <input matInput [matDatepicker]="picker">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field appearance="fill">
+                    <mat-label>تاريخ نهاية العرض</mat-label>
+                    <input matInput [matDatepicker]="picker2">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <ng-template #rt let-r="result" let-t="term">
+                <div class="row">
+                    <div class="col-4">
+                        <img [src]="BasePhotoUrl + r.photoUrl" style="width: 40px;height: 40px;"
+                            onerror="this.src='assets/images/placeholder.png';">
+                    </div>
+                    <div class="col">
+                        <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+                    </div>
+                </div>
+            </ng-template>
+            <div class="form-group row w-100">
+                <label for="typeahead-http" class="col-5">البحث في المنتجات</label>
+                <input id="typeahead-http" type="text" class="form-control col-5" [class.is-invalid]="searchFailed"
+                    [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
+                    placeholder="بحث في المنتجات" />
+                <!-- <small *ngIf="searching" class="form-text text-muted">جاري البحث .....</small>
+                <div class="invalid-feedback" *ngIf="searchFailed">حدث خطاء اثناء البحث</div> -->
+
+                <button class="btn col-2" (click)="addProductToOffer()">
+                    <i class="fas fa-plus text-primary"></i>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">اسم المنتج </th>
+                        <th scope="col">صورة المنتج </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of offer.products">
+                        <td scope="row"> {{product.name}}</td>
+                        <td>
+                            <img [src]="BasePhotoUrl + product.photoUrl" class="img-thumbnail w-25"
+                                onerror="this.src='assets/images/placeholder.png';">
+                        </td>
+                        <td>
+                            <button class="btn col-2" (click)="addProductToOffer()">
+                                <i class="fas fa-minus text-danger"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

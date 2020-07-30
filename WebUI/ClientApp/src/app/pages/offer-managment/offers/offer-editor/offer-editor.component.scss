@@ -1,0 +1,61 @@
+.w-7 {
+    width: 7%;
+}
+.w-10 {
+    width: 10%;
+}
+.w-20 {
+    width: 20%;
+}
+.offer-editor {
+    overflow-x: hidden;
+    .editor-header {
+        border-bottom: 1px solid #dbdbdb;
+        .save-edit-btn {
+            position: absolute;
+            left: 10px;
+        }
+    }
+    .editor-content {
+        .for-sale {
+            .checkmark {
+                right: unset !important;
+                margin-right: 1rem;
+            }
+        }
+        .offer-img-wrapper {
+            text-align: center;
+            position: relative;
+            label {
+                i {
+                    font-size: 3rem;
+                    opacity: 0.8;
+                }
+                i:hover {
+                    opacity: 1;
+                }
+            }
+        }
+        // item units
+        .item-units-content {
+            font-size: 13px;
+        }
+        .save-del-btn {
+            .btn {
+                i {
+                    font-size: 1.3rem;
+                }
+            }
+        }
+        img {
+            width: 80%;
+            display: block;
+            margin-right: auto;
+        }
+    }
+}
+
+/deep/ ngb-typeahead-window {
+    max-height: 300px;
+    overflow: scroll;
+}

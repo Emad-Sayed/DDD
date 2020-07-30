@@ -12,5 +12,6 @@ namespace API.Controllers
         public const string ProductCatalog = nameof(ProductCatalog);
         public const string ShoppingVan = nameof(ShoppingVan);
         public const string Orders = nameof(Orders);
+        public const string OfferManagment = nameof(OfferManagment);
     }
 }

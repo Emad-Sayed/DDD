@@ -17,6 +17,7 @@ const routes: Routes = [
             { path: 'customers', loadChildren: () => import('./pages/customers-managment/customers-managment.module').then(m => m.CustomersManagmentModule), canActivate: [AuthGuard] },
             { path: 'distributors', loadChildren: () => import('./pages/distributor-managment/distributor-managment.module').then(m => m.DistributorManagmentModule), canActivate: [AuthGuard] },
             { path: 'product-catalog', loadChildren: () => import('./pages/product-catalog/product-catalog.module').then(m => m.ProductCatalogModule), canActivate: [AuthGuard] },
+            { path: 'offers', loadChildren: () => import('./pages/offer-managment/offer-managment.module').then(m => m.OfferManagmentModule), canActivate: [AuthGuard] },
             { path: '**', redirectTo: '/product-catalog/products', pathMatch: 'full' },
         ]
     },
