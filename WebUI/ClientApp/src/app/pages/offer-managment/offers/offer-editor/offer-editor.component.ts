@@ -22,7 +22,7 @@ export class OfferEditorComponent implements OnInit {
   isEditing = false;
   offer: Offer = new Offer();
   BasePhotoUrl = Config.BasePhotoUrl;
-  model: any;
+  selectedProduct: any;
   searching = false;
   searchFailed = false;
 
@@ -35,8 +35,9 @@ export class OfferEditorComponent implements OnInit {
   ngOnInit() {
     this.offerManagmentService.offerEditor.subscribe(res => {
       if (res.offerRequestSuccess) return;
+      this.imgURL = null;
       if (res.offer) {
-        this.imgURL = null;
+        this.isEditing = true;
         this.getOfferById(res.offer.id);
       } else {
         this.isEditing = false;
@@ -73,6 +74,7 @@ export class OfferEditorComponent implements OnInit {
   }
 
   updateOffer() {
+    this.offer.offerId = this.offer.id;
     this.offerManagmentService.updateOffer(this.offer).subscribe(res => {
       this.offerManagmentService.offerEditor.next({ offerRequestSuccess: true, openEditor: true });
       this.core.showSuccessOperation();
@@ -88,7 +90,7 @@ export class OfferEditorComponent implements OnInit {
   }
   //#endregion
   log() {
-    console.log(this.model)
+    console.log(this.selectedProduct)
   }
   search = (text$: Observable<string>) =>
     text$.pipe(
@@ -111,7 +113,18 @@ export class OfferEditorComponent implements OnInit {
 
   addProductToOffer() {
     if (!this.offer.products) this.offer.products = [];
-    this.offer.products.push(this.model);
+    this.offerManagmentService.addProductToOffer(this.offer.id, this.selectedProduct.id).subscribe(res => {
+      this.offer.products.push(this.selectedProduct);
+      this.core.showSuccessOperation();
+    });
+  }
+
+  removeProductFromOffer(productId: string) {
+    const selectedProductIndex = this.offer.products.findIndex(x => x.id == productId);
+    this.offerManagmentService.removeProductFromOffer(this.offer.id, productId).subscribe(res => {
+      this.offer.products.splice(selectedProductIndex, 1);
+      this.core.showSuccessOperation();
+    });
   }
   //#region editOffer
   public imagePath;

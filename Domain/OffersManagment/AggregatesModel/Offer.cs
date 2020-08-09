@@ -60,6 +60,11 @@ namespace Domain.OffersManagment.AggregatesModel
             AddDomainEvent(new OfferUpdated(this));
         }
 
+        public void ChangeOrder(int order)
+        {
+            Order = order;
+        }
+
         public void RemoveProductFromOffer(Product product)
         {
             Products.Remove(product);

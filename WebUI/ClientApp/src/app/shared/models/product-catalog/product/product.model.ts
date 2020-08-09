@@ -5,6 +5,7 @@ import { ProductCategory } from "../product-category/product-category.model";
 export class Product {
     public constructor(
         public id?: string,
+        public productId?: string,
         public name?: string,
         public barcode?: string,
         public photoUrl?: string,
@@ -15,5 +16,5 @@ export class Product {
         public productCategory?: ProductCategory,
         public units?: Unit[],
         public newAdded: boolean = false,
-        ) { }
+    ) { }
 }

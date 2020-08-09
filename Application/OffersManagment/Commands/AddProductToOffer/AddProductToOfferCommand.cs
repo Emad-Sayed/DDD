@@ -37,7 +37,7 @@ namespace Application.OffersManagment.Commands.AddProductToOffer
 
                 _offerRepository.Update(offerFromRepo);
 
-                await _offerRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
+                await _offerRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
                 return offerFromRepo.Id.ToString();
             }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Application.OffersManagment.ViewModels
 {
@@ -12,5 +11,6 @@ namespace Application.OffersManagment.ViewModels
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string PhotoUrl { get; set; }
+        public ICollection<ProductVM> Products{ get; set; }
     }
 }

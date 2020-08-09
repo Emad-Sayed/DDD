@@ -31,7 +31,7 @@
             <div class="col">
                 <mat-form-field appearance="fill">
                     <mat-label>تاريخ بداية العرض</mat-label>
-                    <input matInput [matDatepicker]="picker">
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="offer.startDate" name="startDate">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -39,13 +39,13 @@
             <div class="col">
                 <mat-form-field appearance="fill">
                     <mat-label>تاريخ نهاية العرض</mat-label>
-                    <input matInput [matDatepicker]="picker2">
+                    <input matInput [matDatepicker]="picker2" [(ngModel)]="offer.endDate" name="endDate">
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker>
                 </mat-form-field>
             </div>
         </div>
-        <div class="row mt-5">
+        <div class="row mt-5" *ngIf="isEditing">
             <ng-template #rt let-r="result" let-t="term">
                 <div class="row">
                     <div class="col-4">
@@ -60,8 +60,8 @@
             <div class="form-group row w-100">
                 <label for="typeahead-http" class="col-5">البحث في المنتجات</label>
                 <input id="typeahead-http" type="text" class="form-control col-5" [class.is-invalid]="searchFailed"
-                    [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
-                    placeholder="بحث في المنتجات" />
+                    [(ngModel)]="selectedProduct" [ngbTypeahead]="search" [resultTemplate]="rt"
+                    [inputFormatter]="formatter" placeholder="بحث في المنتجات" />
                 <!-- <small *ngIf="searching" class="form-text text-muted">جاري البحث .....</small>
                 <div class="invalid-feedback" *ngIf="searchFailed">حدث خطاء اثناء البحث</div> -->
 
@@ -70,7 +70,7 @@
                 </button>
             </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="isEditing">
             <table class="table">
                 <thead>
                     <tr>
@@ -86,7 +86,7 @@
                                 onerror="this.src='assets/images/placeholder.png';">
                         </td>
                         <td>
-                            <button class="btn col-2" (click)="addProductToOffer()">
+                            <button class="btn col-2" (click)="removeProductFromOffer(product.productId)">
                                 <i class="fas fa-minus text-danger"></i>
                             </button>
                         </td>

@@ -34,6 +34,20 @@ export class OfferManagmentService {
     const params: any = { offerId: offerId }
     return this.httpService.delete(`${Config.Offers}`, params);
   }
+
+  addProductToOffer(offerId: string, productId: string): Observable<any> {
+    const body: any = { offerId: offerId, productId: productId }
+    return this.httpService.post(`${Config.Offers}/AddProductToOffer`, body);
+  }
+
+  removeProductFromOffer(offerId: string, productId: string): Observable<any> {
+    const body: any = { offerId: offerId, productId: productId }
+    return this.httpService.post(`${Config.Offers}/RemoveProductFromOffer`, body);
+  }
+
+  reOrderOffers(orderOfferModel: any): Observable<any> {
+    return this.httpService.post(`${Config.Offers}/ReOrder`, orderOfferModel);
+  }
   //#endregion
 
 }

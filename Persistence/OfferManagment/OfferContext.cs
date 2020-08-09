@@ -35,6 +35,8 @@ namespace Persistence.OfferManagment
         }
 
         public DbSet<Offer> Offers { get; set; }
+        public DbSet<Product> OffersProducts { get; set; }
+        public DbSet<Domain.OffersManagment.AggregatesModel.Unit> OffersProductsUnits { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

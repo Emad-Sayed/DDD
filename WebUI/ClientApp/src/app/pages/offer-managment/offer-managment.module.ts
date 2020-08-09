@@ -10,6 +10,7 @@ import { NgbTypeaheadModule, NgbDatepickerModule } from '@ng-bootstrap/ng-bootst
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule, MatInputModule } from '@angular/material';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const routes: Routes = [
   { path: '', component: OffersComponent },
@@ -28,7 +29,8 @@ const routes: Routes = [
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    DragDropModule
   ]
 })
 export class OfferManagmentModule { }

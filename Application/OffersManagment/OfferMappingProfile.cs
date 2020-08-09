@@ -11,6 +11,7 @@ namespace Application.OffersManagment
         public OfferMappingProfile()
         {
             CreateMap<Offer, OfferVM>().ReverseMap();
+            CreateMap<Product, ProductVM>().ReverseMap();
         }
     }
 }

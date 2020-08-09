@@ -6,8 +6,8 @@ export class Offer {
         public offerId?: string,
         public photoUrl?: string,
         public name?: string,
-        public startDate?: Date,
-        public endDate?: Date,
+        public startDate: Date = new Date(),
+        public endDate: Date = new Date(),
         public order?: number,
         public products?: Product[]
     ) { }

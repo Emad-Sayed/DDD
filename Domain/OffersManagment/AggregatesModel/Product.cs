@@ -26,7 +26,7 @@ namespace Domain.OffersManagment.AggregatesModel
             Units = new List<Unit>();
         }
 
-        public Product(string productId, string name, string barcode, string photoUrl, bool availableToSell, string brand, string productCategory, Guid id = default)
+        public Product(string productId, string name, string barcode, string photoUrl, bool availableToSell, string brand, string productCategory)
         {
             ProductId = productId;
             Name = name;
@@ -35,8 +35,6 @@ namespace Domain.OffersManagment.AggregatesModel
             AvailableToSell = availableToSell;
             Brand = brand;
             ProductCategory = productCategory;
-
-            Id = id == default ? Guid.NewGuid() : id;
         }
 
 

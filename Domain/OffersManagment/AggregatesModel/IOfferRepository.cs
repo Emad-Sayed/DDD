@@ -14,7 +14,9 @@ namespace Domain.OffersManagment.AggregatesModel
         Task<(int, List<Offer>)> GetAllAsync(int pageNumber, int pageSize, string keyWord);
         Offer Add(Offer offer);
         void Update(Offer offer);
+        void UpdateAll(List<Offer> offers);
         void Delete(Offer offer);
         Task<Offer> FindByIdAsync(string id);
+        Task<List<Offer>> FindByIdsAsync(List<string> ids);
     }
 }

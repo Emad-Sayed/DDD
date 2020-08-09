@@ -56,7 +56,7 @@ namespace Infrastructure.Repositories.OfferManagment
             }
 
 
-            query = query.OrderByDescending(x => x.Created);
+            query = query.OrderBy(x => x.Order);
 
             // apply pagination to offers
             var offers = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
@@ -77,6 +77,17 @@ namespace Infrastructure.Repositories.OfferManagment
         public void Delete(Offer offer)
         {
             _context.Offers.Remove(offer);
+        }
+
+        public void UpdateAll(List<Offer> offers)
+        {
+            _context.Offers.UpdateRange(offers);
+        }
+
+        public async Task<List<Offer>> FindByIdsAsync(List<string> ids)
+        {
+            var offers = _context.Offers.Where(x => ids.Contains(x.Id.ToString()));
+            return await offers.ToListAsync();
         }
     }
 }

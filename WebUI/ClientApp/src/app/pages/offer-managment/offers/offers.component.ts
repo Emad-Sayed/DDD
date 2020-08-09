@@ -7,6 +7,7 @@ import { PopupServiceService } from 'src/app/shared/services/popup-service.servi
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Offer } from 'src/app/shared/models/offer-managment/offer.model';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-offers',
@@ -23,14 +24,22 @@ export class OffersComponent implements OnInit {
   openEditor = true;
   query: any = {};
 
+  drop(event: CdkDragDrop<Offer[]>) {
+    moveItemInArray(this.offers, event.previousIndex, event.currentIndex);
+    let offersAfterOrder = { orderOffersModel: this.offers.map(function (off, index) { return { offerId: off.id, order: index } }) };
+    this.offersService.reOrderOffers(offersAfterOrder).subscribe(res => {
+      this.core.showSuccessOperation();
+    });
+  }
+
   constructor(
-    private offerCatalogService: OfferManagmentService,
+    private offersService: OfferManagmentService,
     private core: CoreService,
     private popupService: PopupServiceService
   ) { }
 
   ngOnDestroy(): void {
-    this.offerCatalogService.offerEditor.next({ openEditor: false });
+    this.offersService.offerEditor.next({ openEditor: false });
   }
 
   ngOnInit() {
@@ -43,7 +52,7 @@ export class OffersComponent implements OnInit {
       this.searchInOffers(res);
     });
 
-    this.offerCatalogService.offerEditor.subscribe(res => {
+    this.offersService.offerEditor.subscribe(res => {
       this.openEditor = res.openEditor;
       if (res.offerRequestSuccess)
         this.getOffers();
@@ -55,23 +64,23 @@ export class OffersComponent implements OnInit {
   getOffers() {
     this.query.pageNumber = ++this.page.pageNumber;
     this.query.pageSize = this.page.pageSize;
-    this.offerCatalogService.getOffers(this.query).subscribe(res => {
+    this.offersService.getOffers(this.query).subscribe(res => {
       this.offers.push(...res.data);
       this.offersTotalCount = res.totalCount;
     })
   }
 
   openEditorToUpdateOffer(offer: Offer) {
-    this.offerCatalogService.offerEditor.next({ openEditor: true, offer: offer });
+    this.offersService.offerEditor.next({ openEditor: true, offer: offer });
   }
 
   openEditorToAddOffer() {
-    this.offerCatalogService.offerEditor.next({ openEditor: true });
+    this.offersService.offerEditor.next({ openEditor: true });
   }
 
   deleteOffer(offerId: string) {
-    this.offerCatalogService.deleteOffer(offerId).subscribe(res => {
-      this.offerCatalogService.offerEditor.next({ offerRequestSuccess: true });
+    this.offersService.deleteOffer(offerId).subscribe(res => {
+      this.offersService.offerEditor.next({ offerRequestSuccess: true });
       this.core.showSuccessOperation();
     })
   }

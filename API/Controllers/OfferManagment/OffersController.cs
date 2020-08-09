@@ -5,6 +5,7 @@ using Application.OffersManagment.Commands.AddProductToOffer;
 using Application.OffersManagment.Commands.CreateOffer;
 using Application.OffersManagment.Commands.DeleteOffer;
 using Application.OffersManagment.Commands.RemoveProductFromOffer;
+using Application.OffersManagment.Commands.ReOrderOffers;
 using Application.OffersManagment.Commands.UpdateOffer;
 using Application.OffersManagment.Queries.ListOffers;
 using Application.OffersManagment.Queries.OfferById;
@@ -76,6 +77,14 @@ namespace API.Controllers.OfferManagment
         [HttpPost("RemoveProductFromOffer")]
         [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
         public async Task<IActionResult> RemoveProductFromOffer([FromBody] RemoveProductFromOfferCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(new { result });
+        }
+
+        [HttpPost("ReOrder")]
+        [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
+        public async Task<IActionResult> ReOrder([FromBody] ReOrderOffersCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(new { result });
