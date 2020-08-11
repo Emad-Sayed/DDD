@@ -39,7 +39,6 @@ const routes: Routes = [
     CommonModule,
     SharedModuleModule,
     InfiniteScrollModule,
-    ImageCropperModule
   ],
   providers: [
   ]

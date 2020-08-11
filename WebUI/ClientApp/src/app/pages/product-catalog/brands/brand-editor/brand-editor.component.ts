@@ -4,8 +4,7 @@ import { Config } from 'src/app/shared/confing/config';
 import { ProductCatalogService } from '../../product-catalog.service';
 import { UploadService } from 'src/app/shared/services/upload.service';
 import { CoreService } from 'src/app/shared/services/core.service';
-import { HttpEventType } from '@angular/common/http';
-import { ImageCroppedEvent, Dimensions, base64ToFile, ImageTransform } from 'ngx-image-cropper';
+import { PhotoEditorService } from 'src/app/shared/services/photo-editor.service';
 
 @Component({
   selector: 'app-brand-editor',
@@ -19,18 +18,14 @@ export class BrandEditorComponent implements OnInit {
   isEditing = false;
   brand: Brand = new Brand();
   BasePhotoUrl = Config.BasePhotoUrl;
-  imageToUpload: Blob = new Blob();
-  uploadPercent: number = 0;
-  showUploadButton: boolean = false;
 
   constructor(
     private productCatalogService: ProductCatalogService,
-    private uploadService: UploadService,
+    private photoEditorService: PhotoEditorService,
     private core: CoreService) { }
 
   ngOnInit() {
     this.productCatalogService.brandEditor.subscribe(res => {
-      this.resetPhotoUploader();
       if (res.brandRequestSuccess) return;
       if (res.brand) {
         this.isEditing = true;
@@ -40,119 +35,6 @@ export class BrandEditorComponent implements OnInit {
         this.brand = new Brand();
       }
     })
-  }
-
-  imageChangedEvent: any = '';
-  croppedImage: any = '';
-  canvasRotation = 0;
-  rotation = 0;
-  scale = 1;
-  showCropper = false;
-  containWithinAspectRatio = false;
-  transform: ImageTransform = {};
-
-  resetPhotoUploader() {
-    this.imageChangedEvent = '';
-    this.croppedImage = '';
-    this.canvasRotation = 0;
-    this.rotation = 0;
-    this.scale = 1;
-    this.showCropper = false;
-    this.containWithinAspectRatio = false;
-    this.transform = {};
-    this.imageToUpload = null;
-    this.uploadPercent = 0;
-  }
-  fileChangeEvent(event: any): void {
-    this.imageChangedEvent = event;
-  }
-
-  imageCropped(event: ImageCroppedEvent) {
-    this.croppedImage = event.base64;
-    this.imageToUpload = base64ToFile(event.base64);
-    this.showUploadButton = true;
-  }
-
-  imageLoaded() {
-    this.showCropper = true;
-    console.log('Image loaded');
-  }
-
-  cropperReady(sourceImageDimensions: Dimensions) {
-    console.log('Cropper ready', sourceImageDimensions);
-  }
-
-  loadImageFailed() {
-    console.log('Load failed');
-  }
-
-  rotateLeft() {
-    this.canvasRotation--;
-    this.flipAfterRotate();
-  }
-
-  rotateRight() {
-    this.canvasRotation++;
-    this.flipAfterRotate();
-  }
-
-  private flipAfterRotate() {
-    const flippedH = this.transform.flipH;
-    const flippedV = this.transform.flipV;
-    this.transform = {
-      ...this.transform,
-      flipH: flippedV,
-      flipV: flippedH
-    };
-  }
-
-
-  flipHorizontal() {
-    this.transform = {
-      ...this.transform,
-      flipH: !this.transform.flipH
-    };
-  }
-
-  flipVertical() {
-    this.transform = {
-      ...this.transform,
-      flipV: !this.transform.flipV
-    };
-  }
-
-  resetImage() {
-    this.scale = 1;
-    this.rotation = 0;
-    this.canvasRotation = 0;
-    this.transform = {};
-  }
-
-  zoomOut() {
-    this.scale -= .1;
-    this.transform = {
-      ...this.transform,
-      scale: this.scale
-    };
-  }
-
-  zoomIn() {
-    this.scale += .1;
-    this.transform = {
-      ...this.transform,
-      scale: this.scale
-    };
-  }
-
-  toggleContainWithinAspectRatio() {
-    this.containWithinAspectRatio = !this.containWithinAspectRatio;
-  }
-
-  updateRotation() {
-    this.transform = {
-      ...this.transform,
-      rotate: this.rotation
-    };
   }
 
   openEditor() {
@@ -169,7 +51,6 @@ export class BrandEditorComponent implements OnInit {
   createBrand() {
     this.productCatalogService.createBrand(this.brand).subscribe(res => {
       this.productCatalogService.brandEditor.next({ brandRequestSuccess: true, openEditor: true });
-      this.resetPhotoUploader();
       this.core.showSuccessOperation();
     });
   }
@@ -178,7 +59,6 @@ export class BrandEditorComponent implements OnInit {
     this.brand.brandId = this.brand.id;
     this.productCatalogService.updateBrand(this.brand).subscribe(res => {
       this.productCatalogService.brandEditor.next({ brandRequestSuccess: true, openEditor: true });
-      this.resetPhotoUploader();
       this.core.showSuccessOperation();
     });
   }
@@ -190,20 +70,16 @@ export class BrandEditorComponent implements OnInit {
       this.createBrand();
     }
   }
-  //#endregion
 
-  uploadImage() {
-    const formData = new FormData();
-    formData.append('photo', this.imageToUpload, 'test.png');
-    this.uploadService.upload(formData).subscribe(res => {
-      if (res.type == HttpEventType.UploadProgress) {
-        this.uploadPercent = Math.round(100 * res.loaded / res.total);
-        console.log(this.uploadPercent);
-      }
-      else if (res.type == HttpEventType.Response) {
-        this.brand.photoUrl = res.body.photoPath;
-      }
-    }, () => this.core.showErrorOperation());
+
+  preview($event: any) {
+    const dialogRef = this.photoEditorService.showPhotoEditor($event);
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) return;
+      this.brand.photoUrl = result.imgUrl;
+      this.updateBrand();
+    });
   }
+  //#endregion
 
 }

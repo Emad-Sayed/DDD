@@ -1,0 +1,49 @@
+<div class="container p-3">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-1">
+            <button class="btn btn-danger" (click)="closePopup()">
+                إلغاء
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" />
+            <div class="progress m-3" *ngIf="uploadPercent > 0">
+                <div class="progress-bar" role="progressbar" [style.width.%]="uploadPercent" aria-valuemin="0"
+                    aria-valuemax="100">{{uploadPercent}}%</div>
+            </div>
+
+        </div>
+        <div class="col-6">
+            <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+                [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 3" [resizeToWidth]="256"
+                [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false" [canvasRotation]="canvasRotation"
+                [transform]="transform" [alignImage]="'left'" [style.display]="showCropper ? null : 'none'" format="png"
+                (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                (cropperReady)="cropperReady($event)" (loadImageFailed)="loadImageFailed()"></image-cropper>
+
+            <div [hidden]="!croppedImage" class="noselect">
+                <mat-icon (click)="rotateLeft()">rotate_left</mat-icon>
+                <mat-icon (click)="rotateRight()">rotate_right</mat-icon>
+                <mat-icon (click)="flipHorizontal()">flip_to_back</mat-icon>
+                <mat-icon (click)="flipVertical()">flip_to_front</mat-icon>
+                <mat-icon (click)="toggleContainWithinAspectRatio()">center_focus_weak</mat-icon>
+                <mat-icon (click)="zoomIn()">zoom_in</mat-icon>
+                <mat-icon (click)="zoomOut()">zoom_out</mat-icon>
+                <mat-icon (click)="resetImage()">cancel</mat-icon>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-small btn-success m-3" (click)="uploadImage()" [hidden]="!croppedImage">
+                رفع وحفظ الصورة
+            </button>
+        </div>
+        <div class="col-6">
+            <input type="file" (change)="fileChangeEvent($event)" />
+
+        </div>
+    </div>

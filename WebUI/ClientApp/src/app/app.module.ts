@@ -19,6 +19,9 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { AuthInterceptor } from './shared/services/auth-interceptor.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CoreService } from './shared/services/core.service';
+import { PhotoEditorComponent } from './shared/components/popups/photo-editor/photo-editor.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { MatIconModule } from '@angular/material';
 
 // import { ConfigurationService } from './shared/services/app.configuration.service';
 
@@ -37,7 +40,8 @@ export function tokenGetter() {
     AppComponent,
     NavbarComponent,
     LayoutComponent,
-    DeletePopupComponent
+    DeletePopupComponent,
+    PhotoEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -53,23 +57,26 @@ export function tokenGetter() {
       config: {
         tokenGetter: tokenGetter,
       }
-    })
+    }),
+    ImageCropperModule,
+    MatIconModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
     {
       provide: HTTP_INTERCEPTORS,
-      useFactory: function(router: Router) {
+      useFactory: function (router: Router) {
         return new AuthInterceptor(router);
       },
       multi: true,
       deps: [Router]
-   },
-   CoreService,
-   NgxUiLoaderService
+    },
+    CoreService,
+    NgxUiLoaderService
   ],
   entryComponents: [
-    DeletePopupComponent
+    DeletePopupComponent,
+    PhotoEditorComponent
   ],
   bootstrap: [AppComponent]
 })
