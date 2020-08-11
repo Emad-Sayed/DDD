@@ -9,6 +9,7 @@ import { HttpEventType } from '@angular/common/http';
 import { debounceTime, distinctUntilChanged, switchMap, tap, catchError, map } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import { ProductCatalogService } from 'src/app/pages/product-catalog/product-catalog.service';
+import { PhotoEditorService } from 'src/app/shared/services/photo-editor.service';
 
 @Component({
   selector: 'app-offer-editor',
@@ -29,13 +30,12 @@ export class OfferEditorComponent implements OnInit {
   constructor(
     private offerManagmentService: OfferManagmentService,
     private productCatalogService: ProductCatalogService,
-    private uploadService: UploadService,
+    private photoEditorService: PhotoEditorService,
     private core: CoreService) { }
 
   ngOnInit() {
     this.offerManagmentService.offerEditor.subscribe(res => {
       if (res.offerRequestSuccess) return;
-      this.imgURL = null;
       if (res.offer) {
         this.isEditing = true;
         this.getOfferById(res.offer.id);
@@ -51,7 +51,6 @@ export class OfferEditorComponent implements OnInit {
     this.offerManagmentService.getOfferById(offerId).subscribe(res => {
       this.offer = res;
       this.offer.id = offerId;
-      this.offer.photoUrl ? this.imgURL = this.offer.photoUrl.includes('https://via.') ? this.offer.photoUrl : this.BasePhotoUrl + this.offer.photoUrl : 'assets/images/db-bg.png';
     });
   }
 
@@ -126,34 +125,14 @@ export class OfferEditorComponent implements OnInit {
       this.core.showSuccessOperation();
     });
   }
-  //#region editOffer
-  public imagePath;
-  imgURL: any;
-  public message: string;
 
-  preview(files: string | any[]) {
-    if (files.length === 0) return;
-
-    var mimeType = files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      this.message = "Only images are supported.";
-      return;
-    }
-
-    var reader = new FileReader();
-    this.imagePath = files;
-    reader.readAsDataURL(files[0]);
-    reader.onload = (_event) => {
-      this.imgURL = reader.result;
-    };
-
-    const formData = new FormData();
-    formData.append('photo', files[0]);
-    this.uploadService.upload(formData).subscribe(res => {
-      if (res.type == HttpEventType.Response) {
-        this.offer.photoUrl = res.body.photoPath;
-      }
-    }, () => this.core.showErrorOperation());
+  changePhoto($event: any) {
+    const dialogRef = this.photoEditorService.showPhotoEditor($event);
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) return;
+      this.offer.photoUrl = result.imgUrl;
+      this.updateOffer();
+    });
   }
-  //#endregion
+
 }
