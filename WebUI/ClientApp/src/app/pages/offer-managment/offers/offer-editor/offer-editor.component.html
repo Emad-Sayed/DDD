@@ -13,9 +13,31 @@
                     <input type="text" id="offer-name" name="name" [(ngModel)]="offer.name" class="col-8 form-control"
                         placeholder="إسم العرض" />
                 </div>
+                <div class="row pt-3">
+                    <label for="offer-name" class="col-4 col-form-label">تاريخ بداية العرض</label>
+                    <div class="col-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>تاريخ بداية العرض</mat-label>
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="offer.startDate" name="startDate">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row pt-3">
+                    <label for="offer-name" class="col-4 col-form-label">تاريخ نهاية العرض</label>
+                    <div class="col-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>تاريخ نهاية العرض</mat-label>
+                            <input matInput [matDatepicker]="picker2" [(ngModel)]="offer.endDate" name="endDate">
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
             </div>
             <div class="col-5 offer-img-wrapper">
-                <img [src]="BasePhotoUrl + offer.photoUrl" class="img-fluid"
+                <img [src]="BasePhotoUrl + offer.photoUrl" class="img-fluid text-right"
                     onerror="this.src='assets/images/placeholder.png';">
                 <label for="offer-img" class="mt-2">
                     <ng-container *ngIf="offer.photoUrl; else add">
@@ -26,24 +48,6 @@
                     </ng-template>
                 </label>
                 <input #file type="file" id="offer-img" hidden accept='image/*' (change)="changePhoto($event)" />
-            </div>
-        </div>
-        <div class="row mb-3 w-100">
-            <div class="col">
-                <mat-form-field appearance="fill">
-                    <mat-label>تاريخ بداية العرض</mat-label>
-                    <input matInput [matDatepicker]="picker" [(ngModel)]="offer.startDate" name="startDate">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-            </div>
-            <div class="col">
-                <mat-form-field appearance="fill">
-                    <mat-label>تاريخ نهاية العرض</mat-label>
-                    <input matInput [matDatepicker]="picker2" [(ngModel)]="offer.endDate" name="endDate">
-                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker>
-                </mat-form-field>
             </div>
         </div>
         <div class="row mt-5" *ngIf="isEditing">
@@ -58,14 +62,12 @@
                     </div>
                 </div>
             </ng-template>
-            <div class="form-group row w-100">
+            <hr>
+            <div class="row w-100 pr-2 pb-3">
                 <label for="typeahead-http" class="col-5">البحث في المنتجات</label>
                 <input id="typeahead-http" type="text" class="form-control col-5" [class.is-invalid]="searchFailed"
                     [(ngModel)]="selectedProduct" [ngbTypeahead]="search" [resultTemplate]="rt"
                     [inputFormatter]="formatter" placeholder="بحث في المنتجات" />
-                <!-- <small *ngIf="searching" class="form-text text-muted">جاري البحث .....</small>
-                <div class="invalid-feedback" *ngIf="searchFailed">حدث خطاء اثناء البحث</div> -->
-
                 <button class="btn col-2" (click)="addProductToOffer()">
                     <i class="fas fa-plus text-primary"></i>
                 </button>
@@ -77,13 +79,14 @@
                     <tr>
                         <th scope="col">اسم المنتج </th>
                         <th scope="col">صورة المنتج </th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let product of offer.products">
                         <td scope="row"> {{product.name}}</td>
                         <td>
-                            <img [src]="BasePhotoUrl + product.photoUrl" class="img-thumbnail w-25"
+                            <img [src]="BasePhotoUrl + product.photoUrl" class="product-img img-fluid"
                                 onerror="this.src='assets/images/placeholder.png';">
                         </td>
                         <td>
