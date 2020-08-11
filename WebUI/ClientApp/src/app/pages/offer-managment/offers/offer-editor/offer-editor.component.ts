@@ -88,9 +88,7 @@ export class OfferEditorComponent implements OnInit {
     }
   }
   //#endregion
-  log() {
-    console.log(this.selectedProduct)
-  }
+
   search = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(300),

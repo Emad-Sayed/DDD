@@ -9,7 +9,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgbTypeaheadModule, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatNativeDateModule, MatInputModule } from '@angular/material';
+import { MatNativeDateModule, MatInputModule, MatIconModule } from '@angular/material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const routes: Routes = [
@@ -30,7 +30,8 @@ const routes: Routes = [
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
-    DragDropModule
+    DragDropModule,
+    MatIconModule
   ]
 })
 export class OfferManagmentModule { }
