@@ -72,7 +72,7 @@ export class BrandEditorComponent implements OnInit {
   }
 
 
-  preview($event: any) {
+  changePhoto($event: any) {
     const dialogRef = this.photoEditorService.showPhotoEditor($event);
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
