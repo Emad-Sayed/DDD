@@ -30,8 +30,7 @@ export class BrandsComponent implements OnInit {
   constructor(
     private productCatalogService: ProductCatalogService,
     private core: CoreService,
-    private popupService: PopupServiceService,
-    private uploadService: UploadService
+    private popupService: PopupServiceService
   ) { }
 
 
@@ -140,37 +139,6 @@ export class BrandsComponent implements OnInit {
   saveData(brand: Brand) {
     if (brand.isAdding) this.createBrand(brand);
     else this.updateBrand(brand);
-  }
-  //#endregion
-
-  //#region editProduct
-  public imagePath;
-  imgURL: any;
-  public message: string;
-
-  preview(files: string | any[], brand: Brand) {
-    if (files.length === 0) return;
-
-    var mimeType = files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      this.message = "Only images are supported.";
-      return;
-    }
-
-    var reader = new FileReader();
-    this.imagePath = files;
-    reader.readAsDataURL(files[0]);
-    reader.onload = (_event) => {
-      this.imgURL = reader.result;
-    };
-
-    const formData = new FormData();
-    formData.append('photo', files[0]);
-    this.uploadService.upload(formData).subscribe(res => {
-      if (res.type == HttpEventType.Response) {
-        brand.photoUrl = res.body.photoPath;
-      }
-    }, () => this.core.showErrorOperation());
   }
   //#endregion
 }

@@ -47,16 +47,17 @@
         </div>
       </div>
       <div class="col-5 product-img-wrapper">
-        <img [src]="imgURL" class="img-fluid" *ngIf="imgURL">
+        <img [src]="BasePhotoUrl + product.photoUrl" class="img-fluid"
+          onerror="this.src='assets/images/placeholder.png';">
         <label for="product-img" class="mt-2">
-          <ng-container *ngIf="imgURL; else add">
+          <ng-container *ngIf="product.photoUrl; else add">
             <span class="btn btn-outline-secondary">استبدال الصورة</span>
           </ng-container>
           <ng-template #add>
             <span class="btn btn-outline-secondary">إضافة صورة</span>
           </ng-template>
         </label>
-        <input #file type="file" id="product-img" hidden accept='image/*' (change)="preview(file.files)" />
+        <input #file type="file" id="product-img" hidden accept='image/*' (change)="changePhoto($event)" />
       </div>
     </div>
     <!-- item Units -->
