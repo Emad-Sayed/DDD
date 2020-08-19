@@ -21,7 +21,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CoreService } from './shared/services/core.service';
 import { PhotoEditorComponent } from './shared/components/popups/photo-editor/photo-editor.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatSliderModule } from '@angular/material';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 // import { ConfigurationService } from './shared/services/app.configuration.service';
 
@@ -59,7 +60,9 @@ export function tokenGetter() {
       }
     }),
     ImageCropperModule,
-    MatIconModule
+    MatIconModule,
+    NgbNavModule,
+    MatSliderModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },

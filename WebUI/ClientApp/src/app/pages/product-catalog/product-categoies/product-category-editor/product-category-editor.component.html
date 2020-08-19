@@ -19,13 +19,12 @@
                     onerror="this.src='assets/images/placeholder.png';">
                 <label for="product-img" class="mt-2">
                     <ng-container *ngIf="productCategory.photoUrl; else add">
-                        <span class="btn btn-outline-secondary">استبدال الصورة</span>
+                        <span class="btn btn-outline-secondary" (click)="changePhoto(productCategory.photoUrl)">استبدال الصورة</span>
                     </ng-container>
                     <ng-template #add>
-                        <span class="btn btn-outline-secondary">إضافة صورة</span>
+                        <span class="btn btn-outline-secondary" (click)="changePhoto()">إضافة صورة</span>
                     </ng-template>
                 </label>
-                <input #file type="file" id="product-img" hidden accept='image/*' (change)="changePhoto($event)" />
             </div>
         </div>
     </div>

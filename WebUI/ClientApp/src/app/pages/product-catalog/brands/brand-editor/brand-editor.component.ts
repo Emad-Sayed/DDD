@@ -72,8 +72,8 @@ export class BrandEditorComponent implements OnInit {
   }
 
 
-  changePhoto($event: any) {
-    const dialogRef = this.photoEditorService.showPhotoEditor($event);
+  changePhoto(photoUrl: string = null) {
+    const dialogRef = this.photoEditorService.showPhotoEditor(photoUrl);
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
       this.brand.photoUrl = result.imgUrl;

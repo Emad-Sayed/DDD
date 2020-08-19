@@ -9,9 +9,9 @@ export class PhotoEditorService {
 
     constructor(private dialog: MatDialog) { }
 
-    showPhotoEditor($event: any) {
+    showPhotoEditor(photoUrl: string) {
         return this.dialog.open(PhotoEditorComponent, {
-            data: { event: $event },
+            data: { photoUrl: photoUrl },
             width: '50vw',
             height: '60vh',
         });

@@ -80,8 +80,8 @@ export class ProductCategoryEditorComponent implements OnInit {
   //#endregion
 
 
-  changePhoto($event: any) {
-    const dialogRef = this.photoEditorService.showPhotoEditor($event);
+  changePhoto(photoUrl: string = null) {
+    const dialogRef = this.photoEditorService.showPhotoEditor(photoUrl);
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
       this.productCategory.photoUrl = result.imgUrl;

@@ -5,6 +5,7 @@ import { ImageCroppedEvent, Dimensions, base64ToFile, ImageTransform } from 'ngx
 import { UploadService } from 'src/app/shared/services/upload.service';
 import { CoreService } from 'src/app/shared/services/core.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Event } from '@microsoft/applicationinsights-web';
 
 @Component({
   selector: 'app-photo-editor',
@@ -25,15 +26,21 @@ export class PhotoEditorComponent implements OnInit {
   imageToUpload: Blob = new Blob();
   uploadPercent: number = 0;
   showUploadButton: boolean = false;
-
-
+  imgurl = '';
+  isLinkImg = true;
+  imgToLink = '';
 
   constructor(private uploadService: UploadService, private core: CoreService,
     public dialogRef: MatDialogRef<PhotoEditorComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
-    this.imageChangedEvent = this.data.event;
+    // this.imgurl = 'assets/images/nodata.svg'
+  }
+
+  setImgUrl(url: string) {
+    this.isLinkImg = true;
+    this.imgurl = url;
   }
 
   uploadImage() {
@@ -50,6 +57,14 @@ export class PhotoEditorComponent implements OnInit {
     }, () => this.core.showErrorOperation());
   }
 
+  formatLabel(value: number) {
+    if (value >= 1000) {
+      return Math.round(value / 1000) + 'k';
+    }
+
+    return value;
+  }
+
   resetPhotoUploader() {
     this.imageChangedEvent = '';
     this.croppedImage = '';
@@ -64,7 +79,9 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   fileChangeEvent(event: any): void {
+    if (!event.target.files[0]) return;
     this.imageChangedEvent = event;
+    this.isLinkImg = false;
   }
 
   imageCropped(event: ImageCroppedEvent) {
@@ -138,6 +155,15 @@ export class PhotoEditorComponent implements OnInit {
 
   zoomIn() {
     this.scale += .1;
+    this.transform = {
+      ...this.transform,
+      scale: this.scale
+    };
+  }
+
+  zoom($event: any) {
+    console.log($event);
+    this.scale = $event / 100;
     this.transform = {
       ...this.transform,
       scale: this.scale

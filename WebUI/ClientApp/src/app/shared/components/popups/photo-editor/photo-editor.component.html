@@ -1,44 +1,62 @@
+<div class="btn-group" role="group">
+    <button type="button" class="btn btn-small btn-primary" (click)="isLinkImg = true">رابط صورة</button>
+    <input type="file" name="file" id="file" class="inputfile" (change)="fileChangeEvent($event)" />
+    <label for="file">Choose a file</label>
+</div>
+
+
 <div class="container p-3">
-    <div class="row">
-        <div class="col"></div>
-        <div class="col-1">
-            <button class="btn btn-danger" (click)="closePopup()">
-                إلغاء
-            </button>
+    <div class="row" *ngIf="isLinkImg">
+        <div class="col">
+            <form class="form-inline my-2" style="width: 100%;">
+                <input #link class="form-control m-2 w-50" type="url" placeholder="الرابط">
+
+                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"
+                    (click)="setImgUrl(link.value)">تحميل</button>
+            </form>
         </div>
     </div>
     <div class="row">
         <div class="col-6">
-            <img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" />
+            <img [src]="croppedImage" class="img-corpper" />
             <div class="progress m-3" *ngIf="uploadPercent > 0">
                 <div class="progress-bar" role="progressbar" [style.width.%]="uploadPercent" aria-valuemin="0"
                     aria-valuemax="100">{{uploadPercent}}%</div>
             </div>
-
         </div>
         <div class="col-6">
-            <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
-                [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 3" [resizeToWidth]="256"
+            <image-cropper *ngIf="!isLinkImg" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+                class="img-corpper" [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 3"
+                [resizeToWidth]="256" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false"
+                [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'left'"
+                [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)"
+                (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)"
+                (loadImageFailed)="loadImageFailed()"></image-cropper>
+
+            <image-cropper *ngIf="isLinkImg" [imageURL]="imgurl" [maintainAspectRatio]="true" class="img-corpper"
+                [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 4" [resizeToWidth]="256"
                 [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false" [canvasRotation]="canvasRotation"
                 [transform]="transform" [alignImage]="'left'" [style.display]="showCropper ? null : 'none'" format="png"
                 (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
                 (cropperReady)="cropperReady($event)" (loadImageFailed)="loadImageFailed()"></image-cropper>
 
             <div [hidden]="!croppedImage" class="noselect">
-                <mat-icon (click)="rotateLeft()">rotate_left</mat-icon>
+                <!-- <mat-icon (click)="rotateLeft()">rotate_left</mat-icon>
                 <mat-icon (click)="rotateRight()">rotate_right</mat-icon>
                 <mat-icon (click)="flipHorizontal()">flip_to_back</mat-icon>
                 <mat-icon (click)="flipVertical()">flip_to_front</mat-icon>
                 <mat-icon (click)="toggleContainWithinAspectRatio()">center_focus_weak</mat-icon>
                 <mat-icon (click)="zoomIn()">zoom_in</mat-icon>
                 <mat-icon (click)="zoomOut()">zoom_out</mat-icon>
-                <mat-icon (click)="resetImage()">cancel</mat-icon>
+                <mat-icon (click)="resetImage()">cancel</mat-icon> -->
+                <mat-slider thumbLabel [displayWith]="formatLabel" (valueChange)="zoom($event)" min="100" max="200">
+                </mat-slider>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <button class="btn btn-small btn-success m-3" (click)="uploadImage()" [hidden]="!croppedImage">
+            <button class="btn btn-small btn-success m-3" (click)="uploadImage()">
                 رفع وحفظ الصورة
             </button>
         </div>
