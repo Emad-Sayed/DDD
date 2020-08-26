@@ -11,6 +11,7 @@ namespace Application.ProductCatalog.ProductAggregate
         public ProductMappingProfile()
         {
             CreateMap<Product, AlgoliaProductVM>()
+                .ForMember(pro => pro.ProductId, op => op.MapFrom(y => y.Id.ToString()))
                 .ForMember(pro => pro.ObjectID, op => op.MapFrom(y => y.Id.ToString()))
                 .ForMember(pro => pro.Category, op => op.MapFrom(y => y.ProductCategory.Name))
                 .ForMember(pro => pro.Brand, op => op.MapFrom(y => y.Brand.Name))

@@ -37,7 +37,7 @@ namespace Application.ProductCatalog.DomainEventHandlers.ProductUpdatedDomainEve
             
             var productWithBrandAndCategory = await _productRepository.FindByIdAsync(notification.Product.Id.ToString());
             var productToAddToAlgoia =  _mapper.Map<AlgoliaProductVM>(productWithBrandAndCategory);
-            await _searchEngine.UpdateEntity(productToAddToAlgoia, "products");
+            await _searchEngine.UpdateEntity(productToAddToAlgoia, "dev_product2");
         }
     }
 }

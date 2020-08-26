@@ -40,12 +40,7 @@
                 <img [src]="BasePhotoUrl + offer.photoUrl" class="img-fluid text-right"
                     onerror="this.src='assets/images/placeholder.png';">
                 <label for="offer-img" class="mt-2">
-                    <ng-container *ngIf="offer.photoUrl; else add">
-                        <span class="btn btn-outline-secondary" (click)="changePhoto(offer.photoUrl)">استبدال الصورة</span>
-                    </ng-container>
-                    <ng-template #add>
-                        <span class="btn btn-outline-secondary" (click)="changePhoto()">إضافة صورة</span>
-                    </ng-template>
+                    <span class="btn btn-outline-secondary" (click)="changePhoto(offer.photoUrl)">استبدال الصورة</span>
                 </label>
             </div>
         </div>

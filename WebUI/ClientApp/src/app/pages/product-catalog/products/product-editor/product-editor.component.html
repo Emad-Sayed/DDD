@@ -50,17 +50,12 @@
         <img [src]="BasePhotoUrl + product.photoUrl" class="img-fluid"
           onerror="this.src='assets/images/placeholder.png';">
         <label for="product-img" class="mt-2">
-          <ng-container *ngIf="product.photoUrl; else add">
-          </ng-container>
           <span class="btn btn-outline-secondary" (click)="changePhoto(product.photoUrl)">استبدال الصورة</span>
-          <ng-template #add>
-            <span class="btn btn-outline-secondary" (click)="changePhoto()">إضافة صورة</span>
-          </ng-template>
         </label>
       </div>
     </div>
     <!-- item Units -->
-    <div class="item-units">
+    <div class="item-units" *ngIf="isEditing">
       <div class="row mt-2 item-units-header p-3">
         <h4 class="border-bottom w-100">وحدات الصنف :</h4>
       </div>

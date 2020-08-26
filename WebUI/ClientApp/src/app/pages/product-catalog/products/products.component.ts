@@ -50,8 +50,10 @@ export class ProductsComponent implements OnInit, OnDestroy {
     });
     this.productCatalogService.productEditor.subscribe(res => {
       this.openEditor = res.openEditor;
-      if (res.productRequestSuccess)
+      if (res.productRequestSuccess) {
+        this.resetProducts();
         this.getProducts();
+      }
     });
 
     this.subject.pipe(
@@ -63,6 +65,10 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   }
 
+  resetProducts() {
+    this.page = new Page();
+    this.products = [];
+  }
 
   getProducts() {
     this.query.pageNumber = ++this.page.pageNumber;

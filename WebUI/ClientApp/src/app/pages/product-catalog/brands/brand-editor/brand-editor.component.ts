@@ -77,7 +77,8 @@ export class BrandEditorComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
       this.brand.photoUrl = result.imgUrl;
-      this.updateBrand();
+      if (this.isEditing)
+        this.updateBrand();
     });
   }
   //#endregion

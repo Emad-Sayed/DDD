@@ -39,10 +39,11 @@ export class BrandsComponent implements OnInit {
     this.getBrands();
 
     this.productCatalogService.brandEditor.subscribe(res => {
-      console.log(res);
       this.openEditor = res.openEditor;
-      if (res.productRequestSuccess)
+      if (res.brandRequestSuccess) {
+        this.resetBrands();
         this.getBrands();
+      }
     });
 
     this.subject.pipe(
@@ -56,6 +57,11 @@ export class BrandsComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.productCatalogService.brandEditor.next({ openEditor: false });
+  }
+
+  resetBrands() {
+    this.page = new Page();
+    this.brands = [];
   }
 
   getBrands() {

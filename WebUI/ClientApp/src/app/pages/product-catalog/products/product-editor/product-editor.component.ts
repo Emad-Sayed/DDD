@@ -107,6 +107,7 @@ export class ProductEditorComponent implements OnInit {
 
   createUnit(unit: Unit) {
     this.productCatalogService.createUnit(unit, this.product.id).subscribe(res => {
+      unit.newAdded = false;
       this.core.showSuccessOperation();
     });
   }
@@ -149,7 +150,8 @@ export class ProductEditorComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
       this.product.photoUrl = result.imgUrl;
-      this.updateProduct();
+      if (this.isEditing)
+        this.updateProduct();
     });
   }
 

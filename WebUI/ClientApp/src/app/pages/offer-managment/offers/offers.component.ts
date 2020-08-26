@@ -54,12 +54,18 @@ export class OffersComponent implements OnInit {
 
     this.offersService.offerEditor.subscribe(res => {
       this.openEditor = res.openEditor;
-      if (res.offerRequestSuccess)
+      if (res.offerRequestSuccess) {
+        this.resetOffers();
         this.getOffers();
+      }
     });
 
   }
 
+  resetOffers() {
+    this.page = new Page();
+    this.offers = [];
+  }
 
   getOffers() {
     this.query.pageNumber = ++this.page.pageNumber;

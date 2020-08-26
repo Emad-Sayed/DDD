@@ -129,7 +129,8 @@ export class OfferEditorComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
       this.offer.photoUrl = result.imgUrl;
-      this.updateOffer();
+      if (this.isEditing)
+        this.updateOffer();
     });
   }
 

@@ -1,9 +1,11 @@
 ﻿using Domain.Base.Entity;
 using Domain.Common.Interfaces;
+using Domain.ShoppingVan.Exceptions;
 using Domain.ShoppingVanBoundedContext.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
@@ -53,17 +55,18 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
         public void RemoveItem(string productId, string unitId)
         {
             var vanItem = ShoppingVanItems.FirstOrDefault(x => x.ProductId == productId && x.UnitId == unitId);
-            if (vanItem != null)
-            {
-                TotalItemsCount -= 1;
-                vanItem.ChangeAmount(vanItem.Amount - 1);
-                TotalPrice -= vanItem.SellingPrice + (vanItem.SellingPrice * 0.14f);
+            if (vanItem == null) throw new ShoppingVanItemNotFound(productId, unitId);
 
-                // Check if the van item amount is less than or = to 0 then will remove this item from van
-                if (vanItem.Amount <= 0) ShoppingVanItems.Remove(vanItem);
+            TotalItemsCount -= 1;
+            vanItem.ChangeAmount(vanItem.Amount - 1);
+            TotalPrice -= vanItem.SellingPrice + (vanItem.SellingPrice * 0.14f);
 
-                AddDomainEvent(new ShoppingVanUpdated(this));
-            }
+            // Check if the van item amount is less than or = to 0 then will remove this item from van
+            if (vanItem.Amount <= 0) ShoppingVanItems.Remove(vanItem);
+
+            AddDomainEvent(new ShoppingVanUpdated(this));
+
+
         }
 
     }

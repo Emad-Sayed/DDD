@@ -85,7 +85,8 @@ export class ProductCategoryEditorComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
       this.productCategory.photoUrl = result.imgUrl;
-      this.updateProductCategory();
+      if (this.isEditing)
+        this.updateProductCategory();
     });
   }
 

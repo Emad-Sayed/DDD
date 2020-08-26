@@ -41,8 +41,10 @@ export class ProductCategoiesComponent implements OnInit {
     this.productCatalogService.productCategoryEditor.subscribe(res => {
       console.log(res);
       this.openEditor = res.openEditor;
-      if (res.productRequestSuccess)
-        this.getProductCategorys();
+      if (res.productCategoryRequestSuccess) {
+        this.resetProductCategorys();
+      }
+      this.getProductCategorys();
     });
 
     this.subject.pipe(
@@ -56,6 +58,11 @@ export class ProductCategoiesComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.productCatalogService.productCategoryEditor.next({ openEditor: false });
+  }
+
+  resetProductCategorys() {
+    this.page = new Page();
+    this.productCategorys = [];
   }
 
   getProductCategorys() {

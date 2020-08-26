@@ -35,7 +35,7 @@ namespace API.Controllers.OfferManagment
 
 
         [HttpGet("{offerId}")]
-        public async Task<IActionResult> GetById([FromQuery] OfferByIdQuery query)
+        public async Task<IActionResult> GetById([FromRoute] OfferByIdQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);

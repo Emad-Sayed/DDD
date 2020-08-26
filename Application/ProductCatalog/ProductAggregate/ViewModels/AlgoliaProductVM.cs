@@ -8,11 +8,12 @@ namespace Application.ProductCatalog.ProductAggregate.ViewModels
 {
     public class AlgoliaProductVM
     {
-        public string Name { get; private set; }
-        public string Barcode { get; private set; }
-        public string PhotoUrl { get; private set; }
+        public string ProductId { get;  set; }
+        public string Name { get;  set; }
+        public string Barcode { get;  set; }
+        public string PhotoUrl { get;  set; }
         public bool AvailableToSell { get; set; }
-        public string ObjectID { get; private set; }
+        public string ObjectID { get;  set; }
         public string Category { get; set; }
         public string Brand { get; set; }
         public List<AlgoliaUnitVM> Units { get; set; }
