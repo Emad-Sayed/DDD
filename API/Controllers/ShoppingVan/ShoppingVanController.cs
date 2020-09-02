@@ -14,8 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.ShoppingVan
 {
-    //[Authorize]
-    [EnableCors("AllowOrigin")]
+    [Authorize]
+    [EnableCors()]
     [Route("api/[controller]")]
     public class ShoppingVanController : BaseController
     {

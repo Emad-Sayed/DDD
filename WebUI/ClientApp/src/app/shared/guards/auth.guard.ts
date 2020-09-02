@@ -14,18 +14,26 @@ export class AuthGuard implements CanActivate {
         private router: Router,
         private oauthService: OAuthService,
         private auth: AuthService,
+        private core: CoreService,
         private jwtHelper: JwtHelperService) { }
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         const token = localStorage.getItem('access_token');
+
+        if (!token) this.router.navigate(['/login']);
+
         if (this.jwtHelper.isTokenExpired(token)) {
             this.auth.refreshToken()
                 .then(res => {
-                    return true;
+                    return this.auth.isAdmin();
                 })
                 .catch(e => {
                     this.router.navigate(['/login']);
                 });
         }
-        return true
+        return this.auth.isAdmin();
     }
-} 
+
+
+}
+
+

@@ -1,4 +1,5 @@
 ﻿using Application.ProductCatalog.ProductAggregate.ViewModels;
+using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace Application.ProductCatalog.ProductAggregate
             CreateMap<Product, AlgoliaProductVM>()
                 .ForMember(pro => pro.ProductId, op => op.MapFrom(y => y.Id.ToString()))
                 .ForMember(pro => pro.ObjectID, op => op.MapFrom(y => y.Id.ToString()))
+                .ForMember(pro => pro.ImgUrl, op => op.MapFrom(y => y.PhotoUrl))
                 .ForMember(pro => pro.Category, op => op.MapFrom(y => y.ProductCategory.Name))
                 .ForMember(pro => pro.Brand, op => op.MapFrom(y => y.Brand.Name))
                 .ReverseMap();

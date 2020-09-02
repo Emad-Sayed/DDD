@@ -101,13 +101,14 @@ export class ProductEditorComponent implements OnInit {
 
   deleteUnit(unit: Unit) {
     this.productCatalogService.deleteUnit(unit, this.product.id).subscribe(res => {
+      this.core.showSuccessOperation();
       this.product.units.splice(this.product.units.indexOf(unit), 1);
     });
   }
 
   createUnit(unit: Unit) {
     this.productCatalogService.createUnit(unit, this.product.id).subscribe(res => {
-      unit.newAdded = false;
+      this.getProductById(this.product.id);
       this.core.showSuccessOperation();
     });
   }

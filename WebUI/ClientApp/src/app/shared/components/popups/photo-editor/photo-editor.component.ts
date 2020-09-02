@@ -6,6 +6,7 @@ import { UploadService } from 'src/app/shared/services/upload.service';
 import { CoreService } from 'src/app/shared/services/core.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Event } from '@microsoft/applicationinsights-web';
+import { Config } from 'src/app/shared/confing/config';
 
 @Component({
   selector: 'app-photo-editor',
@@ -29,6 +30,7 @@ export class PhotoEditorComponent implements OnInit {
   imgurl = '';
   isLinkImg = true;
   imgToLink = '';
+  BasePhotoUrl = Config.BasePhotoUrl;
 
   constructor(private uploadService: UploadService, private core: CoreService,
     public dialogRef: MatDialogRef<PhotoEditorComponent>,
@@ -36,6 +38,11 @@ export class PhotoEditorComponent implements OnInit {
 
   ngOnInit() {
     // this.imgurl = 'assets/images/nodata.svg'
+    if (this.data.photoUrl) {
+      this.imgurl = this.BasePhotoUrl + this.data.photoUrl;
+      console.log(this.imgurl);
+      this.isLinkImg = true;
+    }
   }
 
   setImgUrl(url: string) {

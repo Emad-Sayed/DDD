@@ -39,7 +39,7 @@ namespace Application.ProductCatalog.DomainEventHandlers.ProductCreatedDomainEve
 
             var productToAddToAlgoia = _mapper.Map<AlgoliaProductVM>(productWithBrandAndCategory);
 
-            await _searchEngine.AddEntity(productToAddToAlgoia, "dev_product2");
+            await _searchEngine.AddEntity(productToAddToAlgoia, "dev_product3");
         }
     }
 }

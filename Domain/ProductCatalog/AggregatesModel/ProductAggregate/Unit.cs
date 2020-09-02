@@ -33,7 +33,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 
         public Unit() { }
 
-        public Unit(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable, Guid productId)
+        public Unit(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable, Guid productId, Guid id = default)
         {
             Name = name;
             Count = count;
@@ -43,6 +43,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             Weight = weight;
             IsAvailable = isAvailable;
             ProductId = productId;
+            Id = id == default ? Guid.NewGuid() : id;
         }
 
         public void Update(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable)

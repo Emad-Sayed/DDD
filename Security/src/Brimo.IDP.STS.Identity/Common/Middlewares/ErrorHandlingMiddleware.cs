@@ -1,4 +1,4 @@
-﻿using Domain.Common.Exceptions;
+﻿using Brimo.IDP.STS.Identity.Common.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -6,11 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Common.Middlewares
+namespace Brimo.IDP.STS.Identity.Common.Middlewares
 {
     public class ErrorHandlingMiddleware
     {
@@ -45,7 +43,7 @@ namespace Application.Common.Middlewares
             // 1- Exceptions of type BaseException this is the exceptions that we throw in our application
             // 2- Exceptions of type BaseValidationException this exception thrown by the fluentvalidation
             // 3- Unhandeled Exceptions
-             switch (ex)
+            switch (ex)
             {
                 case BusinessException re:
                     errors.Add(new Error(re.ErrorCode, re.Message));
@@ -55,16 +53,6 @@ namespace Application.Common.Middlewares
                     //logger.BeginScope(ex, "Brimo ERROR", code);
 
                     _logger.LogError(re, "TypeOfException", "BusinessException");
-                    break;
-                case BaseValidationException bve:
-                    foreach (KeyValuePair<string, string> keyValuePair in bve.Errors)
-                    {
-                        errors.Add(new Error(keyValuePair.Key, keyValuePair.Value));
-                    }
-                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    code = HttpStatusCode.BadRequest;
-                    message = "Validation error";
-                    _logger.LogError(bve, "TypeOfException", "BusinessException");
                     break;
                 case Exception e:
                     errors.Add(new Error("Server_Error", string.IsNullOrWhiteSpace(e.Message) ? "ERROR" : e.Message));

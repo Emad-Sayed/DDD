@@ -13,6 +13,7 @@ using Brimo.IDP.STS.Identity.Configuration.Interfaces;
 using Brimo.IDP.STS.Identity.Helpers;
 using Brimo.IDP.STS.Identity.Services;
 using System.Collections.Generic;
+using Brimo.IDP.STS.Identity.Common.Middlewares;
 
 namespace Brimo.IDP.STS.Identity
 {
@@ -67,6 +68,8 @@ namespace Brimo.IDP.STS.Identity
         {
 
             app.UseDeveloperExceptionPage();
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseCors(op => op.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 

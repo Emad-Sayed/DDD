@@ -8,6 +8,7 @@ using Persistence.ProductCatalog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,6 +39,10 @@ namespace Infrastructure.Repositories.ProductCatalog
                    .Entity;
         }
 
+        public void AddRange(List<Product> products)
+        {
+            _context.Products.AddRange(products);
+        }
         public void Update(Product product)
         {
             _context.Entry(product).State = EntityState.Modified;
@@ -57,7 +62,7 @@ namespace Infrastructure.Repositories.ProductCatalog
                 query = query.Where(x =>
                 x.Barcode.Contains(keyWord) ||
                 x.Id.ToString().Contains(keyWord) ||
-                x.Name.Contains(keyWord) 
+                x.Name.Contains(keyWord)
                 );
             }
 
@@ -78,12 +83,24 @@ namespace Infrastructure.Repositories.ProductCatalog
 
         public async Task<Product> FindByIdAsync(string id)
         {
-            return await _context.Products
-                .Where(x => x.IsDeleted == false)
-                   .Include(x => x.Brand)
-                   .Include(x => x.Units)
-                   .Include(x => x.ProductCategory)
-                   .FirstOrDefaultAsync(x => x.Id.ToString() == id);
+            var product = await _context.Products
+               .Where(x => x.IsDeleted == false)
+                  .Include(x => x.Brand)
+                  .Include(x => x.Units)
+                  .Include(x => x.ProductCategory)
+                  .FirstOrDefaultAsync(x => x.Id.ToString() == id);
+
+            if (product == null) return product;
+
+            if (product.Units != null)
+            {
+                foreach (var productUnit in product.Units.ToList())
+                {
+                    if (productUnit.IsDeleted)
+                        product.Units.Remove(productUnit);
+                }
+            }
+            return product;
         }
 
         public void Delete(Product product)
@@ -107,6 +124,11 @@ namespace Infrastructure.Repositories.ProductCatalog
         {
             return await _context.ProductCategories
                   .FirstOrDefaultAsync(x => x.Id.ToString() == productCategoryId);
+        }
+
+        public async void DeleteAll()
+        {
+             _context.Products.RemoveRange(_context.Products);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Application.ProductCatalog.ProductAggregate.ViewModels
         public string ProductId { get;  set; }
         public string Name { get;  set; }
         public string Barcode { get;  set; }
-        public string PhotoUrl { get;  set; }
+        public string ImgUrl { get;  set; }
         public bool AvailableToSell { get; set; }
         public string ObjectID { get;  set; }
         public string Category { get; set; }

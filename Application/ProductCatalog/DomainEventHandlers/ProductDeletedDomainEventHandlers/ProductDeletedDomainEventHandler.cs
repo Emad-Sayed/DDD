@@ -31,7 +31,7 @@ namespace Application.ProductCatalog.DomainEventHandlers.ProductDeletedDomainEve
         public async Task Handle(ProductDeleted notification, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Brimo API EventHandelr: {Name} {@UserId} {@UserName} {@Request}", nameof(ProductDeleted), _currentUserService.UserId, _currentUserService.Name, notification);
-            await _searchEngine.DeleteEntity(notification.Product.Id.ToString(), "products");
+            await _searchEngine.DeleteEntity(notification.Product.Id.ToString(), "dev_product3");
         }
     }
 }

@@ -13,11 +13,12 @@ namespace Application.OrderManagment.Queries.CustomerOrders
         public CustomerOrdersQueryValidators()
         {
             RuleFor(x => x.CustomerId).NotEmpty().Must(GuidValidator.IsGuid).WithMessage("Bad OrderId Format OrderId must be GUID").WithErrorCode("invalid_guid");
-            RuleFor(x => x.OrderStatuses).Cascade(CascadeMode.StopOnFirstFailure).NotNull().Must(BetweenZeroToFour).WithMessage("Order State Must be between 0 to 4").WithErrorCode("invalid_order_status");
+            RuleFor(x => x.OrderStatuses).Cascade(CascadeMode.StopOnFirstFailure).Must(BetweenZeroToFour).WithMessage("Order State Must be between 0 to 4").WithErrorCode("invalid_order_status");
         }
 
         private bool BetweenZeroToFour(List<OrderStatus> OrderStatus)
         {
+            if (OrderStatus == null) OrderStatus = new List<OrderStatus>();
             return OrderStatus.All(orderStatus => orderStatus >= Domain.OrderManagment.AggregatesModel.OrderAggregate.OrderStatus.Placed && orderStatus <= Domain.OrderManagment.AggregatesModel.OrderAggregate.OrderStatus.Cancelled);
         }
     }

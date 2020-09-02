@@ -1,9 +1,12 @@
 <div class="btn-group" role="group">
-    <button type="button" class="btn btn-small btn-primary" (click)="isLinkImg = true">رابط صورة</button>
+    <button type="button" class="btn btn-outline-primary" (click)="isLinkImg = true">رابط صورة</button>
     <input type="file" name="file" id="file" class="inputfile" (change)="fileChangeEvent($event)" />
-    <label for="file">Choose a file</label>
+    <label for="file" class="btn btn-outline-primary">Choose a file</label>
 </div>
-
+<!-- <div class="btn-group" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-outline-primary">Left</button>
+    <button for="file" type="button" class="btn btn-outline-primary">Right</button>
+</div> -->
 
 <div class="container p-3">
     <div class="row" *ngIf="isLinkImg">
@@ -11,8 +14,7 @@
             <form class="form-inline my-2" style="width: 100%;">
                 <input #link class="form-control m-2 w-50" type="url" placeholder="الرابط">
 
-                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"
-                    (click)="setImgUrl(link.value)">تحميل</button>
+                <button class="btn btn-outline-primary my-2 my-sm-0" (click)="setImgUrl(link.value)">تحميل</button>
             </form>
         </div>
     </div>
@@ -25,30 +27,25 @@
             </div>
         </div>
         <div class="col-6">
-            <image-cropper *ngIf="!isLinkImg" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
-                class="img-corpper" [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 3"
-                [resizeToWidth]="256" [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false"
-                [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'left'"
-                [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)"
-                (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)"
-                (loadImageFailed)="loadImageFailed()"></image-cropper>
-
-            <image-cropper *ngIf="isLinkImg" [imageURL]="imgurl" [maintainAspectRatio]="true" class="img-corpper"
-                [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 4" [resizeToWidth]="256"
-                [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false" [canvasRotation]="canvasRotation"
-                [transform]="transform" [alignImage]="'left'" [style.display]="showCropper ? null : 'none'" format="png"
-                (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
-                (cropperReady)="cropperReady($event)" (loadImageFailed)="loadImageFailed()"></image-cropper>
-
+            <div *ngIf="!isLinkImg">
+                <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" class="img-corpper"
+                    [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 4" [resizeToWidth]="300"
+                    [cropperMinWidth]="400" [onlyScaleDown]="true" [roundCropper]="false"
+                    [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'left'"
+                    [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)"
+                    (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)"
+                    (loadImageFailed)="loadImageFailed()"></image-cropper>
+            </div>
+            <div *ngIf="isLinkImg">
+                <image-cropper [imageURL]="imgurl" [maintainAspectRatio]="true" class="img-corpper"
+                    [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="4 / 4" [resizeToWidth]="300"
+                    [cropperMinWidth]="400" [onlyScaleDown]="true" [roundCropper]="false"
+                    [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'left'"
+                    [style.display]="showCropper ? null : 'none'" format="png" (imageCropped)="imageCropped($event)"
+                    (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)"
+                    (loadImageFailed)="loadImageFailed()"></image-cropper>
+            </div>
             <div [hidden]="!croppedImage" class="noselect">
-                <!-- <mat-icon (click)="rotateLeft()">rotate_left</mat-icon>
-                <mat-icon (click)="rotateRight()">rotate_right</mat-icon>
-                <mat-icon (click)="flipHorizontal()">flip_to_back</mat-icon>
-                <mat-icon (click)="flipVertical()">flip_to_front</mat-icon>
-                <mat-icon (click)="toggleContainWithinAspectRatio()">center_focus_weak</mat-icon>
-                <mat-icon (click)="zoomIn()">zoom_in</mat-icon>
-                <mat-icon (click)="zoomOut()">zoom_out</mat-icon>
-                <mat-icon (click)="resetImage()">cancel</mat-icon> -->
                 <mat-slider thumbLabel [displayWith]="formatLabel" (valueChange)="zoom($event)" min="100" max="200">
                 </mat-slider>
             </div>
@@ -56,12 +53,11 @@
     </div>
     <div class="row">
         <div class="col">
-            <button class="btn btn-small btn-success m-3" (click)="uploadImage()">
-                رفع وحفظ الصورة
-            </button>
+            <button class="btn btn-small btn-success m-3" (click)="uploadImage()"> حفظ </button>
+            <button class="btn btn-small btn-warning m-3" (click)="closePopup()"> إلغاء </button>
         </div>
-        <div class="col-6">
+        <!-- <div class="col-6">
             <input type="file" (change)="fileChangeEvent($event)" />
 
-        </div>
+        </div> -->
     </div>

@@ -33,6 +33,10 @@ namespace Infrastructure.Repositories.ProductCatalog
             return _context.ProductCategories.Add(productCategory).Entity;
         }
 
+        public void AddRange(List<ProductCategory> productCategories)
+        {
+            _context.ProductCategories.AddRange(productCategories);
+        }
         public void Update(ProductCategory productCategory)
         {
             _context.Entry(productCategory).State = EntityState.Modified;
@@ -82,6 +86,11 @@ namespace Infrastructure.Repositories.ProductCatalog
             var count = query.Count();
 
             return (count, productCategories);
+        }
+
+        public void DeleteAll()
+        {
+            _context.ProductCategories.RemoveRange(_context.ProductCategories);
         }
     }
 }

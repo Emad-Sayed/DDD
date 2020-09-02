@@ -4,6 +4,7 @@ import { OAuthService, TokenResponse } from 'angular-oauth2-oidc';
 import { LoginModel } from '../models/login/login.model';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { CoreService } from './core.service';
 
 
 @Injectable({
@@ -11,7 +12,7 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthService {
 
-    public constructor(private router: Router, private oauthService: OAuthService, private http: HttpClient) {
+    public constructor(private router: Router,private core: CoreService, private oauthService: OAuthService, private http: HttpClient) {
         this.oauthService.configure({
             requireHttps: false,
             skipIssuerCheck: true,
@@ -46,10 +47,9 @@ export class AuthService {
         let url = environment.identityServerUrl + '.well-known/openid-configuration';
         this.oauthService.loadDiscoveryDocument(url).then(() => {
             // Do what ever you want here
-            this.oauthService.fetchTokenUsingPasswordFlowAndLoadUserProfile(loginModel.email, loginModel.password).then(() => {
+            this.oauthService.fetchTokenUsingPasswordFlowAndLoadUserProfile(loginModel.email, loginModel.password).then((u) => {
                 this.router.navigate(['/products'])
-                // console.log('claims', claims);
-                // if (claims) console.debug('given_name', claims.given_name);
+                localStorage.setItem('roles', u.role);
             });
         });
     }
@@ -61,5 +61,15 @@ export class AuthService {
         // Do what ever you want here
         const refreshTokenResponse = await this.oauthService.refreshToken();
         return refreshTokenResponse;
+    }
+
+    isAdmin() {
+        let roles = localStorage.getItem('roles').split(',');
+        if (!(roles.includes('Admin') || roles.includes('Distributor'))) {
+            this.core.showErrorOperation('ليس لديك صلاحية الدخول الي هذا الموقع');
+            this.router.navigate(['/login']);
+            return false;
+        }
+        return true;
     }
 }

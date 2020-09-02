@@ -8,6 +8,7 @@ using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductAggregate.Commands.DeleteProduct;
 using Application.ProductCatalog.ProductAggregate.Commands.DeleteUnit;
+using Application.ProductCatalog.ProductAggregate.Commands.SyncProductsWithAlgolia;
 using Application.ProductCatalog.ProductAggregate.Commands.UpdateProduct;
 using Application.ProductCatalog.ProductAggregate.Commands.UpdateUnit;
 using Application.ProductCatalog.ProductAggregate.Queries.ListProducts;
@@ -46,8 +47,15 @@ namespace API.Controllers.ProductCatalog
             return Ok(result);
         }
 
+        [HttpPost("SyncProductsWithAlgolia")]
+        public async Task<IActionResult> SyncProductsWithAlgolia(SyncProductsWithAlgoliaCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
         [HttpGet("{productId}")]
-        public async Task<IActionResult> GetById([FromQuery] ProductByIdQuery query)
+        public async Task<IActionResult> GetById([FromRoute] ProductByIdQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);

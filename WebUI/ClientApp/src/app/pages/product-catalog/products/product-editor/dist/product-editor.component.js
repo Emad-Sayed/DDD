@@ -94,13 +94,14 @@ var ProductEditorComponent = /** @class */ (function () {
     ProductEditorComponent.prototype.deleteUnit = function (unit) {
         var _this = this;
         this.productCatalogService.deleteUnit(unit, this.product.id).subscribe(function (res) {
+            _this.core.showSuccessOperation();
             _this.product.units.splice(_this.product.units.indexOf(unit), 1);
         });
     };
     ProductEditorComponent.prototype.createUnit = function (unit) {
         var _this = this;
         this.productCatalogService.createUnit(unit, this.product.id).subscribe(function (res) {
-            unit.newAdded = false;
+            _this.getProductById(_this.product.id);
             _this.core.showSuccessOperation();
         });
     };

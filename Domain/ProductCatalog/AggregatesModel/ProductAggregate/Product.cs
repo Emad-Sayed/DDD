@@ -45,7 +45,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             ProductCategoryId = new Guid(productCategoryId);
 
             Id = id == default ? Guid.NewGuid() : id;
-
+            Units = new List<Unit>();
             // Add the ProductCreated to the domain events collection 
             // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]
             AddDomainEvent(new ProductCreated(this));

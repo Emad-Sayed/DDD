@@ -41,7 +41,8 @@ namespace Infrastructure.Repositories.OrderManagment
                 //.Include(x => x.OrderItems)
                 .AsQueryable();
 
-            if (orderStatuses == null) orderStatuses = new List<OrderStatus> { OrderStatus.Placed };
+            if (orderStatuses == null) orderStatuses = new List<OrderStatus> { OrderStatus.Placed, OrderStatus.Confirmed, OrderStatus.Shipped, OrderStatus.Delivered, OrderStatus.Cancelled };
+
             query = query.Where(x => orderStatuses.Contains(x.OrderStatus));
 
             // fillter by keyword
@@ -68,7 +69,7 @@ namespace Infrastructure.Repositories.OrderManagment
                 .Where(x => x.CustomerId == customerId)
                 .AsQueryable();
 
-            if (orderStatuses == null) orderStatuses = new List<OrderStatus> { OrderStatus.Placed };
+            if (orderStatuses == null) orderStatuses = new List<OrderStatus> { OrderStatus.Placed, OrderStatus.Confirmed, OrderStatus.Shipped, OrderStatus.Delivered, OrderStatus.Cancelled };
             query = query.Where(x => orderStatuses.Contains(x.OrderStatus));
 
             // fillter by keyword

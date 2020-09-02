@@ -9,6 +9,7 @@ namespace Brimo.IDP.Admin.EntityFramework.Shared.Entities.Identity
 		public string FullName { get; set; }
 		public UserType UserType { get; set; }
 		public DateTime LastLoginDate { get; set; }
+		public string ResetPasswordCode { get; set; }
 	}
 }
 

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Brimo.IDP.Admin.EntityFramework.Shared.Entities.Identity;
+using Brimo.IDP.STS.Identity.Common.Exceptions;
+using Brimo.IDP.STS.Identity.Common.Exceptions.Auth;
 using Brimo.IDP.STS.Identity.Services;
 using Brimo.IDP.STS.Identity.ViewModels.Auth.Register;
 using Microsoft.AspNetCore.Identity;
@@ -47,7 +50,12 @@ namespace Brimo.IDP.STS.Identity.Controllers
         {
             // Check if phone number is registered before if not will create new user with this phone number
             var userFromDb = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == sendSMSCodeVM.PhoneNumber);
-            if (userFromDb == null)
+            if (userFromDb != null)
+            {
+                var isRegisteredBefore = await _userManager.HasPasswordAsync(userFromDb);
+                if (isRegisteredBefore) throw new UserAlreadyExistException(sendSMSCodeVM.PhoneNumber);
+            }
+            else
             {
                 userFromDb = new UserIdentity
                 {
@@ -57,6 +65,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
                 };
 
                 var result = await _userManager.CreateAsync(userFromDb);
+
                 if (result.Succeeded)
                 {
                     // check if the customer role exist in the database or not if not will create it
@@ -79,10 +88,9 @@ namespace Brimo.IDP.STS.Identity.Controllers
             _smsSender.Send(new SMSMessageModel
             {
                 Message = $@"Your code is {code}",
-
-                // TODO Send SMS message to phone number
                 ToPhoneNumber = sendSMSCodeVM.PhoneNumber
             });
+
             return Ok();
         }
 
@@ -92,31 +100,38 @@ namespace Brimo.IDP.STS.Identity.Controllers
         {
             // Get user from phone number
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == model.PhoneNumber);
-            if (user != null)
-            {
-                var result = await _userManager.VerifyChangePhoneNumberTokenAsync(user, model.SmsCode, model.PhoneNumber);
-                user.PhoneNumberConfirmed = result;
-                await _userManager.UpdateAsync(user);
 
-                return Ok(new { codeVerifed = result });
-            }
-            return BadRequest();
+            if (user == null) throw new UserNotFoundException(model.PhoneNumber);
+
+            var isRegisteredBefore = await _userManager.HasPasswordAsync(user);
+            if (isRegisteredBefore) throw new UserAlreadyExistException(model.PhoneNumber);
+
+            var result = await _userManager.VerifyChangePhoneNumberTokenAsync(user, model.SmsCode, model.PhoneNumber);
+            user.PhoneNumberConfirmed = result;
+            await _userManager.UpdateAsync(user);
+
+            return Ok(new { codeVerifed = result });
         }
 
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterVM model)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == model.PhoneNumber);
-            if (user == null) return BadRequest("User with this phone number not found");
+            if (user == null) throw new PhoneNumberNotConfirmedException(model.PhoneNumber);
 
-            if (!user.PhoneNumberConfirmed) return BadRequest("Please confirm your phone number first");
+            var isRegisteredBefore = await _userManager.HasPasswordAsync(user);
+            if (isRegisteredBefore) throw new UserAlreadyExistException(model.PhoneNumber);
+
+            if (!user.PhoneNumberConfirmed) throw new PhoneNumberNotConfirmedException(model.PhoneNumber);
 
             var result = await _userManager.AddPasswordAsync(user, model.Password);
 
-            if (!result.Succeeded) return BadRequest("this user already registerd before");
+            if (!result.Succeeded) throw new BusinessException(HttpStatusCode.BadRequest, result.Errors.ToString(), string.Empty);
 
             var businessUserId = await CreateCustomer(model, user);
+
             user.BusinessUserId = businessUserId;
+
             await _userManager.UpdateAsync(user);
             return Ok();
         }
@@ -125,7 +140,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
         public async Task<IActionResult> UpdateProfile([FromQuery] string phoneNumber)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == "+" + phoneNumber.Trim());
-            if (user == null) return BadRequest("user_with_this_phone_number_not_found");
+            if (user == null) throw new UserNotFoundException(phoneNumber);
 
             var userDetails = await GetCustomerById(user.BusinessUserId);
             return Ok(userDetails);
@@ -135,11 +150,61 @@ namespace Brimo.IDP.STS.Identity.Controllers
         public async Task<IActionResult> UpdateProfile(UpdateProfileVM model)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == model.PhoneNumber);
-            if (user == null) return BadRequest("User with this phone number not found");
+            if (user == null) throw new UserNotFoundException(model.PhoneNumber);
 
-            if (!user.PhoneNumberConfirmed) return BadRequest("please_confirm_your_phone_number_first");
+            if (!user.PhoneNumberConfirmed) throw new PhoneNumberNotConfirmedException(model.PhoneNumber);
 
             await UpdateCustomer(model, user);
+            return Ok();
+        }
+
+        [HttpPost("ForgetPassword")]
+        public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordVM model)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == model.PhoneNumber);
+            if (user == null) throw new UserNotFoundException(model.PhoneNumber);
+
+            var isRegisteredBefore = await _userManager.HasPasswordAsync(user);
+            if (!isRegisteredBefore) throw new UserNotRegisteredException(model.PhoneNumber);
+
+            if (!user.PhoneNumberConfirmed) throw new PhoneNumberNotConfirmedException(model.PhoneNumber);
+
+            var code = new Random().Next(100000, 999999).ToString();
+            user.ResetPasswordCode = code;
+
+            await _userManager.UpdateAsync(user);
+
+            _smsSender.Send(new SMSMessageModel
+            {
+                Message = $@"Your change password code is {code}",
+                ToPhoneNumber = model.PhoneNumber
+            });
+
+            return Ok();
+        }
+
+        [HttpPost("ChangeForgetPassword")]
+        public async Task<IActionResult> ChangeForgetPassword([FromBody] ChangeForgetPasswordVM model)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == model.PhoneNumber);
+            if (user == null) throw new UserNotFoundException(model.PhoneNumber);
+
+            var isRegisteredBefore = await _userManager.HasPasswordAsync(user);
+            if (!isRegisteredBefore) throw new UserNotRegisteredException(model.PhoneNumber);
+
+            if (!user.PhoneNumberConfirmed) throw new PhoneNumberNotConfirmedException(model.PhoneNumber);
+
+            if (user.ResetPasswordCode != model.Code) throw new InvalidForgetPasswordCodeException();
+
+            var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var result = await _userManager.ResetPasswordAsync(user, resetPasswordToken, model.Password);
+
+            if (!result.Succeeded) throw new BusinessException(HttpStatusCode.BadRequest, result.Errors.ToString(), "invalid_password");
+            
+            user.ResetPasswordCode = null;
+            await _userManager.UpdateAsync(user);
+
             return Ok();
         }
 
@@ -148,7 +213,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
         public async Task<IActionResult> DeleteUser([FromQuery] string userId)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
-            if (user == null) return BadRequest("User with this id not found");
+            if (user == null) throw new UserNotFoundException(string.Empty);
 
             var result = await _userManager.DeleteAsync(user);
 

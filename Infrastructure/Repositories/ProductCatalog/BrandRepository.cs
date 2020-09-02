@@ -33,6 +33,11 @@ namespace Infrastructure.Repositories.ProductCatalog
             return _context.Brands.Add(brand).Entity;
         }
 
+        public void AddRange(List<Brand> brands)
+        {
+            _context.Brands.AddRange(brands);
+        }
+
         public void Update(Brand brand)
         {
             _context.Entry(brand).State = EntityState.Modified;
@@ -82,6 +87,11 @@ namespace Infrastructure.Repositories.ProductCatalog
             var count = query.Count();
 
             return (count, brands);
+        }
+
+        public void DeleteAll()
+        {
+            _context.Brands.RemoveRange(_context.Brands);
         }
     }
 }
