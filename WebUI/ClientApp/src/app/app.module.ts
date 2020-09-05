@@ -23,6 +23,7 @@ import { PhotoEditorComponent } from './shared/components/popups/photo-editor/ph
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { MatIconModule, MatSliderModule } from '@angular/material';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from './shared/services/auth.service';
 
 // import { ConfigurationService } from './shared/services/app.configuration.service';
 
@@ -68,11 +69,11 @@ export function tokenGetter() {
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
     {
       provide: HTTP_INTERCEPTORS,
-      useFactory: function (router: Router) {
-        return new AuthInterceptor(router);
+      useFactory: function (router: Router, authService: AuthService) {
+        return new AuthInterceptor(router, authService);
       },
       multi: true,
-      deps: [Router]
+      deps: [Router, AuthService]
     },
     CoreService,
     NgxUiLoaderService

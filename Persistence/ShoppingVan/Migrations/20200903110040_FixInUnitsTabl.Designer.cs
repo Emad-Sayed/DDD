@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.ShoppingVan;
 
 namespace Persistence.ShoppingVan.Migrations
 {
     [DbContext(typeof(ShoppingVanContext))]
-    partial class ShoppingVanContextModelSnapshot : ModelSnapshot
+    [Migration("20200903110040_FixInUnitsTabl")]
+    partial class FixInUnitsTabl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,9 +62,6 @@ namespace Persistence.ShoppingVan.Migrations
 
                     b.Property<float>("SellingPrice")
                         .HasColumnType("real");
-
-                    b.Property<string>("UnitId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VanItemId")
                         .HasColumnType("nvarchar(max)");

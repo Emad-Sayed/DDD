@@ -33,6 +33,12 @@ namespace Application.ShoppingVan.Queries.CurrentCustomerVan
 
                 var vanToReturn = _mapper.Map<ShoppingVanVM>(vanFromRepo);
 
+                // TODO return empty object
+                if (vanToReturn == null) vanToReturn = new ShoppingVanVM {
+                    CustomerId = _currentUserService.UserId,
+                    ShoppingVanItems = new List<ShoppingVanItemVM>()
+                };
+
                 return vanToReturn;
             }
         }

@@ -35,6 +35,7 @@ namespace Infrastructure.Repositories.ShoppingVan
         {
             return await _context.ShoppingVans
                    .Include(x => x.ShoppingVanItems)
+                   .ThenInclude(x => x.Units)
                    .FirstOrDefaultAsync(x => x.Id.ToString() == id);
         }
 
@@ -47,6 +48,7 @@ namespace Infrastructure.Repositories.ShoppingVan
         {
             var van = await _context.ShoppingVans
                 .Include(x => x.ShoppingVanItems)
+                   .ThenInclude(x => x.Units)
                 .FirstOrDefaultAsync(x => x.CustomerId == customerId);
             return van;
         }
@@ -55,6 +57,7 @@ namespace Infrastructure.Repositories.ShoppingVan
         {
             var customerVan = await _context.ShoppingVans
               .Include(x => x.ShoppingVanItems)
+                   .ThenInclude(x => x.Units)
               .FirstOrDefaultAsync(x => x.CustomerId == id);
             return customerVan;
         }

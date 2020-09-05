@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.ShoppingVan;
 
 namespace Persistence.ShoppingVan.Migrations
 {
     [DbContext(typeof(ShoppingVanContext))]
-    partial class ShoppingVanContextModelSnapshot : ModelSnapshot
+    [Migration("20200903103840_AddingAllProductUnitsToShoppingVan")]
+    partial class AddingAllProductUnitsToShoppingVan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,9 +63,6 @@ namespace Persistence.ShoppingVan.Migrations
                     b.Property<float>("SellingPrice")
                         .HasColumnType("real");
 
-                    b.Property<string>("UnitId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("VanItemId")
                         .HasColumnType("nvarchar(max)");
 
@@ -77,7 +76,7 @@ namespace Persistence.ShoppingVan.Migrations
 
                     b.HasIndex("VanItemId1");
 
-                    b.ToTable("VanItemUnits");
+                    b.ToTable("Unit");
                 });
 
             modelBuilder.Entity("Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate.Van", b =>

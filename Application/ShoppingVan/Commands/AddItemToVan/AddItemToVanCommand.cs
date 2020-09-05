@@ -1,15 +1,14 @@
 ﻿using Application.Common.Interfaces;
-using Domain.Common.Exceptions;
-using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
-using Domain.ProductCatalog.Exceptions;
+using Application.ProductCatalog.ProductAggregate.Queries.ProductById;
+using Domain.ShoppingVan.Exceptions;
 using Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Unit = Domain.ShoppingVan.AggregatesModel.ShoppingVanAggregate.Unit;
 
 namespace Application.ShoppingVan.Commands.AddItemToVan
 {
@@ -20,18 +19,18 @@ namespace Application.ShoppingVan.Commands.AddItemToVan
 
         public class Handler : IRequestHandler<AddItemToVanCommand, int>
         {
-            private readonly IProductRepository _productRepository;
             private readonly IShoppingVanRepository _shoppingVanRepository;
             private readonly ICurrentUserService _currentUserService;
+            private readonly IMediator _mediator;
 
             public Handler(
                 IShoppingVanRepository shoppingVanRepository,
-                IProductRepository productRepository,
-                ICurrentUserService currentUserService)
+                ICurrentUserService currentUserService,
+                IMediator mediator)
             {
                 _shoppingVanRepository = shoppingVanRepository;
-                _productRepository = productRepository;
                 _currentUserService = currentUserService;
+                _mediator = mediator;
             }
 
             public async Task<int> Handle(AddItemToVanCommand request, CancellationToken cancellationToken)
@@ -46,15 +45,21 @@ namespace Application.ShoppingVan.Commands.AddItemToVan
                     await _shoppingVanRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
                 }
 
-                var productToAddToVan = await _productRepository.FindByIdAsync(request.ProductId);
-                if (productToAddToVan == null) throw new ProductNotFoundException(request.ProductId);
+                var productToAddToVan = await _mediator.Send(new ProductByIdQuery { ProductId = request.ProductId });
 
                 // selected product unit
-                var selectedUnit = productToAddToVan.Units.FirstOrDefault(x => x.Id == new Guid(request.UnitId));
+                var selectedUnit = productToAddToVan.Units.FirstOrDefault(x => x.Id == request.UnitId);
                 if (selectedUnit == null) throw new UnitNotFoundException(request.UnitId);
 
                 // Adding product to van
-                van.AddItem(request.ProductId, productToAddToVan.Name, selectedUnit.Id.ToString(), selectedUnit.Name, selectedUnit.Price, productToAddToVan.PhotoUrl, selectedUnit.SellingPrice);
+                var unitsToAddToVan = new List<Unit>();
+
+                foreach (var unit in productToAddToVan.Units)
+                {
+                    unitsToAddToVan.Add(new Unit(unit.Name, unit.Count, unit.ContentCount, unit.Price, unit.SellingPrice, unit.Weight, unit.IsAvailable, van.Id.ToString(), unit.Id));
+                }
+
+                van.AddItem(productToAddToVan.Id, productToAddToVan.Name, productToAddToVan.PhotoUrl, unitsToAddToVan, request.UnitId);
 
                 _shoppingVanRepository.Update(van);
 

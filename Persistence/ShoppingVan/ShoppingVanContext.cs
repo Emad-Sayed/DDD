@@ -36,6 +36,7 @@ namespace Persistence.ShoppingVan
 
         public DbSet<Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate.Van> ShoppingVans { get; set; }
         public DbSet<Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate.VanItem> ShoppingVanItems { get; set; }
+        public DbSet<Domain.ShoppingVan.AggregatesModel.ShoppingVanAggregate.Unit> VanItemUnits { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

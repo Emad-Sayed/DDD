@@ -1,11 +1,11 @@
 ﻿using Domain.Base.Entity;
 using Domain.Common.Interfaces;
+using Domain.ShoppingVan.AggregatesModel.ShoppingVanAggregate;
 using Domain.ShoppingVan.Exceptions;
 using Domain.ShoppingVanBoundedContext.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
@@ -32,41 +32,34 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
             AddDomainEvent(new ShoppingVanCreated(this));
         }
 
-        public void AddItem(string productId, string productName, string unitId, string unitName, float unitPrice, string photoUrl, float sellingPrice)
+        public void AddItem(string productId, string productName, string photoUrl, List<Unit> units, string unitId)
         {
             // Check if the product exist in the shopping van items or not if not will will add it with the required amount
-            var vanItem = ShoppingVanItems.FirstOrDefault(x => x.ProductId == productId && x.UnitId == unitId);
+            var vanItem = ShoppingVanItems.FirstOrDefault(x => x.ProductId == productId);
             if (vanItem == null)
             {
-                vanItem = new VanItem(Id.ToString(), productId, productName, unitId, unitName, unitPrice, photoUrl, sellingPrice);
+                vanItem = new VanItem(Id.ToString(), productId, productName, photoUrl, units);
                 ShoppingVanItems.Add(vanItem);
             }
-            else
-            {
-                vanItem.ChangeAmount(vanItem.Amount + 1);
-            }
+
+            var unit = vanItem.IncreaseUnit(unitId);
 
             TotalItemsCount += 1;
-            TotalPrice += vanItem.SellingPrice + (vanItem.SellingPrice * 0.14f);
+            TotalPrice += unit.SellingPrice;
 
             AddDomainEvent(new ShoppingVanUpdated(this));
         }
 
         public void RemoveItem(string productId, string unitId)
         {
-            var vanItem = ShoppingVanItems.FirstOrDefault(x => x.ProductId == productId && x.UnitId == unitId);
+            var vanItem = ShoppingVanItems.FirstOrDefault(x => x.ProductId == productId);
             if (vanItem == null) throw new ShoppingVanItemNotFound(productId, unitId);
 
             TotalItemsCount -= 1;
-            vanItem.ChangeAmount(vanItem.Amount - 1);
-            TotalPrice -= vanItem.SellingPrice + (vanItem.SellingPrice * 0.14f);
-
-            // Check if the van item amount is less than or = to 0 then will remove this item from van
-            if (vanItem.Amount <= 0) ShoppingVanItems.Remove(vanItem);
+            var unit = vanItem.DecreaseUnit(unitId);
+            TotalPrice -= unit.SellingPrice;
 
             AddDomainEvent(new ShoppingVanUpdated(this));
-
-
         }
 
     }

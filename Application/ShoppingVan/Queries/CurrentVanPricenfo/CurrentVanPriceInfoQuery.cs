@@ -35,8 +35,8 @@ namespace Application.ShoppingVan.Queries.CurrentVanPricenfo
                 var vanInfo = new VanPriceInfoVM
                 {
                     TaxValue = taxValue,
-                    TotalVanPriceBeforeTaxValue = vanFromRepo.TotalPrice - (vanFromRepo.TotalPrice * 0.14f),
-                    TotalVanPriceAfterTaxValue = vanFromRepo.TotalPrice
+                    TotalVanPriceBeforeTaxValue = vanFromRepo.TotalPrice,
+                    TotalVanPriceAfterTaxValue = vanFromRepo.TotalPrice + (vanFromRepo.TotalPrice * 0.14f)
                 };
                 return vanInfo;
             }

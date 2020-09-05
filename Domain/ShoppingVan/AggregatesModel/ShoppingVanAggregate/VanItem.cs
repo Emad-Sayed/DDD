@@ -1,6 +1,9 @@
 ﻿using Domain.Base.Entity;
+using Domain.ShoppingVan.AggregatesModel.ShoppingVanAggregate;
+using Domain.ShoppingVan.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
@@ -9,34 +12,47 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
     {
         public string ProductId { get; private set; }
         public string ProductName { get; private set; }
-        public string UnitId { get; private set; }
-        public string UnitName { get; private set; }
-        public float UnitPrice { get; private set; }
         public string PhotoUrl { get; private set; }
-        public float SellingPrice { get; private set; }
-        public int Amount { get; private set; }
 
         public string VanId { get; private set; }
         public Van Van { get; private set; }
 
+        public ICollection<Unit> Units { get; private set; }
+
         private VanItem() { }
-        public VanItem(string vanId, string productId, string productName, string unitId, string unitName, float unitPrice, string photoUrl, float sellingPrice)
+
+        public VanItem(string vanId, string productId, string productName, string photoUrl, List<Unit> units, Guid id = default)
         {
             ProductId = productId;
             ProductName = productName;
             VanId = vanId;
-            UnitId = unitId;
-            UnitName = unitName;
-            UnitPrice = unitPrice;
             PhotoUrl = photoUrl;
-            SellingPrice = sellingPrice;
 
-            Amount = 1;
+            //Id = id == default ? Guid.NewGuid() : id;
+
+            Units = units;
         }
 
-        public void ChangeAmount(int amount)
+
+        public Unit DecreaseUnit(string unitId)
         {
-            Amount = amount;
+            var unit = Units.FirstOrDefault(x => x.UnitId == unitId);
+            if (unit == null) throw new UnitNotFoundException(unitId);
+
+            if (unit.CustomerCount <= 0) throw new InValidCusotmerUnitCountException();
+
+            unit.DecreaseUnit();
+            return unit;
         }
+
+        public Unit IncreaseUnit(string unitId)
+        {
+            var unit = Units.FirstOrDefault(x => x.UnitId == unitId);
+            if (unit == null) throw new UnitNotFoundException(unitId);
+            unit.IncreaseUnit();
+            return unit;
+        }
+
+
     }
 }

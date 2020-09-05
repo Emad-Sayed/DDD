@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="ShoppingVan\Migrations\20200603214402_AddingProductNameWithUnit.cs" />
     <Compile Remove="ShoppingVan\Migrations\20200603214402_AddingProductNameWithUnit.Designer.cs" />
+    <Compile Remove="ShoppingVan\Migrations\20200903105108_FixInUnitsTable.cs" />
+    <Compile Remove="ShoppingVan\Migrations\20200903105108_FixInUnitsTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

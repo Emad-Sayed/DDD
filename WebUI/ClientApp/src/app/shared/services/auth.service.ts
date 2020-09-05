@@ -12,7 +12,7 @@ import { CoreService } from './core.service';
 })
 export class AuthService {
 
-    public constructor(private router: Router,private core: CoreService, private oauthService: OAuthService, private http: HttpClient) {
+    public constructor(private router: Router, private core: CoreService, private oauthService: OAuthService, private http: HttpClient) {
         this.oauthService.configure({
             requireHttps: false,
             skipIssuerCheck: true,
@@ -64,7 +64,12 @@ export class AuthService {
     }
 
     isAdmin() {
-        let roles = localStorage.getItem('roles').split(',');
+        let roles = [];
+        let rolesFromStorage = localStorage.getItem('roles')
+
+        if (rolesFromStorage) roles = rolesFromStorage.split(',');
+        else this.router.navigate(['/login']);
+
         if (!(roles.includes('Admin') || roles.includes('Distributor'))) {
             this.core.showErrorOperation('ليس لديك صلاحية الدخول الي هذا الموقع');
             this.router.navigate(['/login']);
