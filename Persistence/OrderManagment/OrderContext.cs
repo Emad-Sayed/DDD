@@ -37,6 +37,9 @@ namespace Persistence.OrderManagment
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasSequence<int>("OrderNumbers", schema: "shared")
+                .StartsAt(1000)
+                .IncrementsBy(1);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderContext).Assembly, type => type.FullName.Contains("Order"));
         }
 

@@ -9,6 +9,7 @@ namespace Persistence.OrderManagment.Configurations
         public void Configure(EntityTypeBuilder<Order> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.OrderNumber).HasDefaultValueSql("NEXT VALUE FOR shared.OrderNumbers");
             builder.Ignore(b => b.DomainEvents);
         }
     }

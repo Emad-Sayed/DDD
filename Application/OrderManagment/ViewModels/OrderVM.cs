@@ -10,6 +10,7 @@ namespace Application.OrderManagment.ViewModels
         public string Id { get; set; }
         public string CustomerId { get; private set; }
         public string CustomerName { get; private set; }
+        public int OrderNumber { get; private set; }
         public string Address { get; private set; }
         public OrderStatus OrderStatus { get; private set; }
         public DateTime OrderPlacedDate { get; set; }

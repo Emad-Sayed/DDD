@@ -11,6 +11,7 @@ namespace Application.OrderManagment.ViewModels
         public string ProductName { get; set; }
         public string PhotoUrl { get; set; }
         public float UnitPrice { get; set; }
+        public float UnitSellingPrice { get; set; }
         public string UnitId { get; set; }
         public string UnitName { get; set; }
         public int UnitCount { get; set; }

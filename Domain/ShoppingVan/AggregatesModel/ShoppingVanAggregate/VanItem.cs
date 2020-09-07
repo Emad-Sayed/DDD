@@ -39,8 +39,6 @@ namespace Domain.ShoppingVanBoundedContext.AggregatesModel.ShoppingVanAggregate
             var unit = Units.FirstOrDefault(x => x.UnitId == unitId);
             if (unit == null) throw new UnitNotFoundException(unitId);
 
-            if (unit.CustomerCount <= 0) throw new InValidCusotmerUnitCountException();
-
             unit.DecreaseUnit();
             return unit;
         }

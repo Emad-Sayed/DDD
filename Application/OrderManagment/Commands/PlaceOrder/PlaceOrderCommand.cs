@@ -49,10 +49,14 @@ namespace Application.OrderManagment.Commands.PlaceOrder
                 _orderRepository.Add(orderToPlace);
                 await _orderRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
 
-                //foreach (var vanItem in customerVanFromQuery.ShoppingVanItems)
-                //{
-                //    orderToPlace.AddOrderItem(vanItem.ProductId, vanItem.ProductName, vanItem.UnitPrice, vanItem.PhotoUrl, vanItem.UnitId, vanItem.UnitName, vanItem.Amount);
-                //}
+                foreach (var vanItem in customerVanFromQuery.ShoppingVanItems)
+                {
+                    foreach (var unit in vanItem.Units)
+                    {
+                        if (unit.CustomerCount > 0)
+                            orderToPlace.AddOrderItem(vanItem.ProductId, vanItem.Name, unit.Price, unit.ConsumerPrice, vanItem.ImgUrl, unit.Id, unit.Name, (int)unit.CustomerCount);
+                    }
+                }
 
                 _orderRepository.Update(orderToPlace);
 

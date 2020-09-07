@@ -9,6 +9,7 @@ export class OrderItem {
         public unitId?: string,
         public unitName?: string,
         public unitPrice?: number,
+        public unitSellingPrice?: number,
         public isEditing?: boolean
 
     ) { }

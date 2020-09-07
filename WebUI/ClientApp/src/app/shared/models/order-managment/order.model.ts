@@ -15,6 +15,7 @@ export class Order {
         public orderShippedDate?: Date,
         public orderDeliveredDate?: Date,
         public orderCanceledDate?: Date,
-        public orderItems?: OrderItem[]
+        public orderItems?: OrderItem[],
+        public orderNumber?: number
     ) { }
 }

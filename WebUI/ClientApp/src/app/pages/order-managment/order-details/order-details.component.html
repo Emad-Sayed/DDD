@@ -6,7 +6,7 @@
   </div>
   <div class="row">
     <div class="col-6 pt-3">
-      كود العميل : {{order?.customerId?.substr(0, 5)}}
+      كود العميل : {{order?.customerId}}
     </div>
     <div class="col-6 pt-3">
       خط السير : {{order.address}}
@@ -59,7 +59,7 @@
       <p>{{orderItem.productName}}</p>
     </div>
     <div class="px-2">
-      <p>{{orderItem.unitPrice}}</p>
+      <p>{{orderItem.unitSellingPrice}}</p>
     </div>
     <div class="d-flex justify-content-around">
       <button class="btn p-2" *ngIf="orderItem.isEditing" (click)="updateOrderItem(orderItem)">
@@ -79,7 +79,7 @@
       المجموع
     </div>
     <div class="col-3 text-left">
-     {{order.totalPrice}}
+      {{(order.totalPrice - (order.totalPrice * .14)).toFixed(2)}}
     </div>
   </div>
   <div class="row pt-3">
@@ -95,18 +95,20 @@
       المجموع الكلي
     </div>
     <div class="col-3 text-left">
-      949 ج م
+      {{order.totalPrice.toFixed(2)}} ج م
     </div>
   </div>
   <div class="row text-center mt-5">
     <div class="col">
-      <button class="btn btn-outline-info confirm-btn" *ngIf="order.orderStatus == 0" (click)="confirmOrder()">تاكيد الطلب </button>
+      <button class="btn btn-outline-info confirm-btn" *ngIf="order.orderStatus == 0" (click)="confirmOrder()">تاكيد
+        الطلب </button>
       <button class="btn confirm-btn" *ngIf="order.orderStatus == 1" (click)="shippOrder()">شحن الطلب </button>
       <button class="btn confirm-btn" *ngIf="order.orderStatus == 2" (click)="orderDeliver()">تم التوصيل </button>
     </div>
     <div class="col">
-      <button class="btn btn-outline-danger cancel-btn" *ngIf="order.orderStatus == 0 || order.orderStatus == 1 || order.orderStatus == 2"
-        (click)="cancelOrder()">إلغاء الطلب </button>
+      <button class="btn btn-outline-danger cancel-btn"
+        *ngIf="order.orderStatus == 0 || order.orderStatus == 1 || order.orderStatus == 2" (click)="cancelOrder()">إلغاء
+        الطلب </button>
     </div>
     <div class="col">
       <button class="btn btn-outline-warning print-btn mr-2">
