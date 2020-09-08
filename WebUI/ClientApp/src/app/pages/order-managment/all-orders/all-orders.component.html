@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-12">
+    <div class="col-8">
         <!-- search box -->
         <div class="w-100 card mb-3">
             <div class="ais-SearchBox card-search">
@@ -7,13 +7,32 @@
                     <input class="ais-SearchBox-input form-control col-5" autocomplete="off" autocorrect="off"
                         autocapitalize="off" placeholder="رقم الطلب" spellcheck="false" maxlength="512" type="search"
                         (keydown)="onKeyUp($event.target.value)" value="" />
-                    <!-- <a class="ais-SearchBox-submit card-link" type="submit" title="Submit the search query.">
-                        <i class="fas fa-search ml-2"></i>
-                        بحث
-                    </a> -->
                 </form>
             </div>
         </div>
+    </div>
+    <div class="col-4">
+        <!-- <div class="dropdown">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                حالة الطلب
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item text-primary">جديد</a>
+                <a class="dropdown-item text-info">تم التاكيد</a>
+                <a class="dropdown-item text-warning">جاري الشحن</a>
+                <a class="dropdown-item text-success">تم التوصيل</a>
+                <a class="dropdown-item text-danger">تم الإلغاء</a>
+            </div>
+        </div> -->
+        <select class="custom-select" [(ngModel)]="orderStatusFillter" (change)="onChangeOrderStatusFillter()">
+            <option value="-1">حالة الطلب</option>
+            <option class="text-primary" value="0">جديد</option>
+            <option class="text-info" value="1">تم التاكيد</option>
+            <option class="text-warning" value="2">جاري الشحن</option>
+            <option class="text-success" value="3">تم التوصيل</option>
+            <option class="text-danger" value="4">تم الإلغاء</option>
+        </select>
     </div>
     <div class="col-12">
         <div class="card">

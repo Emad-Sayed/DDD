@@ -4,9 +4,9 @@
         <div class="w-100 card mb-3">
             <div class="ais-SearchBox card-search">
                 <form class="ais-SearchBox-form w-100 form-group d-flex" novalidate>
-                    <input class="ais-SearchBox-input form-control col-5" autocomplete="off" autocorrect="off" (keydown)="onKeyUp($event.target.value)"
-                        autocapitalize="off" placeholder="رقم الطلب" spellcheck="false" maxlength="512" type="search"
-                        value="" />
+                    <input class="ais-SearchBox-input form-control col-5" autocomplete="off" autocorrect="off"
+                        (keydown)="onKeyUp($event.target.value)" autocapitalize="off" placeholder="رقم الطلب"
+                        spellcheck="false" maxlength="512" type="search" value="" />
                     <!-- <a class="ais-SearchBox-submit card-link" type="submit" title="Submit the search query.">
                         <i class="fas fa-search ml-2"></i>
                         بحث
@@ -28,6 +28,7 @@
                                 <table class="table table-dashboard mb-0">
                                     <thead>
                                         <tr>
+                                            <th scope="col" class="border-top-0">#</th>
                                             <th scope="col" class="border-top-0"> رقم الطلب</th>
                                             <th scope="col" class="border-top-0">حالة الطلب</th>
                                             <th scope="col" class="border-top-0">إسم العميل</th>
@@ -43,6 +44,7 @@
                                         <tr *ngFor="let order of placedOrders; let i = index"
                                             (click)="openOrderDetails(order)" rel="off-canvas" class="canvas-btn">
                                             <th scope="row">{{ i + 1 }}</th>
+                                            <th scope="row">{{ order.orderNumber }}</th>
                                             <td>
                                                 <div [ngSwitch]="order.orderStatus">
                                                     <span *ngSwitchCase="0"
@@ -78,6 +80,7 @@
                                 <table class="table table-dashboard mb-0">
                                     <thead>
                                         <tr>
+                                            <th scope="col" class="border-top-0">#</th>
                                             <th scope="col" class="border-top-0"> رقم الطلب</th>
                                             <th scope="col" class="border-top-0">حالة الطلب</th>
                                             <th scope="col" class="border-top-0">إسم العميل</th>
@@ -93,6 +96,7 @@
                                         <tr *ngFor="let order of confirmedOrders; let i = index"
                                             (click)="openOrderDetails(order)" rel="off-canvas" class="canvas-btn">
                                             <th scope="row">{{ i + 1 }}</th>
+                                            <th scope="row">{{ order.orderNumber }}</th>
                                             <td>
                                                 <div [ngSwitch]="order.orderStatus">
                                                     <span *ngSwitchCase="0"
@@ -128,6 +132,7 @@
                                 <table class="table table-dashboard mb-0">
                                     <thead>
                                         <tr>
+                                            <th scope="col" class="border-top-0">#</th>
                                             <th scope="col" class="border-top-0"> رقم الطلب</th>
                                             <th scope="col" class="border-top-0">حالة الطلب</th>
                                             <th scope="col" class="border-top-0">إسم العميل</th>
@@ -143,6 +148,7 @@
                                         <tr *ngFor="let order of shippedOrders; let i = index"
                                             (click)="openOrderDetails(order)" rel="off-canvas" class="canvas-btn">
                                             <th scope="row">{{ i + 1 }}</th>
+                                            <th scope="row">{{ order.orderNumber }}</th>
                                             <td>
                                                 <div [ngSwitch]="order.orderStatus">
                                                     <span *ngSwitchCase="0"

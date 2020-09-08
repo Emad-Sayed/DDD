@@ -1,3 +1,6 @@
+*{
+  direction: rtl;
+}
 .active {
   left: 0px;
   opacity: 1;
@@ -81,4 +84,8 @@ app-product-editor {
     height: 400px;
     margin: 0 auto;
     display: block;
+}
+
+.dropdown-item {
+  cursor: pointer;
 }

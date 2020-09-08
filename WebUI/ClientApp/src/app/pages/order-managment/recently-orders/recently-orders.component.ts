@@ -131,6 +131,7 @@ export class RecentlyOrdersComponent implements OnInit, OnDestroy {
         let confirmedOrder = this.placedOrders.find(x => x.id == orderId);
         confirmedOrder.orderStatus = orderStatus;
         this.confirmedOrders.push(confirmedOrder);
+        --this.totalPlacedOrders;
         ++this.totalConfirmedOrders;
         this.placedOrders.splice(this.placedOrders.indexOf(confirmedOrder), 1);
         this.active = 2;
@@ -139,6 +140,7 @@ export class RecentlyOrdersComponent implements OnInit, OnDestroy {
         let shippedOrder = this.confirmedOrders.find(x => x.id == orderId);
         shippedOrder.orderStatus = orderStatus;
         this.shippedOrders.push(shippedOrder);
+        --this.totalConfirmedOrders;
         ++this.totalShippedOrders;
         this.confirmedOrders.splice(this.confirmedOrders.indexOf(shippedOrder), 1);
         this.shippedOrders.find(x => x.id == orderId).orderStatus = orderStatus;
@@ -148,6 +150,12 @@ export class RecentlyOrdersComponent implements OnInit, OnDestroy {
         let dilveredOrder = this.shippedOrders.find(x => x.id == orderId);
         --this.totalShippedOrders;
         this.shippedOrders.splice(this.shippedOrders.indexOf(dilveredOrder), 1);
+        this.orderManagmentService.orderDetails.next({ openDetails: false });
+        break;
+      case 4:
+        let canceledaOrder = this.placedOrders.find(x => x.id == orderId);
+        --this.totalPlacedOrders;
+        this.placedOrders.splice(this.placedOrders.indexOf(canceledaOrder), 1);
         this.orderManagmentService.orderDetails.next({ openDetails: false });
         break;
       default:

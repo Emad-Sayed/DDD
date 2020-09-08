@@ -35,3 +35,14 @@
   margin: 0 auto;
   display: block;
 }
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  margin-left: auto;
+  [dir="rtl"] & {
+      margin-left: unset;
+      margin-right: auto;
+  }
+}

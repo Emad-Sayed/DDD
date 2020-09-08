@@ -1,0 +1,90 @@
+<div class="row">
+    <h4 class="h4">البيانات الصحيحة {{validExcelProducts.length}}</h4>
+</div>
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">إسم المنتج</th>
+            <th scope="col">الفئة</th>
+            <th scope="col">الشركة</th>
+            <th scope="col text-center">
+                <div class="row">
+                    <strong>الوحدات</strong>
+                </div>
+                <div class="row">
+                    <div style="padding-right: 20px;">#</div>
+                    <div class="col">العدد</div>
+                    <div class="col">الاسم</div>
+                    <div class="col">سعر</div>
+                    <div class="col">سعر البيع</div>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let product of validExcelProducts; let i=index">
+            <th scope="row">{{ i + 1}}</th>
+            <td>{{product.name}}</td>
+            <td>{{product.brand.name}}</td>
+            <td>{{product.productCategory.name}}</td>
+            <td>
+                <table class="table table-sm">
+                    <tbody>
+                        <tr *ngFor="let unit of product.units; let ui = index">
+                            <th scope="row">{{ui + 1}}</th>
+                            <td>{{unit.count}}</td>
+                            <td>{{unit.name}}</td>
+                            <td>{{unit.price}}</td>
+                            <td>{{unit.sellingPrice}}</td>
+                        </tr>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="row">
+    <h4 class="h4">البيانات الخاطئة {{inValidExcelProducts.length}}</h4>
+</div>
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">إسم المنتج</th>
+            <th scope="col">الفئة</th>
+            <th scope="col">الشركة</th>
+            <th scope="col text-center">
+                <div class="row">
+                    <strong>الوحدات</strong>
+                </div>
+                <div class="row">
+                    <div style="padding-right: 20px;">#</div>
+                    <div class="col">العدد</div>
+                    <div class="col">الاسم</div>
+                    <div class="col">سعر</div>
+                    <div class="col">سعر البيع</div>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let product of inValidExcelProducts; let i=index">
+            <th scope="row">{{ i + 1}}</th>
+            <td [ngClass]="{'bg-danger': product.name == null}">{{product.name}}</td>
+            <td [ngClass]="{'bg-danger': product.brand.name == null}">{{product.brand.name}}</td>
+            <td [ngClass]="{'bg-danger': product.productCategory.name == null}">{{product.productCategory.name}}</td>
+            <td>
+                <table class="table table-sm">
+                    <tbody>
+                        <tr *ngFor="let unit of product.units; let ui = index">
+                            <th scope="row">{{ui + 1}}</th>
+                            <td [ngClass]="{'bg-danger': Number.isNaN(unit.count)}">{{unit.count}}</td>
+                            <td [ngClass]="{'bg-danger': unit.name == null}">{{unit.name}}</td>
+                            <td [ngClass]="{'bg-danger': Number.isNaN(unit.price)}">{{unit.price}}</td>
+                            <td [ngClass]="{'bg-danger': Number.isNaN(unit.sellingPrice)}">{{unit.sellingPrice}}</td>
+                        </tr>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -24,6 +24,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { MatIconModule, MatSliderModule } from '@angular/material';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from './shared/services/auth.service';
+import { PreviewProductExcelComponent } from './pages/product-catalog/products/preview-product-excel/preview-product-excel.component';
 
 // import { ConfigurationService } from './shared/services/app.configuration.service';
 
@@ -43,7 +44,8 @@ export function tokenGetter() {
     NavbarComponent,
     LayoutComponent,
     DeletePopupComponent,
-    PhotoEditorComponent
+    PhotoEditorComponent,
+    PreviewProductExcelComponent
   ],
   imports: [
     BrowserModule,
@@ -80,7 +82,8 @@ export function tokenGetter() {
   ],
   entryComponents: [
     DeletePopupComponent,
-    PhotoEditorComponent
+    PhotoEditorComponent,
+    PreviewProductExcelComponent
   ],
   bootstrap: [AppComponent]
 })

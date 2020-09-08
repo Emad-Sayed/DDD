@@ -67,8 +67,12 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             var orderItemToUpdate = OrderItems.FirstOrDefault(x => x.Id == new Guid(orderItemId));
             if (orderItemToUpdate == null) throw new OrderItemNotFoundException(orderItemId);
 
+            var oldOrderItemPrice = orderItemToUpdate.UnitSellingPrice * orderItemToUpdate.UnitCount;
 
             orderItemToUpdate.Update(unitId, unitName, unitPrice, unitSellingPrice, unitCount);
+
+            TotalPrice = TotalPrice - oldOrderItemPrice;
+            TotalPrice = TotalPrice + orderItemToUpdate.UnitSellingPrice * orderItemToUpdate.UnitCount;
 
             AddDomainEvent(new OrderUpdated(this));
         }

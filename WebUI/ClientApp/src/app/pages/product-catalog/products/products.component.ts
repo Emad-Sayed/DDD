@@ -9,7 +9,11 @@ import { PopupServiceService } from 'src/app/shared/services/popup-service.servi
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Brand } from 'src/app/shared/models/product-catalog/brand/brand.model';
 import { ProductCategory } from 'src/app/shared/models/product-catalog/product-category/product-category.model';
-
+import * as XLSX from 'xlsx';
+import { Unit } from 'src/app/shared/models/product-catalog/product/unit.model';
+import { invalid } from '@angular/compiler/src/render3/view/util';
+import { PreviewProductExcelComponent } from './preview-product-excel/preview-product-excel.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-products',
@@ -19,6 +23,8 @@ import { ProductCategory } from 'src/app/shared/models/product-catalog/product-c
 export class ProductsComponent implements OnInit, OnDestroy {
 
   products: Product[] = [];
+  validExcelProducts: Product[] = [];
+  inValidExcelProducts: Product[] = [];
   productsTotalCount: number = 0;
   page: Page = new Page();
   brands: Brand[] = [];
@@ -33,7 +39,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
     private core: CoreService,
     private popupService: PopupServiceService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) { }
 
   ngOnDestroy(): void {
@@ -160,4 +167,84 @@ export class ProductsComponent implements OnInit, OnDestroy {
       this.deleteProduct(product.id);
     });
   }
+
+
+  importProductsFromExcel(evt: any) {
+    /* wire up file reader */
+    const target: DataTransfer = <DataTransfer>(evt.target);
+    if (target.files.length !== 1) {
+      throw new Error('Cannot use multiple files');
+    }
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      /* read workbook */
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+      /* grab first sheet */
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+      /* save data */
+      const data = XLSX.utils.sheet_to_json(ws, { header: ['name', 'category', 'brand', 'unit1Name', 'unit2Name', 'unit3Name', 'unit2Count', 'unit3Count', 'unit1Price', 'unit2Price', 'unit3Price', 'unit1SellingPrice', 'unit2SellingPrice', 'unit3SellingPrice'] }).slice(1);
+      console.log(data);
+
+      const products = data.map(x => new Product('', '', x['name'], '', '', true, '', new Brand('', '', x['brand']), '', new ProductCategory('', '', x['category']), [
+        new Unit(false, '', x['unit1Name'], 1, 1, +x['unit1Price'], +x['unit1SellingPrice']),
+        new Unit(false, '', x['unit2Name'], +x['unit2Count'], 1, +x['unit2Price'], +x['unit2SellingPrice']),
+        new Unit(false, '', x['unit3Name'], +x['unit3Count'], 1, +x['unit3Price'], +x['unit3SellingPrice']),
+      ]))
+
+      products.forEach(product => {
+        if (this.productValidation(product))
+          this.validExcelProducts.push(product);
+        else
+          this.inValidExcelProducts.push(product);
+
+      });
+
+      this.showPreviewProductExcelPopup();
+    };
+    reader.readAsBinaryString(target.files[0]);
+  }
+
+
+  productValidation(product: Product): boolean {
+
+    let allUnitsValid = true;
+    product.units.forEach(unit => {
+      allUnitsValid = allUnitsValid && this.unitValidation(unit);
+    })
+
+    return (product.name != null)
+      && allUnitsValid
+      && (product.brand.name != null)
+      && (product.productCategory.name != null);
+  }
+
+  unitValidation(unit: Unit): boolean {
+    return (unit.name != null)
+      && !Number.isNaN(unit.count)
+      && !Number.isNaN(unit.sellingPrice)
+      && !Number.isNaN(unit.price);
+
+
+  }
+
+  showPreviewProductExcelPopup(): void {
+    const dialogRef = this.dialog.open(PreviewProductExcelComponent, {
+      width: '900px',
+      height: '60vh',
+      data: {
+        validExcelProducts: this.validExcelProducts,
+        inValidExcelProducts: this.inValidExcelProducts
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // this.addUsers(users);
+      }
+    });
+  }
+
 }
+

@@ -10,7 +10,6 @@ import { ProductCategoiesComponent } from './product-categoies/product-categoies
 import { ProductCatalogComponent } from './product-catalog.component';
 import { BrandEditorComponent } from './brands/brand-editor/brand-editor.component';
 import { ProductCategoryEditorComponent } from './product-categoies/product-category-editor/product-category-editor.component';
-import { ImageCropperModule } from 'ngx-image-cropper';
 
 
 const routes: Routes = [
@@ -32,15 +31,13 @@ const routes: Routes = [
     ProductCategoiesComponent,
     ProductCatalogComponent,
     BrandEditorComponent,
-    ProductCategoryEditorComponent
+    ProductCategoryEditorComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
     CommonModule,
     SharedModuleModule,
     InfiniteScrollModule,
-  ],
-  providers: [
   ]
 })
 export class ProductCatalogModule { }

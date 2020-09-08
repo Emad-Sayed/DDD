@@ -19,6 +19,7 @@ export class AllOrdersComponent implements OnInit, OnDestroy {
   ordersTotalCount: number = 0;
   page: Page = new Page();
   query: any = { OrderStatuses: [0, 1, 2, 3, 4] }
+  orderStatusFillter = -1;
   private subject: Subject<string> = new Subject();
 
   openDetails = false;
@@ -60,6 +61,18 @@ export class AllOrdersComponent implements OnInit, OnDestroy {
 
   openOrderDetails(order: Order) {
     this.orderManagmentService.orderDetails.next({ openDetails: true, order: order });
+  }
+
+  onChangeOrderStatusFillter() {
+    if (this.orderStatusFillter == -1)
+      this.query.OrderStatuses = [0, 1, 2, 3, 4];
+    else
+      this.query.OrderStatuses = [this.orderStatusFillter];
+
+    this.page = new Page();
+    this.orders = [];
+    this.getOrders();
+
   }
 
   searchInOrders(value: any) {

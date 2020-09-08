@@ -36,6 +36,8 @@ namespace Application.OrderManagment.Commands.UpdateOrder
                 var orderFromRepo = await _orderRepository.GetByIdAsync(request.OrderId);
                 if (orderFromRepo == null) throw new OrderNotFoundException(request.OrderId);
                 
+                if(orderFromRepo.OrderStatus != OrderStatus.Placed) throw new UpdateConfirmedOrderException(request.OrderId);
+
                 orderFromRepo.UpdateOrderItem(request.OrderItemId, request.UnitId, request.UnitName, request.UnitPrice, request.UnitSellingPrice, request.UnitCount);
 
                 _orderRepository.Update(orderFromRepo);

@@ -68,16 +68,27 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   updateOrderItem(orderItem: OrderItem) {
+    const unit = this.units.find(x => x.id == orderItem.unitId);
     const body = {
       orderId: this.order.id,
       orderItemId: orderItem.id,
       unitId: orderItem.unitId,
-      unitName: orderItem.unitName,
-      unitCount: +orderItem.unitCount
+      unitName: unit.name,
+      unitCount: unit.count,
+      unitPrice: unit.price,
+      unitSellingPrice: unit.sellingPrice,
     };
     this.orderManagmentService.updateOrder(body).subscribe(x => {
+      orderItem.isEditing = false;
       this.core.showSuccessOperation();
     });
+  }
+
+  unitChanged(orderItem: OrderItem) {
+    const unit = this.units.find(x => x.id == orderItem.unitId);
+    orderItem.unitName = unit.name;
+    orderItem.unitSellingPrice = unit.sellingPrice;
+    orderItem.unitSellingPrice = unit.price;
   }
 
   //#endregion
@@ -108,7 +119,7 @@ export class OrderDetailsComponent implements OnInit {
   cancelOrder() {
     this.orderManagmentService.cancelOrder(this.order.id).subscribe(res => {
       this.order.orderStatus = this.order.orderStatus + 1;
-      this.orderManagmentService.orderDetails.next({ openDetails: true, orderId: this.order.id, orderStatus: this.order.orderStatus });
+      this.orderManagmentService.orderDetails.next({ openDetails: true, orderId: this.order.id, orderStatus: 4, lastStatus: this.order.orderStatus });
       this.core.showSuccessOperation();
     }, err => this.core.showErrorOperation());
   }

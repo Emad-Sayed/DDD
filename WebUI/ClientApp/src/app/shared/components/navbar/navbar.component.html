@@ -52,16 +52,8 @@
     <!-- <div>
       <a class="nav-link text-white" (click)="logout()"><i class="fas fa-user text-white"></i></a>
     </div> -->
-
-    <div class="btn-group">
-      <a class="btn dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-        aria-expanded="false">
-        <i class="fas fa-user text-white"></i>
-      </a>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <a class="dropdown-item" href="#">الصفحة الشخصية</a>
-        <a class="dropdown-item" href="#" (click)="logout()">تسجيل الخروج</a>
-      </div>
-    </div>
+    <a class="btn" (click)="logout()">
+      <i class="fas fa-sign-out-alt text-white"></i>
+    </a>
   </div>
 </nav>
