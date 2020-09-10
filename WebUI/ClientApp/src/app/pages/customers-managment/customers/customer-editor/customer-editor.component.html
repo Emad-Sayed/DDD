@@ -1,44 +1,69 @@
-<div class="container">
+<div class="container mx-3">
     <div class="row">
         <button class="btn btn-large" (click)="openClose()">
             <span class="fa fa-times fx-2"></span>
         </button>
     </div>
-    <div class="row mb-4">
-        <div class="col-6 pt-3">
-            كود العميل : {{customer?.id?.substr(0, 5)}}
-        </div>
-        <div class="col-6 pt-3">
-            خط السير : {{customer.shopAddress}}
-        </div>
-        <div class="col-6 pt-3">
-            إسم العميل : {{customer.shopName}}
-        </div>
+    <div class="row">
+        <table class="table table-sm table-borderless">
+            <tbody>
+                <tr>
+                    <th class="text-primary"> إسم العميل </th>
+                    <td>{{customer.fullName}}</td>
+                    <th class="text-primary">كود العميل</th>
+                    <td>{{customer.customerCode}}</td>
+                </tr>
+                <tr>
+                    <th class="text-primary">المدينة</th>
+                    <td>{{customer.city}}</td>
+                    <th class="text-primary">المنطقة</th>
+                    <td>{{customer.area}}</td>
+                </tr>
+                <tr>
+                    <th class="text-primary">إسم المحل</th>
+                    <td>{{customer.shopName}}</td>
+                    <th class="text-primary">عنوان المحل</th>
+                    <td>{{customer.shopAddress}}</td>
+                </tr>
+                <tr>
+                    <th class="text-primary">الموقع علي الخريطة</th>
+                    <td>
+                        <a [href]="getCustomerLocationLink(customer.locationOnMap)" target="_blank"><i class="fa fa-map"
+                                aria-hidden="true"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">رقم الطلب</th>
-                <th scope="col">التاريخ</th>
-                <th scope="col">إجمالي الطلب</th>
-                <th scope="col">حالة الطلب</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let order of customerOrders; index as i">
-                <th scope="row">{{order.id.substr(0, 5)}}</th>
-                <td>{{order.orderPlacedDate | date}}</td>
-                <td>{{ 44 | number }}</td>
-                <td>
-                    <span [ngSwitch]="order.orderStatus">
-                        <span *ngSwitchCase="0" class="badge badge-pill badge-primary">جديد</span>
-                        <span *ngSwitchCase="1" class="badge badge-pill badge-info">تم التاكيد</span>
-                        <span *ngSwitchCase="2" class="badge badge-pill badge-warning">جاري الشحن</span>
-                        <span *ngSwitchCase="3" class="badge badge-pill badge-success">تم التوصيل</span>
-                        <span *ngSwitchCase="4" class="badge badge-pill badge-danger">تم الإلغاء</span>
-                    </span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row">
+        <h3 class="h3">تاريخ الطلبات</h3>
+    </div>
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">رقم الطلب</th>
+                    <th scope="col">التاريخ</th>
+                    <th scope="col">إجمالي الطلب</th>
+                    <th scope="col">حالة الطلب</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let order of customerOrders; index as i">
+                    <th scope="row">{{order.id.substr(0, 5)}}</th>
+                    <td>{{order.orderPlacedDate | date}}</td>
+                    <td>{{ order.totalPrice | number }}</td>
+                    <td>
+                        <span [ngSwitch]="order.orderStatus">
+                            <span *ngSwitchCase="0" class="badge badge-pill badge-primary">جديد</span>
+                            <span *ngSwitchCase="1" class="badge badge-pill badge-info">تم التاكيد</span>
+                            <span *ngSwitchCase="2" class="badge badge-pill badge-warning">جاري الشحن</span>
+                            <span *ngSwitchCase="3" class="badge badge-pill badge-success">تم التوصيل</span>
+                            <span *ngSwitchCase="4" class="badge badge-pill badge-danger">تم الإلغاء</span>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

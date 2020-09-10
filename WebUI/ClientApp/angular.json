@@ -33,7 +33,9 @@
               "src/assets/css/ar-SA/_layout.scss",
               "src/assets/css/all.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jspdf/dist/jspdf.umd.min.js"
+            ]
           },
           "configurations": {
             "production": {

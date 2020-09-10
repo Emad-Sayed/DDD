@@ -6,6 +6,8 @@ import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { Page } from 'src/app/shared/models/shared/page.model';
 import { PopupServiceService } from 'src/app/shared/services/popup-service.service';
+import { City } from 'src/app/shared/models/distributor-managment/city.model';
+import { Area } from 'src/app/shared/models/distributor-managment/area.model';
 
 @Component({
   selector: 'app-customers',
@@ -16,7 +18,10 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
   customers: Customer[] = [];
   customersTotalCount: number = 0;
-
+  cities: City[] = [];
+  areas: Area[] = [];
+  selectedCityId = "-1";
+  selectedAreaId = "-1";
   private subject: Subject<string> = new Subject();
 
   page: Page = new Page();
@@ -28,7 +33,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
     private customerManagmentService: CustomersManagmentService,
     private core: CoreService,
     private popupService: PopupServiceService
-    ) {
+  ) {
   }
 
   ngOnDestroy(): void {
@@ -36,6 +41,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getCities();
     this.getCustomers();
     this.customerManagmentService.customerEditor.subscribe(res => {
       this.openEditor = res.openEditor;
@@ -57,6 +63,38 @@ export class CustomersComponent implements OnInit, OnDestroy {
       this.customers = res.data;
       this.customersTotalCount = res.totalCount;
     })
+  }
+
+  onChangeCity() {
+    this.customers = [];
+    this.page = new Page();
+    this.query.city = "";
+    if (this.selectedCityId != "-1") {
+      const city = this.cities.find(x => x.id == this.selectedCityId);
+      this.areas = city.areas;
+      this.query.city = city.name;
+    }
+    this.getCustomers();
+  }
+
+  onChangeArea() {
+    this.customers = [];
+    this.page = new Page();
+    this.query.area = "";
+    if (this.selectedAreaId != "-1") {
+      const area = this.areas.find(x => x.id == this.selectedAreaId);
+      this.query.area = area.name;
+    }
+    this.getCustomers();
+  }
+
+  getCustomerLocationLink(locationOnMap: string) {
+    if (!locationOnMap || locationOnMap.length == 0) return;
+    let link = '';
+    try {
+      link = `https://www.google.com/maps/search/?api=1&query=${locationOnMap.split('-')[0]},-${locationOnMap.split('-')[1]}`
+    } catch (error) { }
+    return link;
   }
 
   openEditorToUpdateCustomer(customer: Customer) {
@@ -99,6 +137,12 @@ export class CustomersComponent implements OnInit, OnDestroy {
       if (!result) return;
       this.deleteCustomer(customer.id);
     });
+  }
+
+  getCities() {
+    this.customerManagmentService.getCities().subscribe(res => {
+      this.cities = res.data;
+    })
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Order } from 'src/app/shared/models/order-managment/order.model';
 import { OrderManagmentService } from '../order-managment.service';
 import { CoreService } from 'src/app/shared/services/core.service';
@@ -6,6 +6,7 @@ import { OrderItem } from 'src/app/shared/models/order-managment/order-item.mode
 import { ProductCatalogService } from '../../product-catalog/product-catalog.service';
 import { Product } from 'src/app/shared/models/product-catalog/product/product.model';
 import { Unit } from 'src/app/shared/models/product-catalog/product/unit.model';
+import { jsPDF } from 'jspdf'
 
 @Component({
   selector: 'app-order-details',
@@ -15,6 +16,8 @@ import { Unit } from 'src/app/shared/models/product-catalog/product/unit.model';
 export class OrderDetailsComponent implements OnInit {
 
   @Input('isEditorOpen') isEditorOpen: boolean;
+  @ViewChild('htmlData', { static: false }) htmlData: ElementRef;
+
   editingOrder = false;
   isEditing = false;
   order: Order = new Order();
@@ -34,11 +37,25 @@ export class OrderDetailsComponent implements OnInit {
       }
     })
   }
-
+  getCustomerLocationLink(locationOnMap: string) {
+    if (!locationOnMap || locationOnMap.length == 0) return;
+    let link = '';
+    try {
+      link = `https://www.google.com/maps/search/?api=1&query=${locationOnMap.split('-')[0]},-${locationOnMap.split('-')[1]}`
+    } catch (error) { }
+    return link;
+  }
   getProductById(productId: string) {
     this.productCatalogService.getProductById(productId).subscribe(res => {
       this.product = res;
     });
+  }
+
+  public downloadPDF(): void {
+    let DATA = this.htmlData.nativeElement;
+    let doc = new jsPDF('p', 'pt', 'a4');
+    doc.fromHTML(DATA.innerHTML, 15, 15);
+    doc.output('dataurlnewwindow');
   }
 
   getOrderById(orderId: string) {

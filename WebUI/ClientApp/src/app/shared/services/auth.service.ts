@@ -68,8 +68,10 @@ export class AuthService {
         let rolesFromStorage = localStorage.getItem('roles')
 
         if (rolesFromStorage) roles = rolesFromStorage.split(',');
-        else this.router.navigate(['/login']);
-
+        else {
+            this.router.navigate(['/login']);
+            return false;
+        }
         if (!(roles.includes('Admin') || roles.includes('Distributor'))) {
             this.core.showErrorOperation('ليس لديك صلاحية الدخول الي هذا الموقع');
             this.router.navigate(['/login']);

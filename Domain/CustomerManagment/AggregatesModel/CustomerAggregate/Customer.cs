@@ -11,6 +11,7 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
     public class Customer : AuditableEntity, IAggregateRoot
     {
         public string AccountId { get; private set; }
+        public string CustomerCode { get; private set; }
         public string FullName { get; private set; }
         public string ShopName { get; private set; }
         public string ShopAddress { get; private set; }

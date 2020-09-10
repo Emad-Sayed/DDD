@@ -24,13 +24,16 @@ export class AuthGuard implements CanActivate {
         if (this.jwtHelper.isTokenExpired(token)) {
             this.auth.refreshToken()
                 .then(res => {
+                    
                     return this.auth.isAdmin();
                 })
                 .catch(e => {
                     this.router.navigate(['/login']);
+                    return false;
                 });
+        } else {
+            return this.auth.isAdmin();
         }
-        return this.auth.isAdmin();
     }
 
 

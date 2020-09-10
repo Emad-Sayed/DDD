@@ -1,17 +1,28 @@
 <div class="row">
     <!-- search box -->
-    <div class="w-100 card mb-3">
-        <div class="ais-SearchBox card-search">
-            <form class="ais-SearchBox-form w-100 form-group d-flex" novalidate>
-                <input class="ais-SearchBox-input form-control col-5" autocomplete="off" autocorrect="off"
-                    autocapitalize="off" placeholder="رقم العميل / الإسم" spellcheck="false" maxlength="512"
-                    type="search" value="" (keydown)="onKeyUp($event.target.value)" />
-                <!-- <a class="ais-SearchBox-submit card-link" type="submit" title="Submit the search query.">
-                    <i class="fas fa-search ml-2"></i>
-                    بحث
-                </a> -->
-            </form>
+    <div class="col-6">
+        <div class="w-100 card mb-3">
+            <div class="ais-SearchBox card-search">
+                <form class="ais-SearchBox-form w-100 form-group d-flex" novalidate>
+                    <input class="ais-SearchBox-input form-control col-5" autocomplete="off" autocorrect="off"
+                        autocapitalize="off" placeholder="رقم العميل / الإسم" spellcheck="false" maxlength="512"
+                        type="search" value="" (keydown)="onKeyUp($event.target.value)" />
+                </form>
+            </div>
         </div>
+    </div>
+    <div class="col-3">
+        <select class="custom-select" [(ngModel)]="selectedCityId" (change)="onChangeCity()">
+            <option value="-1">المدينة</option>
+            <option class="text-primary" *ngFor="let city of cities" [value]="city.id">{{city.name}}</option>
+        </select>
+
+    </div>
+    <div class="col-3">
+        <select class="custom-select" [(ngModel)]="selectedAreaId" (change)="onChangeArea()">
+            <option value="-1">المنطقة</option>
+            <option class="text-primary" *ngFor="let area of areas" [value]="area.id">{{area.name}}</option>
+        </select>
     </div>
     <div class="col-12">
         <div class="card">
@@ -21,9 +32,13 @@
                     <table class="table table-dashboard mb-0">
                         <thead>
                             <tr>
-                                <th scope="col" class="border-top-0">رقم</th>
+                                <th scope="col" class="border-top-0">#</th>
                                 <th scope="col" class="border-top-0">كود العميل</th>
                                 <th scope="col" class="border-top-0">إسم العميل</th>
+                                <th scope="col" class="border-top-0">إسم المحل</th>
+                                <th scope="col" class="border-top-0">المدينة</th>
+                                <th scope="col" class="border-top-0">المنطقة</th>
+                                <th scope="col" class="border-top-0">الموقع</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,10 +50,23 @@
                             <tr *ngFor="let customer of customers; let i = index" rel="off-canvas" class="canvas-btn">
                                 <th (click)="openEditorToUpdateCustomer(customer)" scope="row">{{ i + 1 }}</th>
                                 <td (click)="openEditorToUpdateCustomer(customer)">
-                                    {{ customer?.id?.substr(0, 5) }}
+                                    {{ customer?.customerCode }}
+                                </td>
+                                <td (click)="openEditorToUpdateCustomer(customer)">
+                                    {{ customer?.fullName }}
                                 </td>
                                 <td (click)="openEditorToUpdateCustomer(customer)">
                                     {{ customer?.shopName }}
+                                </td>
+                                <td (click)="openEditorToUpdateCustomer(customer)">
+                                    {{ customer?.city }}
+                                </td>
+                                <td (click)="openEditorToUpdateCustomer(customer)">
+                                    {{ customer?.area }}
+                                </td>
+                                <td>
+                                    <a [href]="getCustomerLocationLink(customer.locationOnMap)" target="_blank"><i
+                                            class="fa fa-map" aria-hidden="true"></i></a>
                                 </td>
                                 <td class="text-center">
                                     <button (click)="showDeleteCustomerPopup(customer)" class="btn p-0">

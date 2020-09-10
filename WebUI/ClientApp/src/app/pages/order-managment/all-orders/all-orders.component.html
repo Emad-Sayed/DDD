@@ -12,19 +12,6 @@
         </div>
     </div>
     <div class="col-4">
-        <!-- <div class="dropdown">
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                حالة الطلب
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item text-primary">جديد</a>
-                <a class="dropdown-item text-info">تم التاكيد</a>
-                <a class="dropdown-item text-warning">جاري الشحن</a>
-                <a class="dropdown-item text-success">تم التوصيل</a>
-                <a class="dropdown-item text-danger">تم الإلغاء</a>
-            </div>
-        </div> -->
         <select class="custom-select" [(ngModel)]="orderStatusFillter" (change)="onChangeOrderStatusFillter()">
             <option value="-1">حالة الطلب</option>
             <option class="text-primary" value="0">جديد</option>
@@ -73,7 +60,7 @@
                                     </div>
                                 </td>
                                 <td> {{ order.customerName }} </td>
-                                <td> {{order?.customerId}} </td>
+                                <td> {{order?.customerCode}} </td>
                             </tr>
                         </tbody>
                     </table>

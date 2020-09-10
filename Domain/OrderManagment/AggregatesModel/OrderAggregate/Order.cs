@@ -13,7 +13,12 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
         public string CustomerId { get; private set; }
         public int OrderNumber { get; private set; }
         public string CustomerName { get; private set; }
-        public string Address { get; private set; }
+        public string CustomerShopName { get; private set; }
+        public string CustomerShopAddress { get; private set; }
+        public string CustomerCode { get; private set; }
+        public string CustomerCity { get; private set; }
+        public string CustomerArea { get; private set; }
+        public string CustomerLocationOnMap { get; private set; }
         public OrderStatus OrderStatus { get; private set; }
         public DateTime OrderPlacedDate { get; private set; }
         public DateTime OrderConfirmedDate { get; private set; }
@@ -30,11 +35,16 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             OrderItems = new List<OrderItem>();
         }
 
-        public Order(string customerId, string customerName, string address, float totalPrice)
+        public Order(string customerId, string customerName,string customerCode, string customerShopName,string customerShopAddress,string customerCity, string customerArea, string customerLocationOnMap, float totalPrice)
         {
             CustomerId = customerId;
             CustomerName = customerName;
-            Address = address;
+            CustomerCode = customerCode;
+            CustomerShopName = customerShopName;
+            CustomerShopAddress = customerShopAddress;
+            CustomerCity = customerCity;
+            CustomerArea = customerArea;
+            CustomerLocationOnMap = customerLocationOnMap;
             OrderStatus = OrderStatus.Placed;
             OrderPlacedDate = DateTime.UtcNow;
             TotalPrice = totalPrice;
@@ -44,7 +54,7 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             // Add the OrderStarterDomainEvent to the domain events collection 
             // to be raised/dispatched when commiting changes into the Database [ After DbContext.SaveChanges() ]
             // Register Placing order event
-            AddOrderPlacedDomainEvent(customerId, address);
+            AddOrderPlacedDomainEvent(customerId, customerShopAddress);
         }
 
         // DDD Patterns comment

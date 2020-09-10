@@ -40,6 +40,9 @@ namespace Persistence.CustomerManagment
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasSequence<int>("CustomerNumbers", schema: "shared")
+                        .StartsAt(1000)
+                        .IncrementsBy(1);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(CustomerManagmentContext).Assembly, type => type.FullName.Contains("Customer"));
         }
 

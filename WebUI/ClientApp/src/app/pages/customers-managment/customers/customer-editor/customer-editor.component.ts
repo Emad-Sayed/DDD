@@ -35,7 +35,14 @@ export class CustomerEditorComponent implements OnInit {
   openClose() {
     this.customerManagmentService.customerEditor.next({ openEditor: false });
   }
-
+  getCustomerLocationLink(locationOnMap: string) {
+    if (!locationOnMap || locationOnMap.length == 0) return;
+    let link = '';
+    try {
+      link = `https://www.google.com/maps/search/?api=1&query=${locationOnMap.split('-')[0]},-${locationOnMap.split('-')[1]}`
+    } catch (error) { }
+    return link;
+  }
   getCustomerOrders(customerId: string) {
     this.OrderManagmentService.getCustomerOrders(customerId).subscribe(res => {
       this.customerOrders = res.data;

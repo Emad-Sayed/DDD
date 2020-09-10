@@ -47,18 +47,25 @@ namespace Infrastructure.Repositories.CustomerManagment
                    .FirstOrDefaultAsync(x => x.Id.ToString() == id);
         }
 
-        public async Task<(int, List<Customer>)> GetAllAsync(int pageNumber, int pageSize, string keyWord)
+        public async Task<(int, List<Customer>)> GetAllAsync(int pageNumber, int pageSize, string keyWord, string city, string area)
         {
             var query = _context.Customers
                 .Where(x => x.IsDeleted == false)
                 //.Include(x => x.CustomerItems)
                 .AsQueryable();
 
+            // fillter by city
+            if (!string.IsNullOrEmpty(city)) query = query.Where(x => x.Address.City.ToLower() == city.ToLower());
+
+            // fillter by area
+            if (!string.IsNullOrEmpty(area)) query = query.Where(x => x.Address.Area.ToLower() == area.ToLower());
+
             // fillter by keyword
             if (!string.IsNullOrEmpty(keyWord))
             {
                 query = query.Where(x =>
-                x.Id.ToString().Contains(keyWord)
+                x.Id.ToString().Contains(keyWord) ||
+                x.CustomerCode.Contains(keyWord)
                 );
             }
 

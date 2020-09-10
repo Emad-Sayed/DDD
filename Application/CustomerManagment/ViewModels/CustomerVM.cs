@@ -8,6 +8,7 @@ namespace Application.CustomerManagment.ViewModels
     {
         public string Id { get; set; }
         public string AccountId { get;  set; }
+        public string CustomerCode { get;  set; }
         public string FullName { get;  set; }
         public string ShopName { get;  set; }
         public string ShopAddress { get;  set; }

@@ -11,6 +11,7 @@ namespace Persistence.CustomerManagment.Configurations
     {
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
+            builder.Property(x => x.CustomerCode).HasDefaultValueSql("NEXT VALUE FOR shared.CustomerNumbers");
             builder.OwnsOne(o => o.Address);
         }
     }

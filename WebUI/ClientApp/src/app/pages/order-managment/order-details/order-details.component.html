@@ -1,122 +1,139 @@
-<div class="container w-100">
+<div class="container w-100" id="htmlData" #htmlData>
   <div class="row">
     <button class="btn btn-large" (click)="openClose()">
       <span class="fa fa-times fx-2"></span>
     </button>
   </div>
   <div class="row">
-    <div class="col-6 pt-3">
-      كود العميل : {{order?.customerId}}
-    </div>
-    <div class="col-6 pt-3">
-      خط السير : {{order.address}}
-    </div>
-    <div class="col-6 pt-3">
-      إسم العميل : {{order.customerName}}
-    </div>
-    <div class="col-6 pt-3">
-      <p>
-        حالة الطلب : <span [ngSwitch]="order.orderStatus">
-          <span *ngSwitchCase="0" class="badge badge-pill badge-primary">جديد</span>
-          <span *ngSwitchCase="1" class="badge badge-pill badge-info">تم التاكيد</span>
-          <span *ngSwitchCase="2" class="badge badge-pill badge-warning">جاري الشحن</span>
-          <span *ngSwitchCase="3" class="badge badge-pill badge-success">تم التوصيل</span>
-          <span *ngSwitchCase="4" class="badge badge-pill badge-danger">تم الإلغاء</span>
-        </span>
-      </p>
-    </div>
+    <table class="table table-sm table-borderless">
+      <tbody>
+        <tr>
+          <th class="text-primary"> إسم العميل </th>
+          <td>{{order.customerName}}</td>
+          <th class="text-primary">كود العميل</th>
+          <td>{{order.customerCode}}</td>
+        </tr>
+        <tr>
+          <th class="text-primary">رقم الطلب</th>
+          <td>{{order.orderNumber}}</td>
+          <th class="text-primary"> حالة الطلب</th>
+          <td>
+            <span [ngSwitch]="order.orderStatus">
+              <span *ngSwitchCase="0" class="badge badge-pill badge-primary">جديد</span>
+              <span *ngSwitchCase="1" class="badge badge-pill badge-info">تم التاكيد</span>
+              <span *ngSwitchCase="2" class="badge badge-pill badge-warning">جاري الشحن</span>
+              <span *ngSwitchCase="3" class="badge badge-pill badge-success">تم التوصيل</span>
+              <span *ngSwitchCase="4" class="badge badge-pill badge-danger">تم الإلغاء</span>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <th class="text-primary">المدينة</th>
+          <td>{{order.customerCity}}</td>
+          <th class="text-primary">المنطقة</th>
+          <td>{{order.customerArea}}</td>
+        </tr>
+        <tr>
+          <th class="text-primary">إسم المحل</th>
+          <td>{{order.customerShopName}}</td>
+          <th class="text-primary">عنوان المحل</th>
+          <td>{{order.customerShopAddress}}</td>
+        </tr>
+        <tr>
+          <th class="text-primary">الموقع علي الخريطة</th>
+          <td>
+            <a [href]="getCustomerLocationLink(order.customerLocationOnMap)" target="_blank"><i class="fa fa-map"
+                aria-hidden="true"></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <table class="table table-hover table-sm mt-5">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">العدد</th>
-        <th scope="col">المنتج</th>
-        <th scope="col">الوحدة</th>
-        <th scope="col">السعر</th>
-        <th *ngIf="order.orderStatus == 0" scope="col">الإجراءت</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let orderItem of order.orderItems; let i = index">
-        <th scope="row">{{i + 1}}</th>
-        <td class="w-25">
-          <p *ngIf="!orderItem.isEditing">{{orderItem.unitCount}}</p>
-          <input type="number" *ngIf="orderItem.isEditing" name="unitCount" [(ngModel)]="orderItem.unitCount"
-            class="form-control w-50" />
-        </td>
-        <td>
-          <p *ngIf="orderItem.productName.length <= 25">{{orderItem.productName}}</p>
-          <p *ngIf="orderItem.productName.length > 25" [title]="orderItem.productName">
-            {{orderItem.productName.substr(0, 25).concat('...')}}</p>
-        </td>
-        <td>
-          <p *ngIf="!orderItem.isEditing">{{orderItem.unitName}}</p>
-          <select *ngIf="orderItem.isEditing" class="col-8 form-control" id="select-brand" name="productCategoryId"
-            [(ngModel)]="orderItem.unitId" (change)="unitChanged(orderItem)">
-            <option selected>إختر الوحدة</option>
-            <option *ngFor="let unit of filterUnits(orderItem.productId)" [value]="unit.id">
-              {{ unit.name }}</option>
-          </select>
-        </td>
-        <td>
-          <p>{{orderItem.unitSellingPrice}}</p>
-        </td>
-        <td *ngIf="order.orderStatus == 0">
-          <button class="btn p-2" *ngIf="orderItem.isEditing" (click)="updateOrderItem(orderItem)">
-            <i class="fas fa-save text-success"></i>
-          </button>
-          <button class="btn p-2" *ngIf="!orderItem.isEditing" (click)="editOrderItem(orderItem)">
-            <i class="fas fa-edit text-success"></i>
-          </button>
-          <button class="btn p-2">
-            <i class="fas fa-trash-alt text-danger"></i>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="row pt-5">
-    <div class="col-6">
-      المجموع
-    </div>
-    <div class="col-3 text-left">
-      {{(order.totalPrice - (order.totalPrice * .14))}}
-    </div>
+  <div class="row">
+    <table class="table table-hover table-sm mt-2">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">العدد</th>
+          <th scope="col">المنتج</th>
+          <th scope="col">الوحدة</th>
+          <th scope="col">السعر</th>
+          <th *ngIf="order.orderStatus == 0" scope="col">الإجراءت</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let orderItem of order.orderItems; let i = index">
+          <th scope="row">{{i + 1}}</th>
+          <td class="w-25">
+            <p *ngIf="!orderItem.isEditing">{{orderItem.unitCount}}</p>
+            <input type="number" *ngIf="orderItem.isEditing" name="unitCount" [(ngModel)]="orderItem.unitCount"
+              class="form-control w-50" />
+          </td>
+          <td>
+            <p *ngIf="orderItem.productName.length <= 25">{{orderItem.productName}}</p>
+            <p *ngIf="orderItem.productName.length > 25" [title]="orderItem.productName">
+              {{orderItem.productName.substr(0, 25).concat('...')}}</p>
+          </td>
+          <td>
+            <p *ngIf="!orderItem.isEditing">{{orderItem.unitName}}</p>
+            <select *ngIf="orderItem.isEditing" class="col-8 form-control" id="select-brand" name="productCategoryId"
+              [(ngModel)]="orderItem.unitId" (change)="unitChanged(orderItem)">
+              <option selected>إختر الوحدة</option>
+              <option *ngFor="let unit of filterUnits(orderItem.productId)" [value]="unit.id">
+                {{ unit.name }}</option>
+            </select>
+          </td>
+          <td>
+            <p>{{orderItem.unitSellingPrice}}</p>
+          </td>
+          <td *ngIf="order.orderStatus == 0">
+            <button class="btn p-2" *ngIf="orderItem.isEditing" (click)="updateOrderItem(orderItem)">
+              <i class="fas fa-save text-success"></i>
+            </button>
+            <button class="btn p-2" *ngIf="!orderItem.isEditing" (click)="editOrderItem(orderItem)">
+              <i class="fas fa-edit text-success"></i>
+            </button>
+            <button class="btn p-2">
+              <i class="fas fa-trash-alt text-danger"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <div class="row pt-3">
-    <div class="col-6">
-      القيمةالمضافة
-    </div>
-    <div class="col-3 text-left">
-      14 %
-    </div>
+  <div class="row">
+    <table class="table table-sm table-borderless">
+      <tbody>
+        <tr>
+          <th>المجموع</th>
+          <td> {{(order.totalPrice - (order.totalPrice * .14))}} </td>
+        </tr>
+        <tr>
+          <th>القيمةالمضافة</th>
+          <td>14 %</td>
+        </tr>
+        <tr>
+          <th> المجموع الكلي</th>
+          <td> {{order.totalPrice}} ج م </td>
+        </tr>
+        <tr>
+          <th>
+            <button class="btn btn-outline-info btn-small" *ngIf="order.orderStatus == 0" (click)="confirmOrder()">تاكيد
+              الطلب </button>
+            <button class="btn btn-small btn-outline-warning" *ngIf="order.orderStatus == 1" (click)="shippOrder()">شحن
+              الطلب </button>
+            <button class="btn btn-small btn-outline-success" *ngIf="order.orderStatus == 2" (click)="orderDeliver()">تم
+              التوصيل </button>
+            <button class="btn btn-outline-danger btn-small mr-3" *ngIf="order.orderStatus == 0"
+              (click)="cancelOrder()">إلغاء
+              الطلب </button>
+          </th>
+          <td>
+            <button class="btn btn-outline-warning print-btn mr-2" (click)="downloadPDF()">
+              <span class="fa fa-print print-icon"></span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <div class="row border-top mt-3 pt-2">
-    <div class="col-6">
-      المجموع الكلي
-    </div>
-    <div class="col-3 text-left">
-      {{order.totalPrice}} ج م
-    </div>
-  </div>
-  <div class="row text-center mt-5">
-    <div class="col">
-      <button class="btn btn-outline-info confirm-btn" *ngIf="order.orderStatus == 0" (click)="confirmOrder()">تاكيد
-        الطلب </button>
-      <button class="btn confirm-btn btn-outline-warning" *ngIf="order.orderStatus == 1" (click)="shippOrder()">شحن
-        الطلب </button>
-      <button class="btn confirm-btn btn-outline-success" *ngIf="order.orderStatus == 2" (click)="orderDeliver()">تم
-        التوصيل </button>
-    </div>
-    <div class="col">
-      <button class="btn btn-outline-danger cancel-btn" *ngIf="order.orderStatus == 0" (click)="cancelOrder()">إلغاء
-        الطلب </button>
-    </div>
-    <div class="col">
-      <button class="btn btn-outline-warning print-btn mr-2">
-        <span class="fa fa-print print-icon"></span>
-      </button>
-    </div>
-  </div>
-</div>

@@ -4,6 +4,7 @@ import { ApiResponse } from 'src/app/shared/models/api-response/api-response.mod
 import { Config } from 'src/app/shared/confing/config';
 import { HttpService } from 'src/app/shared/services/http.service';
 import { Customer } from 'src/app/shared/models/customer-managment/customer.model';
+import { City } from 'src/app/shared/models/distributor-managment/city.model';
 
 @Injectable({
     providedIn: 'root'
@@ -35,6 +36,12 @@ export class CustomersManagmentService {
     deleteCustomer(customerId: string): Observable<any> {
         const params: any = { customerId: customerId }
         return this.httpService.delete(`${Config.Customers}`, params);
+    }
+    //#endregion
+
+    //#region Cities 
+    getCities(query: any = {}): Observable<ApiResponse<City>> {
+        return this.httpService.getAll<ApiResponse<City>>(`${Config.Customers}/Cities`, query)
     }
     //#endregion
 
