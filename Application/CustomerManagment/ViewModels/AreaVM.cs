@@ -8,5 +8,8 @@ namespace Application.CustomerManagment.ViewModels
     {
         public string Id { get; set; }
         public string Name { get; set; }
+
+        public string CityId { get; set; }
+        public CityVM City { get; set; }
     }
 }

@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Persistence.CustomerManagment.Migrations
+namespace Brimo.IDP.Admin.EntityFramework.SqlServer.Migrations.Identity
 {
-    public partial class AddingSoftDelete : Migration
+    public partial class AddingIsActive : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
-                name: "IsDeleted",
-                table: "Customers",
+                name: "IsActive",
+                table: "Users",
                 nullable: false,
                 defaultValue: false);
         }
@@ -16,8 +16,8 @@ namespace Persistence.CustomerManagment.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "IsDeleted",
-                table: "Customers");
+                name: "IsActive",
+                table: "Users");
         }
     }
 }

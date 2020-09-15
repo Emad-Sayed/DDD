@@ -16,6 +16,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         Task<(int, List<Product>)> GetAllAsync(int pageNumber, int pageSize, string keyWord, string brandId, string productCategoryId);
         Task<List<Unit>> GetProductsUnits(List<string> productsIds);
         Product Add(Product product);
+        void ImportProducts(List<Product> products);
         void DeleteAll();
         void AddRange(List<Product> product);
         void Update(Product product);

@@ -15,6 +15,7 @@ namespace Domain.ProductCatalog.AggregatesModel.BrandAggregate
         void AddRange(List<Brand> brands);
         void Update(Brand brand);
         void Delete(Brand brand);
+        Brand AddBrandIfNotExist(string brandName);
         void DeleteAll();
         Task<Brand> FindByIdAsync(string brandId);
         Task<(int, List<Brand>)> GetAllBrands();

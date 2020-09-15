@@ -10,8 +10,8 @@ using Persistence.DistributorManagment;
 namespace Persistence.DistributorManagment.Migrations
 {
     [DbContext(typeof(DistributorManagmentContext))]
-    [Migration("20200707093912_AddingAudit")]
-    partial class AddingAudit
+    [Migration("20200914074343_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,38 @@ namespace Persistence.DistributorManagment.Migrations
                 .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Area", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CityId")
+                        .HasColumnName("CityId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.ToTable("DistributorsAreas");
+                });
+
+            modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.City", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DistributorsCities");
+                });
 
             modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Distributor", b =>
                 {
@@ -45,6 +77,26 @@ namespace Persistence.DistributorManagment.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Distributors");
+                });
+
+            modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.DistributorArea", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AreaId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("DistributorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AreaId");
+
+                    b.HasIndex("DistributorId");
+
+                    b.ToTable("DistributorArea");
                 });
 
             modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.DistributorUser", b =>
@@ -90,6 +142,13 @@ namespace Persistence.DistributorManagment.Migrations
                     b.ToTable("DistributorUsers");
                 });
 
+            modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Area", b =>
+                {
+                    b.HasOne("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.City", "City")
+                        .WithMany("Areas")
+                        .HasForeignKey("CityId");
+                });
+
             modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Distributor", b =>
                 {
                     b.OwnsOne("Domain.SharedKernel.ValueObjects.Address", "Address", b1 =>
@@ -110,6 +169,19 @@ namespace Persistence.DistributorManagment.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("DistributorId");
                         });
+                });
+
+            modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.DistributorArea", b =>
+                {
+                    b.HasOne("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Area", "Area")
+                        .WithMany("DistributorAreas")
+                        .HasForeignKey("AreaId");
+
+                    b.HasOne("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Distributor", "Distributor")
+                        .WithMany("DistributorAreas")
+                        .HasForeignKey("DistributorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.DistributorManagment.AggregatesModel.DistributorAggregate.DistributorUser", b =>

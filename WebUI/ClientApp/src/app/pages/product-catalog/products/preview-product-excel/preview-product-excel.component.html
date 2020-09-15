@@ -1,4 +1,10 @@
 <div class="row">
+    <div class="col">
+        <button class="btn btn-primary btn-sm" (click)="importProducts()">حفظ البيانات الصحيحة</button>
+        <button class="btn btn-danger btn-sm mr-3" (click)="cancel()">إلغاء</button>
+    </div>
+</div>
+<div class="row">
     <h4 class="h4">البيانات الصحيحة {{validExcelProducts.length}}</h4>
 </div>
 <table class="table table-sm">

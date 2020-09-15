@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Product } from 'src/app/shared/models/product-catalog/product/product.model';
+import { ProductCatalogService } from '../../product-catalog.service';
+import { CoreService } from 'src/app/shared/services/core.service';
 
 @Component({
   selector: 'app-preview-product-excel',
@@ -14,7 +16,9 @@ export class PreviewProductExcelComponent implements OnInit {
   Number = Number;
   constructor(
     public dialogRef: MatDialogRef<PreviewProductExcelComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private productCatalogService: ProductCatalogService,
+    private core: CoreService) {
   }
 
   ngOnInit() {
@@ -22,12 +26,14 @@ export class PreviewProductExcelComponent implements OnInit {
     this.inValidExcelProducts = this.data.inValidExcelProducts;
   }
 
-  /**
-   * close dialog
-   * 
-   * 
-   */
   cancel() {
     this.dialogRef.close();
+  }
+
+  importProducts() {
+    this.productCatalogService.importProduct(this.validExcelProducts).subscribe(res => {
+      this.core.showSuccessOperation(); 
+      this.cancel();
+    });
   }
 }

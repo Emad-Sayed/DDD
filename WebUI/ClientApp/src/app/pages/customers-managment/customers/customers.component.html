@@ -39,6 +39,7 @@
                                 <th scope="col" class="border-top-0">المدينة</th>
                                 <th scope="col" class="border-top-0">المنطقة</th>
                                 <th scope="col" class="border-top-0">الموقع</th>
+                                <th scope="col" class="border-top-0">الحالة</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,10 +60,14 @@
                                     {{ customer?.shopName }}
                                 </td>
                                 <td (click)="openEditorToUpdateCustomer(customer)">
-                                    {{ customer?.city }}
+                                    {{ customer?.area?.city?.name }}
                                 </td>
                                 <td (click)="openEditorToUpdateCustomer(customer)">
-                                    {{ customer?.area }}
+                                    {{ customer?.area?.name }}
+                                </td>
+                                <td>
+                                    <span class="badge badge-pill badge-primary" *ngIf="customer.isActive" (click)="showDeleteCustomerPopup(customer)"> مفعل</span>
+                                    <span class="badge badge-pill badge-warning" *ngIf="!customer.isActive" (click)="showDeleteCustomerPopup(customer)"> غير مفعل</span>
                                 </td>
                                 <td>
                                     <a [href]="getCustomerLocationLink(customer.locationOnMap)" target="_blank"><i
@@ -81,6 +86,6 @@
         </div>
     </div>
     <div class="col-6">
-        <app-customer-editor class="box" [ngClass]="{ active: openEditor }"></app-customer-editor>
+        <app-customer-editor class="box" [ngClass]="{ active: openEditor }" *ngIf="openEditor"></app-customer-editor>
     </div>
 </div>

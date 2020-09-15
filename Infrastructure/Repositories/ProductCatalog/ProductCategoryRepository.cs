@@ -92,5 +92,17 @@ namespace Infrastructure.Repositories.ProductCatalog
         {
             _context.ProductCategories.RemoveRange(_context.ProductCategories);
         }
+
+        public ProductCategory AddProductCategoryIfNotExist(string productCategoryName)
+        {
+            var productCategory = _context.ProductCategories.FirstOrDefault(x => x.Name.ToLower() == productCategoryName.ToLower());
+            if (productCategory == null)
+            {
+                productCategory = new ProductCategory(productCategoryName);
+                _context.ProductCategories.Add(productCategory);
+            }
+
+            return productCategory;
+        }
     }
 }

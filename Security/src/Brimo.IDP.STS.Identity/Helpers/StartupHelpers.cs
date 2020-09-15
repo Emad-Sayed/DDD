@@ -31,6 +31,8 @@ using Brimo.IDP.Admin.EntityFramework.Shared.Entities.Identity;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
+using Brimo.IDP.STS.Identity.Common.Exceptions;
+using System.Net;
 
 namespace Brimo.IDP.STS.Identity.Helpers
 {
@@ -416,13 +418,15 @@ namespace Brimo.IDP.STS.Identity.Helpers
             context.IssuedClaims.AddRange(context.Subject.Claims);
 
             var user = await _userManager.GetUserAsync(context.Subject);
+            if (!user.IsActive)
+                throw new BusinessException(HttpStatusCode.BadRequest, "This account is InActive", "in_active_account");
 
             var roles = await _userManager.GetRolesAsync(user);
 
             foreach (var role in roles)
             {
                 context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
-                context.IssuedClaims.Add(new Claim(JwtClaimTypes.Name, user.FullName ?? user.UserName ));
+                context.IssuedClaims.Add(new Claim(JwtClaimTypes.Name, user.FullName ?? user.UserName));
             }
 
         }

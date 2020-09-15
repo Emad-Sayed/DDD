@@ -12,27 +12,18 @@ import { AuthService } from '../services/auth.service';
 export class AuthGuard implements CanActivate {
     public constructor(
         private router: Router,
-        private oauthService: OAuthService,
-        private auth: AuthService,
-        private core: CoreService,
+        private authService: AuthService,
         private jwtHelper: JwtHelperService) { }
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         const token = localStorage.getItem('access_token');
 
         if (!token) this.router.navigate(['/login']);
 
-        if (this.jwtHelper.isTokenExpired(token)) {
-            this.auth.refreshToken()
-                .then(res => {
-                    
-                    return this.auth.isAdmin();
-                })
-                .catch(e => {
-                    this.router.navigate(['/login']);
-                    return false;
-                });
+        if (!this.jwtHelper.isTokenExpired(token) && this.authService.isAdmin()) {
+            return true;
         } else {
-            return this.auth.isAdmin();
+            this.router.navigate (['/login']);
+            return false;
         }
     }
 

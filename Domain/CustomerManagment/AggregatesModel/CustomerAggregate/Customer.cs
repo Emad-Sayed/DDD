@@ -16,40 +16,45 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
         public string ShopName { get; private set; }
         public string ShopAddress { get; private set; }
         public string LocationOnMap { get; private set; }
-        public Address Address { get; private set; }
-        public bool IsDeleted { get; private set; }
+        public bool IsActive { get; private set; }
+
+        public string AreaId { get; private set; }
+        public Area Area { get; private set; }
 
         private Customer() { }
 
-        public Customer(string accountId, string city, string area, string fullName, string shopName, string shopAddress, string locationOnMap, Guid id = default)
+        public Customer(string accountId, string fullName, string shopName, string shopAddress, string locationOnMap, Guid id = default)
         {
             AccountId = accountId;
             FullName = fullName;
             ShopName = shopName;
             ShopAddress = shopAddress;
             LocationOnMap = locationOnMap;
-            Address = new Address(area, city);
 
             Id = id == default ? Guid.NewGuid() : id;
             AddDomainEvent(new CustomerCreated(this));
         }
 
-        public void UpdateCustomer(string city, string area, string fullName, string shopName, string shopAddress, string locationOnMap)
+        public void AddArea(Area area)
+        {
+            Area = area;
+        }
+
+        public void UpdateCustomer(string fullName, string shopName, string shopAddress, string locationOnMap)
         {
             FullName = fullName;
             ShopName = shopName;
             ShopAddress = shopAddress;
             LocationOnMap = locationOnMap;
-            Address = new Address(area, city);
             AddDomainEvent(new CustomerUpdated(this));
         }
 
-        // delete customer
-        public void Delete()
+        // ActiveAndDeactiveCustomer customer
+        public void ActiveAndDeactiveCustomer()
         {
-            IsDeleted = true;
+            IsActive = !IsActive;
             // rais product deleted event
-            AddDomainEvent(new CustomerDeleted(this));
+            AddDomainEvent(new CustomerActivedOrDeactived(this));
         }
     }
 }

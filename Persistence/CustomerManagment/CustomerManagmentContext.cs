@@ -35,8 +35,8 @@ namespace Persistence.CustomerManagment
         }
 
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<City> Cities { get; set; }
-        public DbSet<Area> Areas { get; set; }
+        public DbSet<City> CustomersCities { get; set; }
+        public DbSet<Area> CustomersAreas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

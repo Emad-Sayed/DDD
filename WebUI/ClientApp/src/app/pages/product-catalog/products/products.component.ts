@@ -87,12 +87,14 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   getBrands() {
+    console.log('get brands');
     this.productCatalogService.getAllBrands().subscribe(res => {
       this.brands.push(...res.data)
     });
   }
 
   getProductCategories() {
+    console.log('get product categories');
     this.productCatalogService.getAllProductCategories().subscribe(res => {
       this.productCategories.push(...res.data)
     });

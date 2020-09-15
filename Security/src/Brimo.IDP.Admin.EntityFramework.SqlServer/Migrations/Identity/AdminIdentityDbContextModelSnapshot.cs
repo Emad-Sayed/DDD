@@ -44,6 +44,9 @@ namespace Brimo.IDP.Admin.EntityFramework.SqlServer.Migrations.Identity
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("LastLoginDate")
                         .HasColumnType("datetime2");
 

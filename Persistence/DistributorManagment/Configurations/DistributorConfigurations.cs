@@ -11,7 +11,6 @@ namespace Persistence.DistributorManagment.Configurations
     {
         public void Configure(EntityTypeBuilder<Distributor> builder)
         {
-            builder.OwnsOne(o => o.Address);
         }
     }
 }

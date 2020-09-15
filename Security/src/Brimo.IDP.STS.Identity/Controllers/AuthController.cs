@@ -8,6 +8,7 @@ using System.Web;
 using Brimo.IDP.Admin.EntityFramework.Shared.Entities.Identity;
 using Brimo.IDP.STS.Identity.Common.Exceptions;
 using Brimo.IDP.STS.Identity.Common.Exceptions.Auth;
+using Brimo.IDP.STS.Identity.Common.Middlewares;
 using Brimo.IDP.STS.Identity.Services;
 using Brimo.IDP.STS.Identity.ViewModels.Auth.Register;
 using Microsoft.AspNetCore.Identity;
@@ -183,6 +184,19 @@ namespace Brimo.IDP.STS.Identity.Controllers
             return Ok();
         }
 
+        [HttpPost("ActiveAndDeactiveCustomer/{userId}")]
+        public async Task<IActionResult> ActiveAndDeactiveCustomer([FromRoute] string userId)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            if (user == null) throw new UserNotFoundException(userId);
+
+            user.IsActive = !user.IsActive;
+
+            await _userManager.UpdateAsync(user);
+
+            return Ok(new { isActive = user.IsActive });
+        }
+
         [HttpPost("ChangeForgetPassword")]
         public async Task<IActionResult> ChangeForgetPassword([FromBody] ChangeForgetPasswordVM model)
         {
@@ -201,7 +215,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
             var result = await _userManager.ResetPasswordAsync(user, resetPasswordToken, model.Password);
 
             if (!result.Succeeded) throw new BusinessException(HttpStatusCode.BadRequest, result.Errors.ToString(), "invalid_password");
-            
+
             user.ResetPasswordCode = null;
             await _userManager.UpdateAsync(user);
 
@@ -229,7 +243,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
             if (user != null) return BadRequest("user_with_this_email_found");
 
-            user = new UserIdentity { Email = model.Email, FullName = model.FullName, UserName = model.Email };
+            user = new UserIdentity { Email = model.Email, FullName = model.FullName, UserName = model.Email, IsActive = true };
             var result = await _userManager.CreateAsync(user);
 
             if (result.Succeeded)
@@ -346,8 +360,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
                 model.PhoneNumber,
                 model.Fullname,
                 model.ShopName,
-                model.City,
-                model.Area,
+                model.AreaId,
                 model.ShopAddress,
                 model.LocationOnMap
             };
@@ -358,7 +371,13 @@ namespace Brimo.IDP.STS.Identity.Controllers
             var url = _configuration["BrimoAPIURL"] + "/api/CustomerManagment/Customers";
 
             var response = await apiClient.PostAsync(url, data);
-            if (response.StatusCode != HttpStatusCode.OK) throw new Exception(await response.Content.ReadAsStringAsync());
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                await DeleteUser(user.Id);
+                var error = JsonConvert.DeserializeObject<ErrorMessage>(await response.Content.ReadAsStringAsync());
+                var errorMessage = error.Errors.FirstOrDefault() == null ? error.Message : error.Errors.FirstOrDefault().ErrorMessage;
+                throw new BusinessException(HttpStatusCode.BadRequest, errorMessage, "");
+            }
 
             var responseString = await response.Content.ReadAsStringAsync();
             return responseString;

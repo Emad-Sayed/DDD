@@ -40,7 +40,7 @@ namespace Application.OrderManagment.Commands.PlaceOrder
                 if (customerDetailsFromQuery == null) throw new CustomerNotFoundException(_currentUserService.UserId);
 
                 // create new order
-                var orderToPlace = new Order(_currentUserService.UserId, customerDetailsFromQuery.FullName, customerDetailsFromQuery.CustomerCode, customerDetailsFromQuery.ShopName, customerDetailsFromQuery.ShopAddress, customerDetailsFromQuery.City, customerDetailsFromQuery.Area, customerDetailsFromQuery.LocationOnMap, customerVanFromQuery.TotalPrice);
+                var orderToPlace = new Order(_currentUserService.UserId, customerDetailsFromQuery.FullName, customerDetailsFromQuery.CustomerCode, customerDetailsFromQuery.ShopName, customerDetailsFromQuery.ShopAddress, customerDetailsFromQuery.Area.City.Name, customerDetailsFromQuery.Area.Name, customerDetailsFromQuery.LocationOnMap, customerVanFromQuery.TotalPrice);
 
                 _orderRepository.Add(orderToPlace);
                 await _orderRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);

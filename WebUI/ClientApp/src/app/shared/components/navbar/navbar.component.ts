@@ -11,7 +11,7 @@ export class NavbarComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
-    const roles = JSON.parse(localStorage.getItem('id_token_claims_obj')).role as string[];
+    const roles = localStorage.getItem('roles').split(',');
     if (roles) this.isAdmin = roles.includes('Admin');
   }
   logout() {

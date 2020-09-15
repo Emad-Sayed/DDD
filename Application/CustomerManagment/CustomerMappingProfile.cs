@@ -10,10 +10,7 @@ namespace Application.CustomerManagment
     {
         public CustomerMappingProfile()
         {
-            CreateMap<Customer, CustomerVM>()
-                .ForMember(x => x.City, op => op.MapFrom(y => y.Address.City))
-                .ForMember(x => x.Area, op => op.MapFrom(y => y.Address.Area))
-                .ReverseMap();
+            CreateMap<Customer, CustomerVM>().ReverseMap();
             CreateMap<City, CityVM>().ReverseMap();
             CreateMap<Area, AreaVM>().ReverseMap();
         }

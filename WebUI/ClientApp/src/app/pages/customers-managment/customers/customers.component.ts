@@ -68,11 +68,11 @@ export class CustomersComponent implements OnInit, OnDestroy {
   onChangeCity() {
     this.customers = [];
     this.page = new Page();
-    this.query.city = "";
+    this.query.cityId = "";
     if (this.selectedCityId != "-1") {
       const city = this.cities.find(x => x.id == this.selectedCityId);
       this.areas = city.areas;
-      this.query.city = city.name;
+      this.query.cityId = city.id;
     }
     this.getCustomers();
   }
@@ -80,13 +80,14 @@ export class CustomersComponent implements OnInit, OnDestroy {
   onChangeArea() {
     this.customers = [];
     this.page = new Page();
-    this.query.area = "";
+    this.query.areaId = "";
     if (this.selectedAreaId != "-1") {
       const area = this.areas.find(x => x.id == this.selectedAreaId);
-      this.query.area = area.name;
+      this.query.areaId = area.id;
     }
     this.getCustomers();
   }
+
 
   getCustomerLocationLink(locationOnMap: string) {
     if (!locationOnMap || locationOnMap.length == 0) return;
@@ -105,9 +106,8 @@ export class CustomersComponent implements OnInit, OnDestroy {
     this.customerManagmentService.customerEditor.next({ openEditor: true });
   }
 
-  deleteCustomer(customerId: string) {
-    this.customerManagmentService.deleteCustomer(customerId).subscribe(res => {
-      this.customerManagmentService.customerEditor.next({ customerRequestSuccess: true });
+  activeAndDeactiveCustomer(customerId: string) {
+    this.customerManagmentService.activeAndDeactiveCustomer(customerId).subscribe(res => {
       this.core.showSuccessOperation();
     })
   }
@@ -129,13 +129,16 @@ export class CustomersComponent implements OnInit, OnDestroy {
   }
 
   showDeleteCustomerPopup(customer: Customer): void {
-    const dialogRef = this.popupService.deleteElement('حذف العميل', 'هل انت متاكد؟ سيتم حذف العميل', {
+    const title = customer.isActive ? 'إلغاء التفعيل' : 'تفعيل'
+    const message = customer.isActive ? 'سيتم إلغاء تفعيل العميل ولن يتمكن من الدخول الي التطبيق' : 'سيتم تفعيل العمل وسوف يتمكن من الدخول الي التطبيق'
+    const dialogRef = this.popupService.deleteElement(title, message, {
       category: '',
       name: customer.shopName
-    });
+    }, true, title);
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
-      this.deleteCustomer(customer.id);
+      this.activeAndDeactiveCustomer(customer.id);
+      customer.isActive = !customer.isActive;
     });
   }
 

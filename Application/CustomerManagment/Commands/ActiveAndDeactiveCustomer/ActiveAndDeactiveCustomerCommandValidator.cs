@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Application.CustomerManagment.Commands.DeleteCustomer
 {
-    public class DeleteCustomerCommandValidator : AbstractValidator<DeleteCustomerCommand>
+    public class ActiveAndDeactiveCustomerCommandValidator : AbstractValidator<ActiveAndDeactiveCustomerCommand>
     {
-        public DeleteCustomerCommandValidator()
+        public ActiveAndDeactiveCustomerCommandValidator()
         {
             RuleFor(x => x.CustomerId).NotEmpty();
         }

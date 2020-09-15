@@ -15,8 +15,6 @@ namespace Application.CustomerManagment.Commands.UpdateCustomer
         public string ShopName { get; set; }
         public string ShopAddress { get; set; }
         public string LocationOnMap { get; set; }
-        public string City { get; set; }
-        public string Area { get; set; }
 
         public class Handler : IRequestHandler<UpdateCustomerCommand, string>
         {
@@ -34,8 +32,6 @@ namespace Application.CustomerManagment.Commands.UpdateCustomer
             {
                 var customer = await _customerRepository.GetCustomerByAccountId(request.AccountId);
                 customer.UpdateCustomer(
-                    request.City,
-                    request.Area,
                     request.FullName,
                     request.ShopName,
                     request.ShopAddress,

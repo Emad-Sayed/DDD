@@ -15,6 +15,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate
         void AddRange(List<ProductCategory> productCategories);
         void Update(ProductCategory productCategory);
         void Delete(ProductCategory productCategory);
+        ProductCategory AddProductCategoryIfNotExist(string name);
         void DeleteAll();
         Task<ProductCategory> FindByIdAsync(string productCategoryId);
         Task<(int, List<ProductCategory>)> GetAllProductCategorys();

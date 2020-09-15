@@ -42,8 +42,6 @@ namespace Application.IntegrationTests.OrderManagment.Commands
             var createCustomerCommand = new CreateCustomerCommand
             {
                 AccountId = accountId,
-                City = "Test City",
-                Area = "Test Area",
                 ShopName = "Test Shop Name",
                 ShopAddress = "Test Shop address",
                 LocationOnMap = "Test LocationOnMap"
@@ -134,8 +132,6 @@ namespace Application.IntegrationTests.OrderManagment.Commands
             var createCustomerCommand = new CreateCustomerCommand
             {
                 AccountId = accountId,
-                City = "Test City",
-                Area = "Test Area",
                 ShopName = "Test Shop Name",
                 ShopAddress = "Test Shop address",
                 LocationOnMap = "Test LocationOnMap"

@@ -13,7 +13,8 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
         void Delete(Customer customer);
         Task<Customer> FindByIdAsync(string id);
         Task<Customer> GetCustomerByAccountId(string id);
-        Task<(int, List<Customer>)> GetAllAsync(int pageNumber, int pageSize, string keyWord, string city, string area);
+        Task<(int, List<Customer>)> GetAllAsync(int pageNumber, int pageSize, string keyWord, string cityId, string areaId);
         Task<(int, List<City>)> GetAllCitiesAsync(int pageNumber, int pageSize, string keyWord);
+        Task<Area> FindAreaById(string areaId);
     }
 }

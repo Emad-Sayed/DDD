@@ -34,15 +34,13 @@ namespace Persistence.DistributorManagment
 
         public DbSet<Distributor> Distributors { get; set; }
         public DbSet<DistributorUser> DistributorUsers { get; set; }
-        public DbSet<City> Cities { get; set; }
-        public DbSet<Area> Areas { get; set; }
+        public DbSet<City> DistributorsCities { get; set; }
+        public DbSet<Area> DistributorsAreas { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(DistributorManagmentContext).Assembly, type => type.FullName.Contains("Distributor"));
-            modelBuilder.Ignore<City>();
-            modelBuilder.Ignore<Area>();
         }
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))

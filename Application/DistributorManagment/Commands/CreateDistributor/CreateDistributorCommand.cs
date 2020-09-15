@@ -1,4 +1,5 @@
 ﻿using Domain.DistributorManagment.AggregatesModel.DistributorAggregate;
+using Domain.DistributorManagment.Exceptions;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,7 @@ namespace Application.DistributorManagment.Commands.CreateDistributor
     public class CreateDistributorCommand : IRequest<string>
     {
         public string Name { get; set; }
-        public string City { get; set; }
-        public string Area { get; set; }
+        public List<string> AreasIds { get; set; }
 
         public class Handler : IRequestHandler<CreateDistributorCommand, string>
         {
@@ -26,13 +26,20 @@ namespace Application.DistributorManagment.Commands.CreateDistributor
 
             public async Task<string> Handle(CreateDistributorCommand request, CancellationToken cancellationToken)
             {
-                var entity = new Distributor(request.Name, request.City, request.Area);
+                var distributor = new Distributor(request.Name);
 
-                _distributorRepository.Add(entity);
+                foreach (var areaId in request.AreasIds)
+                {
+                    var area = await _distributorRepository.FindAreaById(areaId);
+                    if (area == null) throw new AreaNotFoundException(areaId);
+                    distributor.AddArea(area);
+                }
+
+                _distributorRepository.Add(distributor);
 
                 await _distributorRepository.UnitOfWork.SaveEntitiesAsync();
 
-                return entity.Id.ToString();
+                return distributor.Id.ToString();
             }
         }
     }

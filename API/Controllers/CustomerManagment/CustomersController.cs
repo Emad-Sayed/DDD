@@ -50,9 +50,9 @@ namespace API.Controllers.CustomerManagment
         }
 
 
-        [HttpDelete]
+        [HttpPost("ActiveAndDeactiveCustomer")]
         [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
-        public async Task<IActionResult> Delete([FromQuery] DeleteCustomerCommand command)
+        public async Task<IActionResult> ActiveAndDeactiveCustomer([FromBody] ActiveAndDeactiveCustomerCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);

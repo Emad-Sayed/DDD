@@ -8,6 +8,7 @@ using Application.ProductCatalog.ProductAggregate.Commands.AddUnit;
 using Application.ProductCatalog.ProductAggregate.Commands.CreateProduct;
 using Application.ProductCatalog.ProductAggregate.Commands.DeleteProduct;
 using Application.ProductCatalog.ProductAggregate.Commands.DeleteUnit;
+using Application.ProductCatalog.ProductAggregate.Commands.ImportProducts;
 using Application.ProductCatalog.ProductAggregate.Commands.SyncProductsWithAlgolia;
 using Application.ProductCatalog.ProductAggregate.Commands.UpdateProduct;
 using Application.ProductCatalog.ProductAggregate.Commands.UpdateUnit;
@@ -64,6 +65,14 @@ namespace API.Controllers.ProductCatalog
         [HttpPost]
         [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
         public async Task<IActionResult> Post([FromBody] CreateProductCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(new { result });
+        }
+
+        [HttpPost("ImportProducts")]
+        [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
+        public async Task<IActionResult> ImportProducts([FromBody] ImportProductsCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(new { result });

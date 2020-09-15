@@ -35,9 +35,7 @@ namespace Application.IntegrationTests.DistributorManagment.Commands
 
             var createDistributorCommand = new CreateDistributorCommand
             {
-                Name = "Test Distributor",
-                Area = "Nasr City",
-                City = "Cairo"
+                Name = "Test Distributor"
             };
 
             // Act

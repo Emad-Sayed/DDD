@@ -34,9 +34,7 @@ namespace Application.IntegrationTests.DistributorManagment.Commands
             // Create Distributor
             var createDistributorCommand = new CreateDistributorCommand
             {
-                Name = "Test Distributor",
-                Area = "Nasr City",
-                City = "Cairo"
+                Name = "Test Distributor"
             };
             var distributorId = await SendAsync(createDistributorCommand);
 

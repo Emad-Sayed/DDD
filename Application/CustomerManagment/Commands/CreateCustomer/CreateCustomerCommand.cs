@@ -1,4 +1,5 @@
 ﻿using Domain.CustomerManagment.AggregatesModel.CustomerAggregate;
+using Domain.CustomerManagment.Exceptions;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,7 @@ namespace Application.CustomerManagment.Commands.CreateCustomer
         public string ShopName { get; set; }
         public string ShopAddress { get; set; }
         public string LocationOnMap { get; set; }
-        public string City { get; set; }
-        public string Area { get; set; }
+        public string AreaId { get; set; }
 
         public class Handler : IRequestHandler<CreateCustomerCommand, string>
         {
@@ -32,22 +32,25 @@ namespace Application.CustomerManagment.Commands.CreateCustomer
 
             public async Task<string> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
             {
-                var entity = new Customer
+                var customer = new Customer
                     (
                     request.AccountId,
-                    request.City,
-                    request.Area,
                     request.FullName,
                     request.ShopName,
                     request.ShopAddress,
                     request.LocationOnMap
                     );
 
-                _customerRepository.Add(entity);
+                var area = await _customerRepository.FindAreaById(request.AreaId);
+                if (area == null) throw new AreaNotFoundException(request.AreaId);
+
+                customer.AddArea(area);
+
+                _customerRepository.Add(customer);
 
                 await _customerRepository.UnitOfWork.SaveEntitiesAsync();
 
-                return entity.Id.ToString();
+                return customer.Id.ToString();
             }
         }
     }

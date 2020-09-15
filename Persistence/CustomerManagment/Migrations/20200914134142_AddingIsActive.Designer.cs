@@ -10,8 +10,8 @@ using Persistence.CustomerManagment;
 namespace Persistence.CustomerManagment.Migrations
 {
     [DbContext(typeof(CustomerManagmentContext))]
-    [Migration("20200708065958_AddingAuditableEntity")]
-    partial class AddingAuditableEntity
+    [Migration("20200914134142_AddingIsActive")]
+    partial class AddingIsActive
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,42 +19,41 @@ namespace Persistence.CustomerManagment.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("Relational:Sequence:shared.CustomerNumbers", "'CustomerNumbers', 'shared', '1000', '1', '', '', 'Int32', 'False'")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Area", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnName("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CityId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CityId1")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnName("CityId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId1");
+                    b.HasIndex("CityId");
 
-                    b.ToTable("Areas");
+                    b.ToTable("CustomersAreas");
                 });
 
             modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.City", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnName("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities");
+                    b.ToTable("CustomersCities");
                 });
 
             modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Customer", b =>
@@ -66,14 +65,25 @@ namespace Persistence.CustomerManagment.Migrations
                     b.Property<string>("AccountId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("AreaId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CustomerCode")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValueSql("NEXT VALUE FOR shared.CustomerNumbers");
+
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -92,6 +102,8 @@ namespace Persistence.CustomerManagment.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AreaId");
+
                     b.ToTable("Customers");
                 });
 
@@ -99,29 +111,14 @@ namespace Persistence.CustomerManagment.Migrations
                 {
                     b.HasOne("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.City", "City")
                         .WithMany("Areas")
-                        .HasForeignKey("CityId1");
+                        .HasForeignKey("CityId");
                 });
 
             modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Customer", b =>
                 {
-                    b.OwnsOne("Domain.SharedKernel.ValueObjects.Address", "Address", b1 =>
-                        {
-                            b1.Property<Guid>("CustomerId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Area")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("City")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("CustomerId");
-
-                            b1.ToTable("Customers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CustomerId");
-                        });
+                    b.HasOne("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Area", "Area")
+                        .WithMany("Customers")
+                        .HasForeignKey("AreaId");
                 });
 #pragma warning restore 612, 618
         }

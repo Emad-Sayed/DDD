@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Application.CustomerManagment.Commands.DeleteCustomer
 {
-    public class DeleteCustomerCommand : IRequest
+    public class ActiveAndDeactiveCustomerCommand : IRequest
     {
         public string CustomerId { get; set; }
 
-        public class Handler : IRequestHandler<DeleteCustomerCommand>
+        public class Handler : IRequestHandler<ActiveAndDeactiveCustomerCommand>
         {
             private readonly ICustomerRepository _customerRepository;
 
@@ -25,12 +25,12 @@ namespace Application.CustomerManagment.Commands.DeleteCustomer
                 _customerRepository = customerRepository;
             }
 
-            public async Task<Unit> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(ActiveAndDeactiveCustomerCommand request, CancellationToken cancellationToken)
             {
                 var customerFromRepo = await _customerRepository.FindByIdAsync(request.CustomerId);
                 if (customerFromRepo == null) throw new CustomerNotFoundException(request.CustomerId);
 
-                customerFromRepo.Delete();
+                customerFromRepo.ActiveAndDeactiveCustomer();
 
                 _customerRepository.Update(customerFromRepo);
 

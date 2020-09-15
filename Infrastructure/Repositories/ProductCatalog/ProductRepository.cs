@@ -1,4 +1,5 @@
-﻿using Domain.Common.Interfaces;
+﻿using Application.ProductCatalog.DomainEventHandlers.ProductCategoryCreatedDomainEventHandlers;
+using Domain.Common.Interfaces;
 using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
@@ -128,7 +129,12 @@ namespace Infrastructure.Repositories.ProductCatalog
 
         public async void DeleteAll()
         {
-             _context.Products.RemoveRange(_context.Products);
+            _context.Products.RemoveRange(_context.Products);
+        }
+
+        public void ImportProducts(List<Product> products)
+        {
+            _context.Products.AddRange(products);
         }
     }
 }

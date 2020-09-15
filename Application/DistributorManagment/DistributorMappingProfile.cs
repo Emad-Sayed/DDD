@@ -10,10 +10,7 @@ namespace Application.DistributorManagment
     {
         public DistributorMappingProfile()
         {
-            CreateMap<Distributor, DistributorVM>()
-                .ForMember(x => x.City, op => op.MapFrom(y => y.Address.City))
-                .ForMember(x => x.Area, op => op.MapFrom(y => y.Address.Area))
-                .ReverseMap();
+            CreateMap<Distributor, DistributorVM>().ReverseMap();
             CreateMap<City, CityVM>().ReverseMap();
             CreateMap<Area, AreaVM>().ReverseMap();
             CreateMap<DistributorUser, DistributorUserVM>().ReverseMap();

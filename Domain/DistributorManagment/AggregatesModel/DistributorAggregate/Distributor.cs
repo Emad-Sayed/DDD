@@ -15,20 +15,20 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
     public class Distributor : AuditableEntity, IAggregateRoot
     {
         public string Name { get; private set; }
-        public Address Address { get; private set; }
 
         public ICollection<DistributorUser> DistributorUsers { get; private set; }
+        public ICollection<DistributorArea> DistributorAreas { get; private set; }
 
 
         private Distributor()
         {
         }
 
-        public Distributor(string name, string city, string area)
+        public Distributor(string name)
         {
             Name = name;
-            Address = new Address(area, city);
             DistributorUsers = new List<DistributorUser>();
+            DistributorAreas = new List<DistributorArea>();
 
             // Add the DistributorCreated to the domain events collection 
             // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]
@@ -43,11 +43,17 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
             AddDomainEvent(new DistributorUserCreated(distributorUserToCreate));
         }
 
+        public void AddArea(Area area)
+        {
+            var distributorArea = new DistributorArea { Area = area, Distributor = this };
+            DistributorAreas.Add(distributorArea);
+        }
+
+
         // update distributor
-        public void UpdateDistributor(string name, string city, string area)
+        public void UpdateDistributor(string name)
         {
             Name = name;
-            Address = new Address(area, city);
 
             // rais distributor updated event
             AddDomainEvent(new DistributorUpdated(this));

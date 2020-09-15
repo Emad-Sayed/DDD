@@ -56,7 +56,9 @@ namespace API
                                       .AllowAnyHeader().AllowAnyMethod();
                                   });
             });
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+          );
             services.AddMvcCore().AddAuthorization();
             // Note - this is on the IMvcBuilder, not the service collection
             services.AddAuthorizationPolicies();

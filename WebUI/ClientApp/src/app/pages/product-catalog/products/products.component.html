@@ -17,8 +17,8 @@
           <a class="btn btn-outline-info mr-auto" type="button" (click)="openEditorToAddProduct()">
             اضافة
           </a>
-          <div class="upload-btn-wrapper">
-            <button class="white-custom-btn">رفع ملف ايكسل <i class="far fa-file-excel"></i></button>
+          <div class="upload-btn-wrapper p-2">
+            <!-- <button class="white-custom-btn">رفع ملف ايكسل <i class="far fa-file-excel"></i></button> -->رفع ملف ايكسل
             <input type="file" name="myfile" (change)="importProductsFromExcel($event)" />
           </div>
 
@@ -102,6 +102,6 @@
     </div>
   </div>
   <div class="col-6">
-    <app-product-editor class="box" [ngClass]="{ active: openEditor }"></app-product-editor>
+    <app-product-editor class="box" [ngClass]="{ active: openEditor }" *ngIf="openEditor"></app-product-editor>
   </div>
 </div>

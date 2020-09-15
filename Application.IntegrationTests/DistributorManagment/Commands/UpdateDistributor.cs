@@ -36,9 +36,7 @@ namespace Application.IntegrationTests.DistributorManagment.Commands
 
             var createDistributorCommand = new CreateDistributorCommand
             {
-                Name = "Test Distributor",
-                Area = "Nasr City",
-                City = "Cairo"
+                Name = "Test Distributor"
             };
 
             var distributorId = await SendAsync(createDistributorCommand);
@@ -48,9 +46,7 @@ namespace Application.IntegrationTests.DistributorManagment.Commands
             var updateDistributorCommand = new UpdateDistributorCommand
             {
                 Id = distributorId,
-                Name = "Test Update Distributor",
-                Area = "Update Distributor Area",
-                City = "Update Distributor City"
+                Name = "Test Update Distributor"
             };
 
             await SendAsync(updateDistributorCommand);
@@ -59,8 +55,6 @@ namespace Application.IntegrationTests.DistributorManagment.Commands
             // Assert
             distributor.Should().NotBeNull();
             distributor.Name.Should().Be(updateDistributorCommand.Name);
-            distributor.Address.Area.Should().Be(updateDistributorCommand.Area);
-            distributor.Address.City.Should().Be(updateDistributorCommand.City);
         }
     }
 }

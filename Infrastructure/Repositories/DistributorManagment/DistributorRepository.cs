@@ -5,8 +5,10 @@ using Persistence.DistributorManagment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Twilio.Rest.Api.V2010.Account.Usage.Record;
 
 namespace Infrastructure.Repositories.DistributorManagment
 {
@@ -75,7 +77,7 @@ namespace Infrastructure.Repositories.DistributorManagment
 
         public async Task<(int, List<City>)> GetAllCitiesAsync(int pageNumber, int pageSize, string keyWord)
         {
-            var query = _context.Cities
+            var query = _context.DistributorsCities
                 .Include(x => x.Areas)
                 .AsQueryable();
 
@@ -102,6 +104,11 @@ namespace Infrastructure.Repositories.DistributorManagment
                 distributorUser.ConfirmEmail();
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<Area> FindAreaById(string areaId)
+        {
+            return await _context.DistributorsAreas.FirstOrDefaultAsync(z => z.Id == areaId);
         }
     }
 }

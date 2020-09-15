@@ -33,9 +33,9 @@ export class CustomersManagmentService {
     }
 
 
-    deleteCustomer(customerId: string): Observable<any> {
-        const params: any = { customerId: customerId }
-        return this.httpService.delete(`${Config.Customers}`, params);
+    activeAndDeactiveCustomer(customerId: string): Observable<any> {
+        const body: any = { customerId: customerId }
+        return this.httpService.post(`${Config.Customers}/ActiveAndDeactiveCustomer`, body);
     }
     //#endregion
 

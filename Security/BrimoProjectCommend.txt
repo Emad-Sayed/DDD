@@ -1,1 +1,2 @@
 dotnet new skoruba.is4admin --name Brimo.IDP --title Brimo.IDP --adminemail "admin@example.com" --adminpassword "Pa$$word123" --adminrole Admin --adminclientid BrimoClientId --adminclientsecret BrimoClientSecret --dockersupport true
+Add-Migration -Context AdminIdentityDbContext -Project Brimo.IDP.Admin.EntityFramework.SqlServer -StartupProject Brimo.IDP.STS.Identity

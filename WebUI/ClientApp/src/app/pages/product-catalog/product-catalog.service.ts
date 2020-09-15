@@ -90,6 +90,11 @@ export class ProductCatalogService {
         const params: any = { productId: productId }
         return this.httpService.delete(`${Config.Products}`, params);
     }
+
+    importProduct(products: Product[]): Observable<any> {
+        return this.httpService.post(`${Config.Products}/ImportProducts`, { products: products });
+    }
+
     //#endregion
 
     //#region Unit

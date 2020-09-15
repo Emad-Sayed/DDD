@@ -3,11 +3,11 @@ using MediatR;
 
 namespace Domain.CustomerManagment.Events
 {
-    public class CustomerDeleted : INotification
+    public class CustomerActivedOrDeactived : INotification
     {
         public Customer Customer { get; }
 
-        public CustomerDeleted(Customer customer)
+        public CustomerActivedOrDeactived(Customer customer)
         {
             Customer = customer;
         }

@@ -17,8 +17,8 @@ namespace Application.CustomerManagment.Queries.ListCustomers
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         public string KeyWord { get; set; }
-        public string City { get; set; }
-        public string Area { get; set; }
+        public string CityId { get; set; }
+        public string AreaId { get; set; }
 
         public class Handler : IRequestHandler<ListCustomersQuery, ListEntityVM<CustomerVM>>
         {
@@ -34,7 +34,7 @@ namespace Application.CustomerManagment.Queries.ListCustomers
             public async Task<ListEntityVM<CustomerVM>> Handle(ListCustomersQuery request, CancellationToken cancellationToken)
             {
                 // get customers paginated form the database 
-                var customersFromRepo = await _customersRepository.GetAllAsync(request.PageNumber, request.PageSize, request.KeyWord, request.City, request.Area);
+                var customersFromRepo = await _customersRepository.GetAllAsync(request.PageNumber, request.PageSize, request.KeyWord, request.CityId, request.AreaId);
                
                 // mapping customers to cusotmers view models
                 var customersToReturn = _mapper.Map<List<CustomerVM>>(customersFromRepo.Item2);

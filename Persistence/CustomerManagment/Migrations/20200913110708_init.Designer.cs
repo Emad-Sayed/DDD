@@ -10,8 +10,8 @@ using Persistence.CustomerManagment;
 namespace Persistence.CustomerManagment.Migrations
 {
     [DbContext(typeof(CustomerManagmentContext))]
-    [Migration("20200908040704_AddingCusotmerCode")]
-    partial class AddingCusotmerCode
+    [Migration("20200913110708_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,31 +24,27 @@ namespace Persistence.CustomerManagment.Migrations
 
             modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Area", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CityId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CityId1")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnName("CityId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId1");
+                    b.HasIndex("CityId");
 
                     b.ToTable("Areas");
                 });
 
             modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.City", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -66,6 +62,9 @@ namespace Persistence.CustomerManagment.Migrations
 
                     b.Property<string>("AccountId")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AreaId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -101,6 +100,8 @@ namespace Persistence.CustomerManagment.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AreaId");
+
                     b.ToTable("Customers");
                 });
 
@@ -108,11 +109,15 @@ namespace Persistence.CustomerManagment.Migrations
                 {
                     b.HasOne("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.City", "City")
                         .WithMany("Areas")
-                        .HasForeignKey("CityId1");
+                        .HasForeignKey("CityId");
                 });
 
             modelBuilder.Entity("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Customer", b =>
                 {
+                    b.HasOne("Domain.CustomerManagment.AggregatesModel.CustomerAggregate.Area", "Area")
+                        .WithMany("Customers")
+                        .HasForeignKey("AreaId");
+
                     b.OwnsOne("Domain.SharedKernel.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("CustomerId")

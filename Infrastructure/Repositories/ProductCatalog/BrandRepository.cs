@@ -5,6 +5,7 @@ using Persistence.ProductCatalog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -92,6 +93,18 @@ namespace Infrastructure.Repositories.ProductCatalog
         public void DeleteAll()
         {
             _context.Brands.RemoveRange(_context.Brands);
+        }
+
+        public Brand AddBrandIfNotExist(string brandName)
+        {
+            var brand = _context.Brands.FirstOrDefault(x => x.Name.ToLower() == brandName.ToLower());
+            if (brand == null)
+            {
+                brand = new Brand(brandName);
+                _context.Brands.Add(brand);
+            }
+
+            return brand;
         }
     }
 }
