@@ -15,6 +15,7 @@ namespace Application.DistributorManagment.Commands.UpdateDistributor
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public List<string> AreasIds { get; set; }
 
         public class Handler : IRequestHandler<UpdateDistributorCommand>
         {
@@ -30,6 +31,13 @@ namespace Application.DistributorManagment.Commands.UpdateDistributor
                 var distributorFromRepo = await _distributorRepository.FindByIdAsync(request.Id);
                 if (distributorFromRepo == null) throw new DistributorNotFoundException(request.Id);
 
+
+                foreach (var areaId in request.AreasIds)
+                {
+                    var area = await _distributorRepository.FindAreaById(areaId);
+                    if (area == null) throw new AreaNotFoundException(areaId);
+                    distributorFromRepo.AddArea(area);
+                }
 
                 distributorFromRepo.UpdateDistributor(request.Name);
 

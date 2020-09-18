@@ -64,9 +64,9 @@ namespace API.Controllers.Order
         }
 
         [HttpPost("PlaceOrder")]
-        public async Task<IActionResult> PlaceOrder()
+        public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderCommand command)
         {
-            var result = await Mediator.Send(new PlaceOrderCommand());
+            var result = await Mediator.Send(command);
             return Ok(new { result });
         }
 

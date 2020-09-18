@@ -24,5 +24,10 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
 
             Id = id;
         }
+
+        public void UpdateArea(string name)
+        {
+            Name = name;
+        }
     }
 }

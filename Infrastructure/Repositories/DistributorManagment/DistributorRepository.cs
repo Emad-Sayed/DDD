@@ -45,8 +45,24 @@ namespace Infrastructure.Repositories.DistributorManagment
         public async Task<Distributor> FindByIdAsync(string id)
         {
             return await _context.Distributors
+                .Include(x => x.DistributorAreas)
+                .ThenInclude(x => x.Area)
+                .ThenInclude(x => x.City)
                 .Include(x => x.DistributorUsers)
                    .FirstOrDefaultAsync(x => x.Id.ToString() == id);
+        }
+
+        public async Task<City> FindCityByIdAsync(string cityId)
+        {
+            return await _context.DistributorsCities
+                .Include(x => x.Areas)
+                   .FirstOrDefaultAsync(x => x.Id.ToString() == cityId);
+        }
+
+        public async Task<bool> CityExistAsync(string name)
+        {
+            return await _context.DistributorsCities
+                   .AnyAsync(x => x.Name.ToLower() == name.ToLower());
         }
 
         public async Task<(int, List<Distributor>)> GetAllAsync(int pageNumber, int pageSize, string keyWord)
@@ -109,6 +125,23 @@ namespace Infrastructure.Repositories.DistributorManagment
         public async Task<Area> FindAreaById(string areaId)
         {
             return await _context.DistributorsAreas.FirstOrDefaultAsync(z => z.Id == areaId);
+        }
+
+        public City AddCity(City city)
+        {
+            return _context.DistributorsCities
+                     .Add(city)
+                     .Entity;
+        }
+
+        public void UpdateCity(City city)
+        {
+            _context.Entry(city).State = EntityState.Modified;
+        }
+
+        public void DeleteCity(City city)
+        {
+            _context.DistributorsCities.Remove(city);
         }
     }
 }

@@ -23,5 +23,10 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
 
             Id = id;
         }
+
+        public void UpdateArea(string name)
+        {
+            Name = name;
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             OrderItems = new List<OrderItem>();
         }
 
-        public Order(string customerId, string customerName,string customerCode, string customerShopName,string customerShopAddress,string customerCity, string customerArea, string customerLocationOnMap, float totalPrice)
+        public Order(string customerId, string customerName, string customerCode, string customerShopName, string customerShopAddress, string customerCity, string customerArea, string customerLocationOnMap)
         {
             CustomerId = customerId;
             CustomerName = customerName;
@@ -47,7 +47,6 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             CustomerLocationOnMap = customerLocationOnMap;
             OrderStatus = OrderStatus.Placed;
             OrderPlacedDate = DateTime.UtcNow;
-            TotalPrice = totalPrice;
 
             OrderItems = new List<OrderItem>();
 
@@ -70,6 +69,15 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             var orderItem = new OrderItem(Id.ToString(), productId, productName, unitPrice, unitSellingPrice, photoUrl, unitId, unitName, unitCount);
 
             OrderItems.Add(orderItem);
+        }
+
+        public void ReCalcTotalOrderPrice()
+        {
+            TotalPrice = 0;
+            foreach (var item in OrderItems)
+            {
+                TotalPrice += item.UnitSellingPrice;
+            }
         }
 
         public void UpdateOrderItem(string orderItemId, string unitId, string unitName, float unitPrice, float unitSellingPrice, int unitCount)

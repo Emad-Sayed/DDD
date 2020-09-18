@@ -30,8 +30,8 @@ namespace Application.OrderManagment.DomainEventHandlers.OrderPlacedDomainEventH
         public async Task Handle(OrderPlaced notification, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Brimo API EventHandelr: {Name} {@UserId} {@UserName} {@Request}", nameof(OrderPlaced), _currentUserService.UserId, _currentUserService.Name, notification);
-            var customerVanFromQuery = await _mediator.Send(new CurrentCustomerVanQuery { }, cancellationToken);
-            if (customerVanFromQuery != null) await _mediator.Send(new DeleteCurrentCustomerVanCommand { }, cancellationToken);
+            //var customerVanFromQuery = await _mediator.Send(new CurrentCustomerVanQuery { }, cancellationToken);
+            //if (customerVanFromQuery != null) await _mediator.Send(new DeleteCurrentCustomerVanCommand { }, cancellationToken);
         }
     }
 }

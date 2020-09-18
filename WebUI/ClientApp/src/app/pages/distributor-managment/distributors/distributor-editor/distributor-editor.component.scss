@@ -63,3 +63,13 @@
     }
   }
 }
+.example-chip-list {
+  width: 100%;
+}
+* /deep/ {
+  direction: rtl !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

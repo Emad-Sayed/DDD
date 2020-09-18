@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
@@ -45,8 +46,18 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
 
         public void AddArea(Area area)
         {
-            var distributorArea = new DistributorArea { Area = area, Distributor = this };
-            DistributorAreas.Add(distributorArea);
+            var areaToAdd = DistributorAreas.FirstOrDefault(x => x.Area.Name == area.Name);
+            if (areaToAdd == null)
+            {
+                var distributorArea = new DistributorArea { Id = Guid.NewGuid().ToString(), Area = area, Distributor = this };
+                DistributorAreas.Add(distributorArea);
+            }
+        }
+
+        public void RemoveArea(Area area)
+        {
+            var areaToRemove = DistributorAreas.FirstOrDefault(x => x.Area.Name == area.Name);
+            if (areaToRemove != null)  DistributorAreas.Remove(areaToRemove);
         }
 
 

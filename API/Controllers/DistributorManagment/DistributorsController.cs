@@ -4,10 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Configuration;
 using Application.DistributorManagment.Commands.ConfirmDistributorUserEmail;
+using Application.DistributorManagment.Commands.CreateCity;
 using Application.DistributorManagment.Commands.CreateDistributor;
 using Application.DistributorManagment.Commands.CreateDistributorUser;
+using Application.DistributorManagment.Commands.DeleteCity;
 using Application.DistributorManagment.Commands.DeleteDistributor;
 using Application.DistributorManagment.Commands.DeleteDistributorUser;
+using Application.DistributorManagment.Commands.RemoveDistributorAreas;
+using Application.DistributorManagment.Commands.UpdateCity;
 using Application.DistributorManagment.Commands.UpdateDistributor;
 using Application.DistributorManagment.Commands.UpdateDistributorUser;
 using Application.DistributorManagment.Queries.DistributorById;
@@ -61,12 +65,43 @@ namespace API.Controllers.DistributorManagment
             return Ok(new { result });
         }
 
+        [HttpPost("RemoveDistributorAreas")]
+        public async Task<IActionResult> RemoveDistributorAreas([FromBody] RemoveDistributorAreasCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(new { result });
+        }
+
+        #region Cities and Areas
         [HttpGet("Cities")]
         public async Task<IActionResult> GetAllCities([FromQuery] ListCitiesQuery query)
         {
             var result = await Mediator.Send(query);
             return Ok(result);
         }
+
+        [HttpPost("Cities")]
+        public async Task<IActionResult> CreateCity([FromBody] CreateCityCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPut("Cities")]
+        public async Task<IActionResult> UpdateCity([FromBody] UpdateCityCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpDelete("Cities/{cityId}")]
+        public async Task<IActionResult> DeleteCity([FromRoute] DeleteCityCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+        #endregion
+
 
         [HttpPost("{distributorId}/CreateDistributorUser")]
         public async Task<IActionResult> CreateDistributorUserCommand([FromBody] CreateDistributorUserCommand command)

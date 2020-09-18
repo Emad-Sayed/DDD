@@ -13,7 +13,7 @@ namespace Brimo.IDP.STS.Identity.ViewModels.Auth.Register
         public string ShopName { get; set; }
         public string ShopAddress { get; set; }
         public string LocationOnMap { get; set; }
-        public string City { get; set; }
-        public string Area { get; set; }
+        public AreaVM Area { get; set; }
+
     }
 }

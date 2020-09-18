@@ -7,7 +7,7 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
 {
     public class DistributorArea : EntityBase
     {
-        public new string Id { get; protected set; }
+        public new string Id { get; set; }
         public string AreaId { get; set; }
         public Area Area { get; set; }
 

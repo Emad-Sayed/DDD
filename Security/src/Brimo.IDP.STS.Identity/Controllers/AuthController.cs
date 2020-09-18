@@ -11,6 +11,7 @@ using Brimo.IDP.STS.Identity.Common.Exceptions.Auth;
 using Brimo.IDP.STS.Identity.Common.Middlewares;
 using Brimo.IDP.STS.Identity.Services;
 using Brimo.IDP.STS.Identity.ViewModels.Auth.Register;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -88,7 +89,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
 
             _smsSender.Send(new SMSMessageModel
             {
-                Message = $@"Your code is {code}",
+                Message = $@"{code} هو كود التفعيل الخاص بك في بريمو",
                 ToPhoneNumber = sendSMSCodeVM.PhoneNumber
             });
 
@@ -177,7 +178,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
 
             _smsSender.Send(new SMSMessageModel
             {
-                Message = $@"Your change password code is {code}",
+                Message = $@"{code} هو كود التحقق الخاص بك في بريمو",
                 ToPhoneNumber = model.PhoneNumber
             });
 

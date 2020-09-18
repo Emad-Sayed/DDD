@@ -28,7 +28,7 @@ export class DistributorsComponent implements OnInit, OnDestroy {
     private distributorManagmentService: DistributorsManagmentService,
     private core: CoreService,
     private popupService: PopupServiceService
-    ) {
+  ) {
   }
 
   ngOnDestroy(): void {
@@ -39,8 +39,11 @@ export class DistributorsComponent implements OnInit, OnDestroy {
     this.getDistributors();
     this.distributorManagmentService.distributorEditor.subscribe(res => {
       this.openEditor = res.openEditor;
-      if (res.distributorRequestSuccess)
+      if (res.distributorRequestSuccess) {
+        this.page = new Page();
         this.getDistributors();
+
+      }
     });
 
     this.subject.pipe(

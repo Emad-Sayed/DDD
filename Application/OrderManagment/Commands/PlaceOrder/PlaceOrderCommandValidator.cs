@@ -9,6 +9,7 @@ namespace Application.OrderManagment.Commands.PlaceOrder
     {
         public PlaceOrderCommandValidator()
         {
+            RuleFor(x => x.Items).NotEmpty().WithMessage("Order items must be not empt").WithErrorCode("order_items_must_be_not_empty");
         }
     }
 }

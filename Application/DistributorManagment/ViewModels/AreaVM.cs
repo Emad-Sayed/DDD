@@ -8,5 +8,6 @@ namespace Application.DistributorManagment.ViewModels
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public CityVM City { get; set; }
     }
 }

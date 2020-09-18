@@ -9,6 +9,6 @@ namespace Application.DistributorManagment.ViewModels
         public string Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<AreaVM> Areas { get; set; }
+        public List<AreaVM> Areas { get; set; }
     }
 }

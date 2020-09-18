@@ -1,10 +1,14 @@
 ﻿using Application.Common.Interfaces;
 using Application.CustomerManagment.Queries.CustomerByAccountId;
+using Application.OrderManagment.ViewModels;
+using Application.ProductCatalog.ProductAggregate.Queries.ProductById;
 using Application.ShoppingVan.Queries.CurrentCustomerVan;
 using Domain.CustomerManagment.Exceptions;
 using Domain.OrderManagment.AggregatesModel.OrderAggregate;
 using Domain.ShoppingVan.Exceptions;
 using MediatR;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,6 +16,7 @@ namespace Application.OrderManagment.Commands.PlaceOrder
 {
     public class PlaceOrderCommand : IRequest<string>
     {
+        public List<VanItemVM> Items { get; set; }
         public class Handler : IRequestHandler<PlaceOrderCommand, string>
         {
             private readonly IMediator _mediator;
@@ -31,8 +36,8 @@ namespace Application.OrderManagment.Commands.PlaceOrder
             public async Task<string> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
             {
                 // Get Current Open shopping van for the current logged in customer
-                var customerVanFromQuery = await _mediator.Send(new CurrentCustomerVanQuery(), cancellationToken);
-                if (customerVanFromQuery == null) throw new EmptyShoppingVanException();
+                //var customerVanFromQuery = await _mediator.Send(new CurrentCustomerVanQuery(), cancellationToken);
+                //if (customerVanFromQuery == null) throw new EmptyShoppingVanException();
 
 
                 // Get Current Customer form the current logged in customer
@@ -40,21 +45,36 @@ namespace Application.OrderManagment.Commands.PlaceOrder
                 if (customerDetailsFromQuery == null) throw new CustomerNotFoundException(_currentUserService.UserId);
 
                 // create new order
-                var orderToPlace = new Order(_currentUserService.UserId, customerDetailsFromQuery.FullName, customerDetailsFromQuery.CustomerCode, customerDetailsFromQuery.ShopName, customerDetailsFromQuery.ShopAddress, customerDetailsFromQuery.Area.City.Name, customerDetailsFromQuery.Area.Name, customerDetailsFromQuery.LocationOnMap, customerVanFromQuery.TotalPrice);
+                var orderToPlace = new Order(
+                                    _currentUserService.UserId,
+                                    customerDetailsFromQuery.FullName,
+                                    customerDetailsFromQuery.CustomerCode,
+                                    customerDetailsFromQuery.ShopName,
+                                    customerDetailsFromQuery.ShopAddress,
+                                    customerDetailsFromQuery.Area.City.Name,
+                                    customerDetailsFromQuery.Area.Name,
+                                    customerDetailsFromQuery.LocationOnMap);
+
+
+
+                foreach (var vanItem in request.Items)
+                {
+                    if (vanItem.CustomerCount > 0)
+                    {
+                        var productDetails = await _mediator.Send(new ProductByIdQuery { ProductId = vanItem.ProductId });
+
+                        var unit = productDetails.Units.FirstOrDefault(x => x.Id == vanItem.UnitId);
+
+                        if (unit == null) throw new UnitNotFoundException(vanItem.UnitId);
+
+                        orderToPlace.AddOrderItem(productDetails.Id, productDetails.Name, unit.Price, unit.SellingPrice, productDetails.PhotoUrl, unit.Id, unit.Name, vanItem.CustomerCount);
+
+                    }
+
+                }
+                orderToPlace.ReCalcTotalOrderPrice();
 
                 _orderRepository.Add(orderToPlace);
-                await _orderRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
-
-                foreach (var vanItem in customerVanFromQuery.ShoppingVanItems)
-                {
-                    foreach (var unit in vanItem.Units)
-                    {
-                        if (unit.CustomerCount > 0)
-                            orderToPlace.AddOrderItem(vanItem.ProductId, vanItem.Name, unit.Price, unit.ConsumerPrice, vanItem.ImgUrl, unit.Id, unit.Name, (int)unit.CustomerCount);
-                    }
-                }
-
-                _orderRepository.Update(orderToPlace);
 
                 await _orderRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
 

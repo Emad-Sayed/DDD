@@ -5,34 +5,87 @@
         </button>
         <button class="btn btn-primary save-edit-btn" (click)="saveData()">حفظ</button>
     </div>
-    <div class="row mt-2">
+    <div class="row m-3">
         <label for="dist-name" class="col-3 col-form-label">إسم الموزع</label>
         <input type="text" name="name" [(ngModel)]="distributor.name" id="dist-name" class="col-5 offset-4 form-control"
             placeholder="إسم الموزع" />
     </div>
-    <div class="row mt-2">
-        <label for="dist-city" class="col-3 col-form-label">إختر المدينة</label>
-        <select class="col-5 offset-4 form-control" id="dist-city" name="city" [(ngModel)]="distributor.city">
-            <option selected>إختر المدينة</option>
-            <option *ngFor="let city of cities" [value]="city.name">
-                {{ city.name }}</option>
-        </select>
+    <div class="row m-3">
+        <div class="col">
+            <label for="dist-name" class="col-3 col-form-label">المناطق</label>
+        </div>
+        <div class="col-1">
+            <mat-icon class="cursor-pointer" (click)="addNewCityRow()">add</mat-icon>
+        </div>
     </div>
-    <div class="row mt-2">
-        <label for="dist-area" class="col-3 col-form-label">إختر المنطقة</label>
-        <select class="col-5 offset-4 form-control" id="dist-area" name="area" [(ngModel)]="distributor.area">
-            <option selected>إختر المنطقة</option>
-            <option *ngFor="let area of fillteredCities(distributor.city)" [value]="area.name">
-                {{ area.name }}</option>
-        </select>
+    <div class="row m-3">
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">اسم المدينة</th>
+                    <th scope="col">المناطق</th>
+                    <th scope="col">الإجراءت</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let city of distributor.cities;let i = index">
+                    <th scope=" row"> {{i+ 1}}</th>
+                    <td>
+                        <mat-chip>
+                            {{city?.name}}
+                        </mat-chip>
+                    </td>
+                    <td>
+                        <mat-chip-list>
+                            <mat-chip *ngFor="let area of city.areas; let i = index">
+                                {{area.name}}
+                            </mat-chip>
+                        </mat-chip-list>
+                    </td>
+                    <td>
+                        <mat-icon (click)="removeDistributorAreas(city.areas)">delete</mat-icon>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row m-3" *ngFor="let row of locationsRows;let i = index" dir="rtl">
+        <div class="col-4">
+            <mat-form-field appearance="fill" [id]="'city' + i">
+                <mat-label>المدينة</mat-label>
+                <mat-select [(ngModel)]="row.cityId" [id]="'selectcity' + i" (selectionChange)="cityChanged(row)">
+                    <mat-option *ngFor="let city of cities" [value]="city.id">
+                        {{city.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-8">
+            <mat-form-field class="example-chip-list" [id]="'area' + i">
+                <mat-chip-list #chipList>
+                    <mat-chip *ngFor="let area of row.areas" [selectable]="selectable" [removable]="removable"
+                        (removed)="remove(row, area)">
+                        {{area.name}}
+                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input placeholder="المناطق" #fruitInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
+                        [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        (matChipInputTokenEnd)="add($event, row)">
+                </mat-chip-list>
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event, row)">
+                    <mat-option *ngFor="let fruit of fillterAreas(row.cityId) " [value]="fruit">
+                        {{fruit.name}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
     </div>
 
-    <div class="row p-2">
+    <div class="row m-3" *ngIf="isEditing">
         <!-- item DistributorUsers -->
         <div class="item-distributorUsers w-100">
-            <div class="row mt-2 item-units-header p-3">
-                <h4 class="border-bottom w-100"> المستخديمن :</h4>
-            </div>
+            <label for="dist-name" class="col-form-label">المستخدمين</label>
             <div class="row item-distributorUsers-content">
                 <div class="distributorUser d-flex w-100 justify-content-between px-3 text-center">
                     <div class="_num w-45">
@@ -64,7 +117,8 @@
                         <button class="btn p-2" (click)="removeDistributorUser(distributor.distributorUsers[i], i)">
                             <i class="fas fa-trash-alt text-danger"></i>
                         </button>
-                        <button *ngIf="!distributorUser.emailConfirmed" class="btn p-2" (click)="resendInvitationEmail(distributorUser.email)">
+                        <button *ngIf="!distributorUser.emailConfirmed" class="btn p-2"
+                            (click)="resendInvitationEmail(distributorUser.email)">
                             <i class="fas fa-reply text-danger"></i>
                         </button>
                     </div>

@@ -40,6 +40,19 @@ namespace Infrastructure.Repositories.CustomerManagment
             _context.Entry(customer).State = EntityState.Modified;
         }
 
+        public async Task<City> FindCityByIdAsync(string cityId)
+        {
+            return await _context.CustomersCities
+                .Include(x => x.Areas)
+                   .FirstOrDefaultAsync(x => x.Id.ToString() == cityId);
+        }
+
+        public async Task<bool> CityExistAsync(string name)
+        {
+            return await _context.CustomersCities
+                   .AnyAsync(x => x.Name.ToLower() == name.ToLower());
+        }
+
         public async Task<Customer> FindByIdAsync(string id)
         {
             return await _context.Customers
@@ -120,6 +133,23 @@ namespace Infrastructure.Repositories.CustomerManagment
         public async Task<Area> FindAreaById(string areaId)
         {
             return await _context.CustomersAreas.FirstOrDefaultAsync(z => z.Id == areaId);
+        }
+
+        public City AddCity(City city)
+        {
+            return _context.CustomersCities
+                     .Add(city)
+                     .Entity;
+        }
+
+        public void UpdateCity(City city)
+        {
+            _context.Entry(city).State = EntityState.Modified;
+        }
+
+        public void DeleteCity(City city)
+        {
+            _context.CustomersCities.Remove(city);
         }
     }
 }

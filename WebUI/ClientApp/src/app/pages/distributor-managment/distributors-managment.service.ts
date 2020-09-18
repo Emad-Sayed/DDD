@@ -40,6 +40,11 @@ export class DistributorsManagmentService {
         const params: any = { distributorId: distributorId }
         return this.httpService.delete(`${Config.Distributors}`, params);
     }
+
+    removeDistributorAreas(distributorId: string, areasIds: string[]): Observable<any> {
+        const body = { distributorId: distributorId, areasIds: areasIds };
+        return this.httpService.post(`${Config.Distributors}/RemoveDistributorAreas`, body);
+    }
     //#endregion
 
     //#region DistributorUser
