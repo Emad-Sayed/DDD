@@ -11,6 +11,7 @@ namespace Application.CustomerManagment.Commands.CreateCity
 {
     public class CreateCityCommand : IRequest<string>
     {
+        public string CityId { get; set; }
         public string Name { get; set; }
 
 
@@ -29,7 +30,7 @@ namespace Application.CustomerManagment.Commands.CreateCity
                 var cityExist = await _customerRepository.CityExistAsync(request.Name);
                 if (cityExist) throw new CityAlreadyExistException(request.Name);
 
-                var city = new City(Guid.NewGuid().ToString(), request.Name);
+                var city = new City(request.CityId, request.Name);
 
                 _customerRepository.AddCity(city);
 

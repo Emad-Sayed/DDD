@@ -56,7 +56,7 @@ namespace Infrastructure.Repositories.DistributorManagment
         {
             return await _context.DistributorsCities
                 .Include(x => x.Areas)
-                   .FirstOrDefaultAsync(x => x.Id.ToString() == cityId);
+                   .FirstOrDefaultAsync(x => x.Id.ToLower() == cityId.ToLower());
         }
 
         public async Task<bool> CityExistAsync(string name)
@@ -100,10 +100,14 @@ namespace Infrastructure.Repositories.DistributorManagment
             // fillter by keyword
             if (!string.IsNullOrEmpty(keyWord))
             {
+                keyWord = keyWord.ToLower();
+
                 query = query.Where(x =>
-                x.Id.ToString().Contains(keyWord)
-                );
+                x.Id.Contains(keyWord) ||
+                x.Name.Contains(keyWord));
             }
+
+            query = query.OrderBy(x => x.Name);
 
             // apply pagination to cities
             var cities = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
@@ -124,7 +128,7 @@ namespace Infrastructure.Repositories.DistributorManagment
 
         public async Task<Area> FindAreaById(string areaId)
         {
-            return await _context.DistributorsAreas.FirstOrDefaultAsync(z => z.Id == areaId);
+            return await _context.DistributorsAreas.FirstOrDefaultAsync(z => z.Id.ToLower() == areaId.ToLower());
         }
 
         public City AddCity(City city)

@@ -4,13 +4,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Configuration;
 using Application.DistributorManagment.Commands.ConfirmDistributorUserEmail;
+using Application.DistributorManagment.Commands.CreateArea;
 using Application.DistributorManagment.Commands.CreateCity;
 using Application.DistributorManagment.Commands.CreateDistributor;
 using Application.DistributorManagment.Commands.CreateDistributorUser;
+using Application.DistributorManagment.Commands.DeleteArea;
 using Application.DistributorManagment.Commands.DeleteCity;
 using Application.DistributorManagment.Commands.DeleteDistributor;
 using Application.DistributorManagment.Commands.DeleteDistributorUser;
 using Application.DistributorManagment.Commands.RemoveDistributorAreas;
+using Application.DistributorManagment.Commands.UpdateArea;
 using Application.DistributorManagment.Commands.UpdateCity;
 using Application.DistributorManagment.Commands.UpdateDistributor;
 using Application.DistributorManagment.Commands.UpdateDistributorUser;
@@ -84,21 +87,42 @@ namespace API.Controllers.DistributorManagment
         public async Task<IActionResult> CreateCity([FromBody] CreateCityCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return Ok(new { result });
         }
 
         [HttpPut("Cities")]
         public async Task<IActionResult> UpdateCity([FromBody] UpdateCityCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return Ok(new { result });
         }
 
         [HttpDelete("Cities/{cityId}")]
-        public async Task<IActionResult> DeleteCity([FromRoute] DeleteCityCommand command)
+        public async Task<IActionResult> DeleteCity([FromQuery] DeleteCityCommand command)
         {
             var result = await Mediator.Send(command);
-            return Ok(result);
+            return Ok(new { result });
+        }
+
+        [HttpPost("Cities/{cityId}/Areas")]
+        public async Task<IActionResult> CreateArea([FromBody] CreateAreaCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(new { result });
+        }
+
+        [HttpPut("Cities/{cityId}/Areas")]
+        public async Task<IActionResult> UpdateArea([FromBody] UpdateAreaCommnad command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(new { result });
+        }
+
+        [HttpDelete("Cities/{cityId}/Areas/{areaId}")]
+        public async Task<IActionResult> DeleteArea([FromQuery] DeleteAreaCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(new { result });
         }
         #endregion
 

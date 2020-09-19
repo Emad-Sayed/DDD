@@ -27,7 +27,7 @@ namespace Application.DistributorManagment.DomainEventHandlers.AreaUpdatedDomain
         public async Task Handle(AreaUpdated notification, CancellationToken cancellationToken)
         {
             // If area updated successfully will update area in the customer area table
-            await _mediator.Send(new UpdateAreaCommnad { CityId = notification.Area.CityId, AreaId = notification.Area.Id, Name = notification.Area.Name }, cancellationToken);
+            await _mediator.Send(new UpdateAreaCommnad { CityId = notification.City.Id, AreaId = notification.Area.Id, Name = notification.Area.Name }, cancellationToken);
 
             _logger.LogInformation("Brimo API EventHandelr: {Name} {@UserId} {@UserName} {@Request}", nameof(AreaUpdated), _currentUserService.UserId, _currentUserService.Name, notification);
         }

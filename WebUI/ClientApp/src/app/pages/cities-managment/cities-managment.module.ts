@@ -4,7 +4,7 @@ import { CitiesComponent } from './cities/cities.component';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModuleModule } from 'src/app/shared/modules/shared.module';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { MatExpansionModule } from '@angular/material';
+import { MatExpansionModule,  MatIconModule } from '@angular/material';
 
 
 const routes: Routes = [
@@ -19,7 +19,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedModuleModule,
     InfiniteScrollModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatIconModule
   ]
 })
 export class CitiesManagmentModule { }

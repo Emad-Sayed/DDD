@@ -48,7 +48,7 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
 
             Areas.Add(area);
 
-            AddDomainEvent(new AreaCreated(area));
+            AddDomainEvent(new AreaCreated(this, area));
 
             return area;
         }
@@ -62,7 +62,7 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
 
             area.UpdateArea(name);
 
-            AddDomainEvent(new AreaUpdated(area));
+            AddDomainEvent(new AreaUpdated(this, area));
         }
 
         public void DeleteArea(string id)
@@ -72,7 +72,7 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
 
             Areas.Remove(area);
 
-            AddDomainEvent(new AreaDeleted(area));
+            AddDomainEvent(new AreaDeleted(this, area));
         }
 
 

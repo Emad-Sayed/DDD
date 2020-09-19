@@ -1,18 +1,80 @@
-<mat-accordion>
-    <mat-expansion-panel *ngFor="let city of cities;let i = index" disabled hideToggle [id]="'city' + i">
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                <p>{{city.name}}</p>
-                <span class="material-icons" >expand_more</span>
-
-            </mat-panel-title>
-        </mat-expansion-panel-header>
-        <div class="row" *ngFor="let area of city.areas">
-            <div class="col-2">
-                <p>{{area.name}}</p>
-            </div>
-            <div class="col"></div>
-            <div class="col-2"></div>
+<div class="row card">
+    <!-- search box -->
+    <div class="w-100">
+        <div class="ais-SearchBox card-search">
+            <form class="ais-SearchBox-form w-100 form-group d-flex" novalidate>
+                <input class="ais-SearchBox-input form-control col-5" autocomplete="off" autocorrect="off"
+                    autocapitalize="off" placeholder="إسم المدينة" spellcheck="false" maxlength="512" type="search"
+                    value="" (keydown)="onKeyUp($event.target.value)" />
+                <div class="col"></div>
+                <div class="col-1">
+                    <mat-icon class="mt-2" color="primary" (click)="addNewCityRow()">add
+                    </mat-icon>
+                </div>
+            </form>
         </div>
-    </mat-expansion-panel>
-</mat-accordion>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="parent_data" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+        (scrolled)="onScroll()" [scrollWindow]="false">
+        <mat-accordion>
+            <mat-expansion-panel disabled="true" class="item mt-3" *ngFor="let city of cities" #myPanel>
+                <mat-expansion-panel-header expandedHeight="auto" collapsedHeight="auto">
+                    <div class="row w-100 align-items-center ">
+                        <mat-panel-title>
+                            <h6 *ngIf="!city.isEditing">{{city.name}}</h6>
+                            <div *ngIf="city.isEditing" class="form-group pt-2">
+                                <input type="text" class="form-control" [id]="city.id" name="name" [(ngModel)]="city.name"
+                                    placeholder="إسم المدينة">
+                            </div>
+                        </mat-panel-title>
+                        <div class="col-md-6 pl-0  data" [ngClass]="{'active': myPanel.expanded}">
+                            <div class="buttons background-gradient" [ngClass]="{'visible': myPanel.expanded}">
+                                <div class="row py-2">
+                                    <div class="col-md"></div>
+                                    <div class="col-4">
+                                        <mat-icon class="m-2" color="primary" (click)="addNewAreaRow(city, myPanel)">
+                                            add
+                                        </mat-icon>
+                                        <mat-icon *ngIf="!city.isEditing" class="m-2" color="accent"
+                                            (click)="city.isEditing = true">edit</mat-icon>
+
+                                        <mat-icon *ngIf="city.isEditing" class="m-2" color="accent"
+                                            (click)="saveCity(city)">save</mat-icon>
+                                        <mat-icon color="warn" (click)="showDeleteCityPopup(city)">delete</mat-icon>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <mat-icon (click)="myPanel.expanded = ! myPanel.expanded">
+                                            {{myPanel.expanded ?  'keyboard_arrow_up':'keyboard_arrow_down'}}</mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-expansion-panel-header>
+                <div class="row pt-3" *ngFor="let area of city.areas">
+                    <div class="col-2">
+                        <p *ngIf="!area.isEditing">{{area.name}}</p>
+                        <div *ngIf="area.isEditing" class="form-group pt-2">
+                            <input type="text" class="form-control" [id]="area.id" name="name" [(ngModel)]="area.name"
+                                placeholder="إسم المنطقة">
+                        </div>
+                    </div>
+                    <div class="col"></div>
+                    <div class="col-1">
+                        <mat-icon *ngIf="!area.isEditing" class="pl-2" color="accent" (click)="area.isEditing = true">
+                            edit</mat-icon>
+                        <mat-icon *ngIf="area.isEditing" class="pl-2 pt-3" color="accent"
+                            (click)="saveArea(city.id, area)">
+                            save</mat-icon>
+                        <mat-icon color="warn" (click)="showDeleteAreaPopup(city.id, area)">delete</mat-icon>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+    <!-- <app-footer></app-footer> -->
+
+</div>

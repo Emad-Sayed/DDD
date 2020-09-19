@@ -27,7 +27,7 @@ namespace Application.DistributorManagment.DomainEventHandlers.AreaDeletedDomain
         public async Task Handle(AreaDeleted notification, CancellationToken cancellationToken)
         {
             // If area deleted successfully will delete area in the customer area table
-            await _mediator.Send(new DeleteAreaCommand { CityId = notification.Area.CityId, AreaId = notification.Area.Id }, cancellationToken);
+            await _mediator.Send(new DeleteAreaCommand { CityId = notification.City.Id, AreaId = notification.Area.Id }, cancellationToken);
 
             _logger.LogInformation("Brimo API EventHandelr: {Name} {@UserId} {@UserName} {@Request}", nameof(AreaDeleted), _currentUserService.UserId, _currentUserService.Name, notification);
 

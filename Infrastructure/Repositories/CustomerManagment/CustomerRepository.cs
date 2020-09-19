@@ -44,7 +44,7 @@ namespace Infrastructure.Repositories.CustomerManagment
         {
             return await _context.CustomersCities
                 .Include(x => x.Areas)
-                   .FirstOrDefaultAsync(x => x.Id.ToString() == cityId);
+                   .FirstOrDefaultAsync(x => x.Id.ToLower() == cityId.ToLower());
         }
 
         public async Task<bool> CityExistAsync(string name)
@@ -118,8 +118,10 @@ namespace Infrastructure.Repositories.CustomerManagment
             // fillter by keyword
             if (!string.IsNullOrEmpty(keyWord))
             {
+                keyWord = keyWord.ToLower();
                 query = query.Where(x =>
-                x.Id.ToString().Contains(keyWord)
+                x.Name.Contains(keyWord) ||
+                x.Id.Contains(keyWord) 
                 );
             }
 
@@ -132,7 +134,7 @@ namespace Infrastructure.Repositories.CustomerManagment
 
         public async Task<Area> FindAreaById(string areaId)
         {
-            return await _context.CustomersAreas.FirstOrDefaultAsync(z => z.Id == areaId);
+            return await _context.CustomersAreas.FirstOrDefaultAsync(z => z.Id.ToLower() == areaId.ToLower());
         }
 
         public City AddCity(City city)

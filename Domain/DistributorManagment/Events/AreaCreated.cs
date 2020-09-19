@@ -8,10 +8,12 @@ namespace Domain.DistributorManagment.Events
 {
     public class AreaCreated : INotification
     {
+        public City City { get; }
         public Area Area { get; }
 
-        public AreaCreated(Area area)
+        public AreaCreated(City city, Area area)
         {
+            City = city;
             Area = area;
         }
     }

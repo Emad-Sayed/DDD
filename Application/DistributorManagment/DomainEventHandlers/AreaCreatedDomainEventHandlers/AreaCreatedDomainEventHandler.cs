@@ -27,7 +27,7 @@ namespace Application.DistributorManagment.DomainEventHandlers.AreaCreatedDomain
         public async Task Handle(AreaCreated notification, CancellationToken cancellationToken)
         {
             // If area created successfully will creat area in the customer area table
-             await _mediator.Send(new CreateAreaCommand { CityId = notification.Area.CityId, Name = notification.Area.Name }, cancellationToken);
+            await _mediator.Send(new CreateAreaCommand { CityId = notification.City.Id, AreaId = notification.Area.Id, Name = notification.Area.Name }, cancellationToken);
 
             _logger.LogInformation("Brimo API EventHandelr: {Name} {@UserId} {@UserName} {@Request}", nameof(AreaCreated), _currentUserService.UserId, _currentUserService.Name, notification);
         }

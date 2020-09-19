@@ -26,12 +26,12 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
         }
 
 
-        public Area AddArea(string name)
+        public Area AddArea(string areaId, string name)
         {
             var area = Areas.FirstOrDefault(x => x.Name.ToLower() == name.ToLower());
             if (area != null) throw new AreaAlreadyExistException(name);
 
-            area = new Area(name, Id, Guid.NewGuid().ToString());
+            area = new Area(name, Id, areaId);
 
             Areas.Add(area);
 
