@@ -1,0 +1,18 @@
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let city of cities;let i = index" disabled hideToggle [id]="'city' + i">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <p>{{city.name}}</p>
+                <span class="material-icons" >expand_more</span>
+
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row" *ngFor="let area of city.areas">
+            <div class="col-2">
+                <p>{{area.name}}</p>
+            </div>
+            <div class="col"></div>
+            <div class="col-2"></div>
+        </div>
+    </mat-expansion-panel>
+</mat-accordion>

@@ -10,6 +10,7 @@ namespace Domain.OffersManagment.AggregatesModel
         public string Name { get; private set; }
 
         // How many units from this unit
+        public string UnitId { get; private set; }
         public int Count { get; private set; }
 
         // How many item in this unit
@@ -33,8 +34,9 @@ namespace Domain.OffersManagment.AggregatesModel
 
         public Unit() { }
 
-        public Unit(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable, Guid productId)
+        public Unit(string unitId, string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable, Guid productId)
         {
+            UnitId = unitId;
             Name = name;
             Count = count;
             ContentCount = contentCount;

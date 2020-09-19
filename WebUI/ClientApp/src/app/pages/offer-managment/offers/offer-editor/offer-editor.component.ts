@@ -91,11 +91,11 @@ export class OfferEditorComponent implements OnInit {
 
   search = (text$: Observable<string>) =>
     text$.pipe(
-      debounceTime(300),
+      debounceTime(500),
       distinctUntilChanged(),
       tap(() => this.searching = true),
       switchMap(term =>
-        this.productCatalogService.getProducts({ keyWord: term, pageNumber: 1, pageSize: 100000 }).pipe(
+        this.productCatalogService.getProducts({ keyWord: term, pageNumber: 1, pageSize: 100 }).pipe(
           tap(() => this.searchFailed = false),
           map(x => x.data),
           catchError(() => {

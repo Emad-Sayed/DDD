@@ -11,11 +11,10 @@ namespace Application.OffersManagment.ViewModels
         public string Barcode { get; set; }
         public string PhotoUrl { get; set; }
         public bool AvailableToSell { get; set; }
+        public List<UnitVM> Units { get; set; }
 
         public string Brand { get; set; }
 
         public string ProductCategory { get; set; }
-
-        public bool IsDeleted { get; set; }
     }
 }

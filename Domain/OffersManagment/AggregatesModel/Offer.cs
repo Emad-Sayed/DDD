@@ -52,12 +52,14 @@ namespace Domain.OffersManagment.AggregatesModel
             AddDomainEvent(new OfferUpdated(this));
         }
 
-        public void AddProductToOffer(string productId, string name, string barcode, string photoUrl, bool availableToSell, string brand, string productCategory)
+        public Product AddProductToOffer(string productId, string name, string barcode, string photoUrl, bool availableToSell, string brand, string productCategory)
         {
             var product = new Product(productId, name, barcode, photoUrl, availableToSell, brand, productCategory);
             Products.Add(product);
 
             AddDomainEvent(new OfferUpdated(this));
+
+            return product;
         }
 
         public void ChangeOrder(int order)

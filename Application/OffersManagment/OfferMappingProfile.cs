@@ -12,6 +12,11 @@ namespace Application.OffersManagment
         {
             CreateMap<Offer, OfferVM>().ReverseMap();
             CreateMap<Product, ProductVM>().ReverseMap();
+
+            CreateMap<Unit, UnitVM>()
+                .ForMember(x => x.Id, y => y.MapFrom(z => z.UnitId))
+                .ForMember(x => x.ConsumerPrice, y => y.MapFrom(z => z.SellingPrice))
+                .ReverseMap();
         }
     }
 }

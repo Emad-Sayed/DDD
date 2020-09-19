@@ -60,9 +60,9 @@ namespace Infrastructure.Repositories.ProductCatalog
             // fillter by keyword
             if (!string.IsNullOrEmpty(keyWord))
             {
+                keyWord = keyWord.ToLower();
                 query = query.Where(x =>
                 x.Barcode.Contains(keyWord) ||
-                x.Id.ToString().Contains(keyWord) ||
                 x.Name.Contains(keyWord)
                 );
             }

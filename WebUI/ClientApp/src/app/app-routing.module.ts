@@ -18,6 +18,7 @@ const routes: Routes = [
             { path: 'distributors', loadChildren: () => import('./pages/distributor-managment/distributor-managment.module').then(m => m.DistributorManagmentModule) },
             { path: 'product-catalog', loadChildren: () => import('./pages/product-catalog/product-catalog.module').then(m => m.ProductCatalogModule) },
             { path: 'offers', loadChildren: () => import('./pages/offer-managment/offer-managment.module').then(m => m.OfferManagmentModule) },
+            { path: 'cities', loadChildren: () => import('./pages/cities-managment/cities-managment.module').then(m => m.CitiesManagmentModule) },
             { path: '**', redirectTo: '/product-catalog/products', pathMatch: 'full' },
         ]
     },

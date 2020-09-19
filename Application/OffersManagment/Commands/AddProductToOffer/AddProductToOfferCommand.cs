@@ -33,7 +33,12 @@ namespace Application.OffersManagment.Commands.AddProductToOffer
 
                 var productVM = await _mediator.Send(new ProductByIdQuery { ProductId = request.ProductId }, cancellationToken);
 
-                offerFromRepo.AddProductToOffer(productVM.Id, productVM.Name, productVM.Barcode, productVM.PhotoUrl, productVM.AvailableToSell, productVM.Brand.Name, productVM.ProductCategory.Name);
+                var product = offerFromRepo.AddProductToOffer(productVM.Id, productVM.Name, productVM.Barcode, productVM.PhotoUrl, productVM.AvailableToSell, productVM.Brand.Name, productVM.ProductCategory.Name);
+
+                foreach (var unit in productVM.Units)
+                {
+                    product.AddUnit(unit.Id, unit.Name, unit.Count, unit.ContentCount, unit.Price, unit.SellingPrice, unit.Weight, unit.IsAvailable);
+                }
 
                 _offerRepository.Update(offerFromRepo);
 

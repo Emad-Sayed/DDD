@@ -2,6 +2,7 @@
 using Domain.Common.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Domain.OffersManagment.AggregatesModel
@@ -35,6 +36,14 @@ namespace Domain.OffersManagment.AggregatesModel
             AvailableToSell = availableToSell;
             Brand = brand;
             ProductCategory = productCategory;
+
+            Units = new List<Unit>();
+        }
+
+        public void AddUnit(string unitId, string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable)
+        {
+            var unit = new Unit(unitId, name, count, contentCount, price, sellingPrice, weight, isAvailable, Id);
+            Units.Add(unit);
         }
 
 
