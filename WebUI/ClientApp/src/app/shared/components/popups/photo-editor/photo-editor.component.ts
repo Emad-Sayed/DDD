@@ -24,6 +24,10 @@ export class PhotoEditorComponent implements OnInit {
   containWithinAspectRatio = false;
   transform: ImageTransform = {};
 
+  imgWidth = 100;
+  imgHight = 100;
+
+
   imageToUpload: Blob = new Blob();
   uploadPercent: number = 0;
   showUploadButton: boolean = false;
@@ -37,10 +41,12 @@ export class PhotoEditorComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
-    // this.imgurl = 'assets/images/nodata.svg'
     if (this.data.photoUrl) {
       this.imgurl = this.BasePhotoUrl + this.data.photoUrl;
-      console.log(this.imgurl);
+      this.imgWidth = this.data.cropperWidth;
+      this.imgHight = this.data.cropperHight;
+      console.log('this.imgWidth', this.data);
+      console.log(this.imgWidth);
       this.isLinkImg = true;
     }
   }
@@ -93,6 +99,8 @@ export class PhotoEditorComponent implements OnInit {
 
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
+    console.log('imageCropped width', event.width);
+    console.log('imageCropped hight', event.height);
     this.imageToUpload = base64ToFile(event.base64);
     this.showUploadButton = true;
   }
@@ -103,6 +111,7 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   cropperReady(sourceImageDimensions: Dimensions) {
+    
     console.log('Cropper ready', sourceImageDimensions);
   }
 

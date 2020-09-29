@@ -37,12 +37,14 @@ namespace API.Controllers.CustomerManagment
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateCustomerCommand command)
         {
+            var user = User;
             var result = await Mediator.Send(command);
             return Ok( result );
         }
 
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Put([FromBody] UpdateCustomerCommand command)
         {
             var result = await Mediator.Send(command);

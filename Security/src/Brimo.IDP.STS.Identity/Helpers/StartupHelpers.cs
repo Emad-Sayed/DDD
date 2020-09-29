@@ -33,6 +33,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Brimo.IDP.STS.Identity.Common.Exceptions;
 using System.Net;
+using IdentityServer4.AccessTokenValidation;
 
 namespace Brimo.IDP.STS.Identity.Helpers
 {
@@ -227,7 +228,14 @@ namespace Brimo.IDP.STS.Identity.Helpers
                 iis.AutomaticAuthentication = false;
             });
 
-            var authenticationBuilder = services.AddAuthentication();
+            var authenticationBuilder = services.AddAuthentication()
+            .AddJwtBearer(option =>
+            {
+                option.Authority = configuration["IdentityServerAddress"];
+                option.Audience = "brimo_api";
+
+                option.RequireHttpsMetadata = false;
+            });
 
             AddExternalProviders(authenticationBuilder, configuration);
         }

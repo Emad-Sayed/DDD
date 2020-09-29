@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain.CustomerManagment.AggregatesModel.CustomerAggregate;
+using Domain.CustomerManagment.Exceptions;
 using MediatR;
 
 namespace Application.CustomerManagment.Commands.UpdateCustomer
@@ -14,6 +15,7 @@ namespace Application.CustomerManagment.Commands.UpdateCustomer
         public string FullName { get; set; }
         public string ShopName { get; set; }
         public string ShopAddress { get; set; }
+        public string AreaId { get; set; }
         public string LocationOnMap { get; set; }
 
         public class Handler : IRequestHandler<UpdateCustomerCommand, string>
@@ -31,12 +33,35 @@ namespace Application.CustomerManagment.Commands.UpdateCustomer
             public async Task<string> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
             {
                 var customer = await _customerRepository.GetCustomerByAccountId(request.AccountId);
-                customer.UpdateCustomer(
-                    request.FullName,
-                    request.ShopName,
-                    request.ShopAddress,
-                    request.LocationOnMap
-                );
+                if (customer == null) throw new CustomerNotFoundException(request.AccountId);
+
+                if(!string.IsNullOrEmpty(request.FullName))
+                {
+                    customer.UpdateFullName(request.FullName);
+                }
+
+                if (!string.IsNullOrEmpty(request.ShopName))
+                {
+                    customer.UpdateShopName(request.ShopName);
+                }
+
+                if (!string.IsNullOrEmpty(request.ShopAddress))
+                {
+                    customer.UpdateShopAddress(request.ShopAddress);
+                }
+
+                if (!string.IsNullOrEmpty(request.LocationOnMap))
+                {
+                    customer.UpdateLocationOnMap(request.LocationOnMap);
+                }
+
+                if (!string.IsNullOrEmpty(request.AreaId))
+                {
+                    var area = await _customerRepository.FindAreaById(request.AreaId);
+                    if (area == null) throw new AreaNotFoundException(request.AreaId);
+
+                    customer.ChangeArea(area);
+                }
 
                 _customerRepository.Update(customer);
 

@@ -35,9 +35,33 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
             AddDomainEvent(new CustomerCreated(this));
         }
 
-        public void AddArea(Area area)
+        public void ChangeArea(Area area)
         {
             Area = area;
+        }
+
+        public void UpdateFullName(string fullName)
+        {
+            FullName = fullName;
+            AddDomainEvent(new CustomerUpdated(this));
+        }
+
+        public void UpdateShopName(string shopName)
+        {
+            ShopName = shopName;
+            AddDomainEvent(new CustomerUpdated(this));
+        }
+
+        public void UpdateShopAddress(string shopAddress)
+        {
+            ShopAddress = shopAddress;
+            AddDomainEvent(new CustomerUpdated(this));
+        }
+
+        public void UpdateLocationOnMap(string locationOnMap)
+        {
+            LocationOnMap = locationOnMap;
+            AddDomainEvent(new CustomerUpdated(this));
         }
 
         public void UpdateCustomer(string fullName, string shopName, string shopAddress, string locationOnMap)

@@ -93,19 +93,14 @@ namespace Application.IntegrationTests
             var distributorManagmentContext = scope.ServiceProvider.GetService<DistributorManagmentContext>();
             var adminIdentityDbContext = scope.ServiceProvider.GetService<AdminIdentityDbContext>();
 
-            shoppingVanContext.Database.EnsureDeleted();
-            orderContext.Database.EnsureDeleted();
-            productCatalogContext.Database.EnsureDeleted();
-            customerManagmentContext.Database.EnsureDeleted();
-            distributorManagmentContext.Database.EnsureDeleted();
 
-            shoppingVanContext.Database.Migrate();
-            orderContext.Database.Migrate();
-            productCatalogContext.Database.Migrate();
-            customerManagmentContext.Database.Migrate();
-            distributorManagmentContext.Database.Migrate();
             try
             {
+                shoppingVanContext.Database.Migrate();
+                orderContext.Database.Migrate();
+                productCatalogContext.Database.Migrate();
+                customerManagmentContext.Database.Migrate();
+                distributorManagmentContext.Database.Migrate();
                 adminIdentityDbContext.Database.Migrate();
             }
             catch (Exception)

@@ -44,7 +44,7 @@ namespace Application.CustomerManagment.Commands.CreateCustomer
                 var area = await _customerRepository.FindAreaById(request.AreaId);
                 if (area == null) throw new AreaNotFoundException(request.AreaId);
 
-                customer.AddArea(area);
+                customer.ChangeArea(area);
 
                 _customerRepository.Add(customer);
 

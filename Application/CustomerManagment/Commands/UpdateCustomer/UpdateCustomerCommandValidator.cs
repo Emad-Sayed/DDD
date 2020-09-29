@@ -9,10 +9,6 @@ namespace Application.CustomerManagment.Commands.UpdateCustomer
     {
         public UpdateCustomerCommandValidator()
         {
-            RuleFor(x => x.AccountId).NotEmpty();
-            RuleFor(x => x.ShopName).NotEmpty();
-            RuleFor(x => x.ShopAddress).NotEmpty();
-            RuleFor(x => x.LocationOnMap).NotEmpty();
         }
     }
 }

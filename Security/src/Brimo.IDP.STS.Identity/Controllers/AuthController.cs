@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -11,12 +12,15 @@ using Brimo.IDP.STS.Identity.Common.Exceptions.Auth;
 using Brimo.IDP.STS.Identity.Common.Middlewares;
 using Brimo.IDP.STS.Identity.Services;
 using Brimo.IDP.STS.Identity.ViewModels.Auth.Register;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 
 namespace Brimo.IDP.STS.Identity.Controllers
@@ -50,6 +54,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
         [HttpPost("SendSMSCode")]
         public async Task<IActionResult> SendSMSCode([FromBody] SendSMSCodeVM sendSMSCodeVM)
         {
+            var user = User;
             // Check if phone number is registered before if not will create new user with this phone number
             var userFromDb = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == sendSMSCodeVM.PhoneNumber);
             if (userFromDb != null)
@@ -149,12 +154,20 @@ namespace Brimo.IDP.STS.Identity.Controllers
         }
 
         [HttpPost("UpdateProfile")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Customer")]
         public async Task<IActionResult> UpdateProfile(UpdateProfileVM model)
         {
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == model.PhoneNumber);
+            var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
             if (user == null) throw new UserNotFoundException(model.PhoneNumber);
 
             if (!user.PhoneNumberConfirmed) throw new PhoneNumberNotConfirmedException(model.PhoneNumber);
+
+            if (!string.IsNullOrEmpty(model.Fullname))
+            {
+                user.FullName = model.Fullname;
+                await _userManager.UpdateAsync(user);
+            }
 
             await UpdateCustomer(model, user);
             return Ok();
@@ -181,6 +194,34 @@ namespace Brimo.IDP.STS.Identity.Controllers
                 Message = $@"{code} هو كود التحقق الخاص بك في بريمو",
                 ToPhoneNumber = model.PhoneNumber
             });
+
+            return Ok();
+        }
+
+        [HttpPost("ChangePassword")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Customer")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordVM model)
+        {
+            var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            if (user == null) throw new UserNotFoundException(userId);
+
+            var isRegisteredBefore = await _userManager.HasPasswordAsync(user);
+            if (!isRegisteredBefore) throw new UserNotRegisteredException(user.PhoneNumber);
+
+            if (!user.PhoneNumberConfirmed) throw new PhoneNumberNotConfirmedException(user.PhoneNumber);
+
+            var results = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
+            if (!results.Succeeded)
+            {
+                var error = results.Errors.FirstOrDefault();
+                if (error != null)
+                    throw new ChangePasswordException(error.Description, error.Code);
+                else
+                    throw new ChangePasswordException("Error while changing password", "changing_password_error");
+            }
 
             return Ok();
         }
@@ -386,7 +427,11 @@ namespace Brimo.IDP.STS.Identity.Controllers
 
         private async Task<string> UpdateCustomer(UpdateProfileVM model, UserIdentity user)
         {
+            string accessToken = Request.Headers[HeaderNames.Authorization];
+
             var apiClient = new HttpClient();
+
+            apiClient.DefaultRequestHeaders.Add("Authorization", accessToken);
 
             var body = new
             {
@@ -394,8 +439,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
                 model.Fullname,
                 model.ShopName,
                 model.ShopAddress,
-                model.City,
-                model.Area,
+                model.AreaId,
                 model.LocationOnMap
             };
 
