@@ -172,6 +172,12 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
 
   importProductsFromExcel(evt: any) {
+    
+    if(this.validExcelProducts.length > 0){
+      
+    };
+    this.inValidExcelProducts = [];
+
     /* wire up file reader */
     const target: DataTransfer = <DataTransfer>(evt.target);
     if (target.files.length !== 1) {
@@ -186,14 +192,26 @@ export class ProductsComponent implements OnInit, OnDestroy {
       const wsname: string = wb.SheetNames[0];
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
       /* save data */
-      const data = XLSX.utils.sheet_to_json(ws, { header: ['name', 'category', 'brand', 'unit1Name', 'unit2Name', 'unit3Name', 'unit2Count', 'unit3Count', 'unit1Price', 'unit2Price', 'unit3Price', 'unit1SellingPrice', 'unit2SellingPrice', 'unit3SellingPrice'] }).slice(1);
+      const data = XLSX.utils.sheet_to_json(ws, { header: ['barcode', 'name', 'category', 'brand', 'unit1Name', 'unit2Name', 'unit3Name', 'unit2Count', 'unit3Count', 'unit1Price', 'unit2Price', 'unit3Price', 'unit1SellingPrice', 'unit2SellingPrice', 'unit3SellingPrice'] }).slice(1);
       console.log(data);
 
-      const products = data.map(x => new Product('', '', x['name'], '', '', true, '', new Brand('', '', x['brand']), '', new ProductCategory('', '', x['category']), [
-        new Unit(false, '', x['unit1Name'], 1, 1, +x['unit1Price'], +x['unit1SellingPrice']),
-        new Unit(false, '', x['unit2Name'], +x['unit2Count'], 1, +x['unit2Price'], +x['unit2SellingPrice']),
-        new Unit(false, '', x['unit3Name'], +x['unit3Count'], 1, +x['unit3Price'], +x['unit3SellingPrice']),
-      ]))
+      const products: Product[] = [];
+
+      data.forEach(x => {
+        const product = new Product('', '', x['name'], x['barcode'], x['barcode'] + '.jpg', true, '', new Brand('', '', x['brand']), '', new ProductCategory('', '', x['category']), [
+          new Unit(false, '', x['unit1Name'], 1, 1, +x['unit1Price'], +x['unit1SellingPrice'], 1, true, ''),
+          new Unit(false, '', x['unit2Name'], +x['unit2Count'], 1, +x['unit2Price'], +x['unit2SellingPrice'], 1, true, ''),
+        ]);
+
+        if (x['unit3Name']) {
+          const unit3 = new Unit(false, '', x['unit3Name'], +x['unit3Count'], 1, +x['unit3Price'], +x['unit3SellingPrice'], 1, true, '');
+          product.units.push(unit3);
+        }
+
+        products.push(product);
+
+      });
+
 
       products.forEach(product => {
         if (this.productValidation(product))
@@ -217,6 +235,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     })
 
     return (product.name != null)
+      && (product.barcode != null)
       && allUnitsValid
       && (product.brand.name != null)
       && (product.productCategory.name != null);
@@ -234,7 +253,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   showPreviewProductExcelPopup(): void {
     const dialogRef = this.dialog.open(PreviewProductExcelComponent, {
       width: '900px',
-      height: '60vh',
+      height: '80vh',
       data: {
         validExcelProducts: this.validExcelProducts,
         inValidExcelProducts: this.inValidExcelProducts

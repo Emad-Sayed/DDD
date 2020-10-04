@@ -28,9 +28,11 @@ namespace Brimo.IDP.STS.Identity.Services
             var SenderName = _configuration["EmailSettings:SenderName"];
             var IsEnableSSL = bool.Parse(_configuration["EmailSettings:IsEnableSSL"]);
 
-            MailMessage mail = new MailMessage();
+            MailMessage mail = new MailMessage
+            {
+                From = new MailAddress(SenderName)
+            };
 
-            mail.From = new MailAddress(SenderName);
             mail.To.Add(email);
 
 

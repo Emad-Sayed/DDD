@@ -9,6 +9,7 @@ namespace Application.ProductCatalog.ProductAggregate.ViewModels
     public class AlgoliaProductVM
     {
         public string ProductId { get;  set; }
+        public string DistributorId { get;  set; }
         public string Name { get;  set; }
         public string Barcode { get;  set; }
         public string ImgUrl { get;  set; }

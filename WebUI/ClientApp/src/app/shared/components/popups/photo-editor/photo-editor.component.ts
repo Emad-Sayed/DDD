@@ -41,12 +41,11 @@ export class PhotoEditorComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
+
+    this.imgWidth = this.data.cropperWidth;
+    this.imgHight = this.data.cropperHight;
     if (this.data.photoUrl) {
       this.imgurl = this.BasePhotoUrl + this.data.photoUrl;
-      this.imgWidth = this.data.cropperWidth;
-      this.imgHight = this.data.cropperHight;
-      console.log('this.imgWidth', this.data);
-      console.log(this.imgWidth);
       this.isLinkImg = true;
     }
   }
@@ -111,7 +110,7 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   cropperReady(sourceImageDimensions: Dimensions) {
-    
+
     console.log('Cropper ready', sourceImageDimensions);
   }
 

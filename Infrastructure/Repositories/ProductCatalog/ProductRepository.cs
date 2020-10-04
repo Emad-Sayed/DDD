@@ -49,7 +49,7 @@ namespace Infrastructure.Repositories.ProductCatalog
             _context.Entry(product).State = EntityState.Modified;
         }
 
-        public async Task<(int, List<Product>)> GetAllAsync(int pageNumber, int pageSize, string keyWord, string brandId, string productCategoryId)
+        public async Task<(int, List<Product>)> GetAllAsync(int pageNumber, int pageSize, string keyWord, string brandId, string productCategoryId, string distributorId)
         {
             var query = _context.Products
                 .Where(x => x.IsDeleted == false)
@@ -69,6 +69,10 @@ namespace Infrastructure.Repositories.ProductCatalog
 
             if (!string.IsNullOrEmpty(brandId))
                 query = query.Where(x => x.BrandId == new Guid(brandId));
+
+
+            if (!string.IsNullOrEmpty(distributorId))
+                query = query.Where(x => x.DistributorId == distributorId);
 
             if (!string.IsNullOrEmpty(productCategoryId))
                 query = query.Where(x => x.ProductCategoryId == new Guid(productCategoryId));

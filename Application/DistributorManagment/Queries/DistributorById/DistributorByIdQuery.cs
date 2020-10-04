@@ -1,6 +1,7 @@
 ﻿using Application.DistributorManagment.ViewModels;
 using AutoMapper;
 using Domain.DistributorManagment.AggregatesModel.DistributorAggregate;
+using Domain.DistributorManagment.Exceptions;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -16,22 +17,23 @@ namespace Application.DistributorManagment.Queries.DistributorById
 
         public class Handler : IRequestHandler<DistributorByIdQuery, DistributorVM>
         {
-            private readonly IDistributorRepository _customersRepository;
+            private readonly IDistributorRepository _distributorsRepository;
             private readonly IMapper _mapper;
 
-            public Handler(IDistributorRepository customerRepository, IMapper mapper)
+            public Handler(IDistributorRepository distributorRepository, IMapper mapper)
             {
-                _customersRepository = customerRepository;
+                _distributorsRepository = distributorRepository;
                 _mapper = mapper;
             }
 
             public async Task<DistributorVM> Handle(DistributorByIdQuery request, CancellationToken cancellationToken)
             {
-                var customerFromRepo = await _customersRepository.FindByIdAsync(request.DistributorId);
+                var distributorFromRepo = await _distributorsRepository.FindByIdAsync(request.DistributorId);
+                if (distributorFromRepo == null) throw new DistributorNotFoundException(request.DistributorId);
+                        
+                var distributorToReturn = _mapper.Map<DistributorVM>(distributorFromRepo);
 
-                var customerToReturn = _mapper.Map<DistributorVM>(customerFromRepo);
-
-                return customerToReturn;
+                return distributorToReturn;
             }
         }
     }

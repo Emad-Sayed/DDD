@@ -9,6 +9,7 @@ using Domain.ShoppingVan.Exceptions;
 using MediatR;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -44,18 +45,8 @@ namespace Application.OrderManagment.Commands.PlaceOrder
                 var customerDetailsFromQuery = await _mediator.Send(new CustomerByAccountIdQuery { AccountId = _currentUserService.UserId }, cancellationToken);
                 if (customerDetailsFromQuery == null) throw new CustomerNotFoundException(_currentUserService.UserId);
 
-                // create new order
-                var orderToPlace = new Order(
-                                    _currentUserService.UserId,
-                                    customerDetailsFromQuery.FullName,
-                                    customerDetailsFromQuery.CustomerCode,
-                                    customerDetailsFromQuery.ShopName,
-                                    customerDetailsFromQuery.ShopAddress,
-                                    customerDetailsFromQuery.Area.City.Name,
-                                    customerDetailsFromQuery.Area.Name,
-                                    customerDetailsFromQuery.LocationOnMap);
 
-
+                List<Order> ordersList = new List<Order>();
 
                 foreach (var vanItem in request.Items)
                 {
@@ -67,18 +58,36 @@ namespace Application.OrderManagment.Commands.PlaceOrder
 
                         if (unit == null) throw new UnitNotFoundException(vanItem.UnitId);
 
-                        orderToPlace.AddOrderItem(productDetails.Id, productDetails.Name, unit.Price, unit.SellingPrice, productDetails.PhotoUrl, unit.Id, unit.Name, vanItem.CustomerCount);
+                        var order = ordersList.FirstOrDefault(x => x.DistributorId == productDetails.DistributorId);
+                        if (order == null)
+                        {
+                            order = new Order(
+                                productDetails.DistributorId,
+                                productDetails.DistributorId,
+                                _currentUserService.UserId,
+                                customerDetailsFromQuery.FullName,
+                                customerDetailsFromQuery.CustomerCode,
+                                customerDetailsFromQuery.ShopName,
+                                customerDetailsFromQuery.ShopAddress,
+                                customerDetailsFromQuery.Area.City.Name,
+                                customerDetailsFromQuery.Area.Name,
+                                customerDetailsFromQuery.LocationOnMap);
+                        }
 
+                        order.AddOrderItem(productDetails.Id, productDetails.Name, unit.Price, unit.SellingPrice, productDetails.PhotoUrl, unit.Id, unit.Name, vanItem.CustomerCount);
+
+                        order.ReCalcTotalOrderPrice();
+
+                        _orderRepository.Add(order);
                     }
 
                 }
-                orderToPlace.ReCalcTotalOrderPrice();
 
-                _orderRepository.Add(orderToPlace);
+
 
                 await _orderRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
 
-                return orderToPlace.Id.ToString();
+                return "orderToPlace.Id.ToString()";
             }
         }
     }

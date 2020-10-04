@@ -25,11 +25,12 @@ namespace Domain.DistributorManagment.AggregatesModel.DistributorAggregate
         {
         }
 
-        public Distributor(string name)
+        public Distributor(string name, Guid id = default)
         {
             Name = name;
             DistributorUsers = new List<DistributorUser>();
             DistributorAreas = new List<DistributorArea>();
+            Id = id == default ? Guid.NewGuid() : id;
 
             // Add the DistributorCreated to the domain events collection 
             // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]

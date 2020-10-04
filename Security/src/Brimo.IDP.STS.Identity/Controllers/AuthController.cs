@@ -285,7 +285,7 @@ namespace Brimo.IDP.STS.Identity.Controllers
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
             if (user != null) return BadRequest("user_with_this_email_found");
 
-            user = new UserIdentity { Email = model.Email, FullName = model.FullName, UserName = model.Email, IsActive = true };
+            user = new UserIdentity { Email = model.Email, FullName = model.FullName, UserName = model.Email, BusinessUserId = model.DistributorId, IsActive = true };
             var result = await _userManager.CreateAsync(user);
 
             if (result.Succeeded)
@@ -299,12 +299,13 @@ namespace Brimo.IDP.STS.Identity.Controllers
 
                 try
                 {
-
                     // send invitation to distributer user
                     await SendInvitationMail(user);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    await _userManager.DeleteAsync(user);
+                    throw e;
                 }
             }
             else

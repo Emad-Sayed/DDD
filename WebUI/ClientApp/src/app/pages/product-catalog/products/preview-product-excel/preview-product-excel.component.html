@@ -11,6 +11,7 @@
     <thead>
         <tr>
             <th scope="col">#</th>
+            <th scope="col">الرمز</th>
             <th scope="col">إسم المنتج</th>
             <th scope="col">الفئة</th>
             <th scope="col">الشركة</th>
@@ -19,7 +20,7 @@
                     <strong>الوحدات</strong>
                 </div>
                 <div class="row">
-                    <div style="padding-right: 20px;">#</div>
+                    <!-- <div style="padding-right: 20px;">#</div> -->
                     <div class="col">العدد</div>
                     <div class="col">الاسم</div>
                     <div class="col">سعر</div>
@@ -31,14 +32,15 @@
     <tbody>
         <tr *ngFor="let product of validExcelProducts; let i=index">
             <th scope="row">{{ i + 1}}</th>
+            <td>{{product.barcode}}</td>
             <td>{{product.name}}</td>
-            <td>{{product.brand.name}}</td>
             <td>{{product.productCategory.name}}</td>
+            <td>{{product.brand.name}}</td>
             <td>
                 <table class="table table-sm">
                     <tbody>
                         <tr *ngFor="let unit of product.units; let ui = index">
-                            <th scope="row">{{ui + 1}}</th>
+                            <!-- <th scope="row">{{ui + 1}}</th> -->
                             <td>{{unit.count}}</td>
                             <td>{{unit.name}}</td>
                             <td>{{unit.price}}</td>
@@ -56,6 +58,7 @@
     <thead>
         <tr>
             <th scope="col">#</th>
+            <th scope="col">الرمز</th>
             <th scope="col">إسم المنتج</th>
             <th scope="col">الفئة</th>
             <th scope="col">الشركة</th>
@@ -64,7 +67,7 @@
                     <strong>الوحدات</strong>
                 </div>
                 <div class="row">
-                    <div style="padding-right: 20px;">#</div>
+                    <!-- <div style="padding-right: 20px;">#</div> -->
                     <div class="col">العدد</div>
                     <div class="col">الاسم</div>
                     <div class="col">سعر</div>
@@ -76,6 +79,7 @@
     <tbody>
         <tr *ngFor="let product of inValidExcelProducts; let i=index">
             <th scope="row">{{ i + 1}}</th>
+            <td [ngClass]="{'bg-danger': product.barcode == null}">{{product.barcode}}</td>
             <td [ngClass]="{'bg-danger': product.name == null}">{{product.name}}</td>
             <td [ngClass]="{'bg-danger': product.brand.name == null}">{{product.brand.name}}</td>
             <td [ngClass]="{'bg-danger': product.productCategory.name == null}">{{product.productCategory.name}}</td>
@@ -83,7 +87,7 @@
                 <table class="table table-sm">
                     <tbody>
                         <tr *ngFor="let unit of product.units; let ui = index">
-                            <th scope="row">{{ui + 1}}</th>
+                            <!-- <th scope="row">{{ui + 1}}</th> -->
                             <td [ngClass]="{'bg-danger': Number.isNaN(unit.count)}">{{unit.count}}</td>
                             <td [ngClass]="{'bg-danger': unit.name == null}">{{unit.name}}</td>
                             <td [ngClass]="{'bg-danger': Number.isNaN(unit.price)}">{{unit.price}}</td>

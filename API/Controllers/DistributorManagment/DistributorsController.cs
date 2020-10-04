@@ -20,6 +20,7 @@ using Application.DistributorManagment.Commands.UpdateDistributorUser;
 using Application.DistributorManagment.Queries.DistributorById;
 using Application.DistributorManagment.Queries.ListCities;
 using Application.DistributorManagment.Queries.ListDistributors;
+using Application.DistributorManagment.Queries.ListDistributorsInMyArea;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -36,6 +37,14 @@ namespace API.Controllers.DistributorManagment
         public async Task<IActionResult> Get([FromQuery] ListDistributorsQuery query)
         {
             var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("ListDistributorsInMyArea")]
+        public async Task<IActionResult> Get()
+        {
+            var result = await Mediator.Send(new ListDistributorsInMyAreaQuery());
             return Ok(result);
         }
 

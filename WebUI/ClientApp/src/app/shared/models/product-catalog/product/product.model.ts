@@ -16,5 +16,6 @@ export class Product {
         public productCategory?: ProductCategory,
         public units?: Unit[],
         public newAdded: boolean = false,
+        public distributorId?: string
     ) { }
 }

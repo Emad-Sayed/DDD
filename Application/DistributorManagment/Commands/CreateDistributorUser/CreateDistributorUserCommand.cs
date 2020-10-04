@@ -40,7 +40,7 @@ namespace Application.DistributorManagment.Commands.CreateDistributorUser
                 if (distributor == null) throw new DistributorNotFoundException(request.DistributorId);
 
 
-                var accountId = await CreateUserAccountAsync(request);
+                var accountId = await CreateUserAccountAsync(request, distributor.Id.ToString());
 
 
                 distributor.CreateUser(accountId, request.FullName, request.Email);
@@ -52,11 +52,12 @@ namespace Application.DistributorManagment.Commands.CreateDistributorUser
                 return accountId;
             }
 
-            private async Task<string> CreateUserAccountAsync(CreateDistributorUserCommand request)
+            private async Task<string> CreateUserAccountAsync(CreateDistributorUserCommand request, string distributorId)
             {
                 HttpClient apiClient = new HttpClient();
                 var body = new
                 {
+                    distributorId,
                     request.FullName,
                     request.Email
                 };

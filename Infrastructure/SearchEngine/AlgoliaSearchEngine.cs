@@ -59,7 +59,7 @@ namespace Infrastructure.SearchEngine
                 var brand = brands.FirstOrDefault(z => z.Name == productVM.Brand);
                 var productCategory = productCategories.FirstOrDefault(z => z.Name == productVM.Category);
 
-                var product = new Product(productVM.Name, productVM.Barcode, productVM.ImgUrl, productVM.AvailableToSell, brand.Id.ToString(), productCategory.Id.ToString());
+                var product = new Product("b74f5c89-cd7d-4e5e-9179-99b4c1e1ab12", productVM.Name, productVM.Barcode, productVM.ImgUrl, productVM.AvailableToSell, brand.Id.ToString(), productCategory.Id.ToString());
                 foreach (var unit in productVM.Units)
                 {
                     product.AddUnitToProduct(unit.Name, 1, 1, unit.Price, unit.ConsumerPrice, 1, unit.IsAvailable);

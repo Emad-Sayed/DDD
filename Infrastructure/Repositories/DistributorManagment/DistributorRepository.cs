@@ -147,5 +147,16 @@ namespace Infrastructure.Repositories.DistributorManagment
         {
             _context.DistributorsCities.Remove(city);
         }
+
+        public async Task<List<Distributor>> GetDistributorsInAreaAsync(string areaId)
+        {
+            var query = _context.Distributors.AsQueryable();
+
+            query = query.Where(x => x.DistributorAreas.Any(x => x.AreaId == areaId));
+
+            var distributors = await query.ToListAsync();
+
+            return distributors;
+        }
     }
 }

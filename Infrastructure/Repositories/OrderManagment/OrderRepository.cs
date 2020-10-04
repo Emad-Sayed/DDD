@@ -35,7 +35,7 @@ namespace Infrastructure.Repositories.OrderManagment
                    .Entity;
         }
 
-        public async Task<(int, List<Order>)> GetAllAsync(List<OrderStatus> orderStatuses, int pageNumber, int pageSize, string keyWord)
+        public async Task<(int, List<Order>)> GetAllAsync(List<OrderStatus> orderStatuses, int pageNumber, int pageSize, string keyWord, string distributorId)
         {
             var query = _context.Orders
                 //.Include(x => x.OrderItems)
@@ -55,6 +55,9 @@ namespace Infrastructure.Repositories.OrderManagment
                 x.CustomerName.ToLower().Contains(keyWord)
                 );
             }
+
+            if (!string.IsNullOrEmpty(distributorId))
+                query = query.Where(x => x.DistributorId == distributorId);
 
             // apply pagination to products
             var products = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();

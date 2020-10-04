@@ -15,7 +15,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.ImportProducts
     public class ImportProductsCommand : IRequest
     {
         public List<ProductToImportVM> Products { get; set; } = new List<ProductToImportVM>();
-
+        public string DistributorId { get; set; }
         public class Handler : IRequestHandler<ImportProductsCommand>
         {
             private readonly IProductRepository _productRepository;
@@ -31,16 +31,19 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.ImportProducts
 
             public async Task<MediatR.Unit> Handle(ImportProductsCommand request, CancellationToken cancellationToken)
             {
+                if (string.IsNullOrEmpty(request.DistributorId))
+                    request.DistributorId = "b74f5c89-cd7d-4e5e-9179-99b4c1e1ab12";
+
                 var products = new List<Product>();
 
                 foreach (var productVM in request.Products)
                 {
                     var brand = _brandRepository.AddBrandIfNotExist(productVM.Brand.Name);
                     var productCategory = _productCategoryRepository.AddProductCategoryIfNotExist(productVM.ProductCategory.Name);
-                    
+
                     await _productRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
 
-                    var product = new Product(productVM.Name, string.Empty, string.Empty, true, brand.Id.ToString(), productCategory.Id.ToString());
+                    var product = new Product(request.DistributorId, productVM.Name, productVM.Barcode, productVM.PhotoUrl, true, brand.Id.ToString(), productCategory.Id.ToString());
 
                     foreach (var unitVM in productVM.Units)
                     {

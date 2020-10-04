@@ -11,6 +11,7 @@ using Application.OrderManagment.Queries.OrderById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace API.Controllers.Order
@@ -28,6 +29,9 @@ namespace API.Controllers.Order
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] ListOrdersQuery query)
         {
+            if (User.IsInRole("Distributor"))
+                query.DistributorId = User?.FindFirstValue("BusinessUserId");
+
             var result = await Mediator.Send(query);
             return Ok(result);
         }

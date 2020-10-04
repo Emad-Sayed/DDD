@@ -10,6 +10,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.UpdateProduct
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public string DistributorId { get; set; }
         public string Barcode { get; set; }
         public string PhotoUrl { get; set; }
         public string BrandId { get; set; }
@@ -30,7 +31,7 @@ namespace Application.ProductCatalog.ProductAggregate.Commands.UpdateProduct
                 var productFromRepo = await _productRepository.FindByIdAsync(request.Id);
                 if (productFromRepo == null) throw new ProductNotFoundException(request.Id);
 
-                productFromRepo.UpdateProduct(request.Name, request.Barcode, request.PhotoUrl, request.AvailableToSell, request.BrandId, request.ProductCategoryId);
+                productFromRepo.UpdateProduct(request.DistributorId, request.Name, request.Barcode, request.PhotoUrl, request.AvailableToSell, request.BrandId, request.ProductCategoryId);
 
                 _productRepository.Update(productFromRepo);
 

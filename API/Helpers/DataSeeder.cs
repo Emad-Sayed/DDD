@@ -40,11 +40,12 @@ namespace API.Helpers
                     shoppingVanContext.Database.Migrate();
                 }
                 catch (Exception) { }
-                SeedProductCatalogData(productCatalogContext);
+                //SeedProductCatalogData(productCatalogContext);
                 SeedCustomerCities(customerManagmentContext);
                 SeedCustomerAreas(customerManagmentContext);
                 SeedDistributorCities(distributorManagmentContext);
                 SeedDistributorAreas(distributorManagmentContext);
+                SeedDistributors(distributorManagmentContext);
             }
             return host;
         }
@@ -97,6 +98,20 @@ namespace API.Helpers
 
                 var products = testProducts.Generate(2000);
                 context.Products.AddRange(products);
+                context.SaveChanges();
+            }
+        }
+
+        public static void SeedDistributors(DistributorManagmentContext context)
+        {
+            if (!context.Distributors.Any(x => x.Name == "قباء"))
+            {
+                var distributors = new List<Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Distributor>
+                {
+                    new Domain.DistributorManagment.AggregatesModel.DistributorAggregate.Distributor ("قباء", new Guid("b74f5c89-cd7d-4e5e-9179-99b4c1e1ab12"))
+                };
+
+                context.AddRange(distributors);
                 context.SaveChanges();
             }
         }

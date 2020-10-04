@@ -1,16 +1,12 @@
 ﻿using Domain.Base.Entity;
-using Domain.Common.Exceptions;
 using Domain.Common.Interfaces;
 using Domain.ProductCatalog.AggregatesModel.BrandAggregate;
 using Domain.ProductCatalog.AggregatesModel.ProductCategoryAggregate;
 using Domain.ProductCatalog.Events;
 using Domain.ProductCatalog.Exceptions;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Runtime.InteropServices;
 
 namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 {
@@ -20,6 +16,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
         public string Barcode { get; private set; }
         public string PhotoUrl { get; private set; }
         public bool AvailableToSell { get; set; }
+        public string DistributorId { get; private set; }
 
         public Guid BrandId { get; private set; }
         public Brand Brand { get; private set; }
@@ -35,8 +32,9 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             Units = new List<Unit>();
         }
 
-        public Product(string name, string barcode, string photoUrl, bool availableToSell, string brandId, string productCategoryId, Guid id = default)
+        public Product(string distributorId, string name, string barcode, string photoUrl, bool availableToSell, string brandId, string productCategoryId, Guid id = default)
         {
+            DistributorId = distributorId;
             Name = name;
             Barcode = barcode;
             PhotoUrl = photoUrl;
@@ -46,14 +44,15 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
 
             Id = id == default ? Guid.NewGuid() : id;
             Units = new List<Unit>();
-            // Add the ProductCreated to the domain events collection 
+            // Add the ProductCreated to the domain events collection
             // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]
             AddDomainEvent(new ProductCreated(this));
         }
 
         // update product
-        public void UpdateProduct(string name, string barcode, string photoUrl, bool availableToSell, string brandId, string productCategoryId)
+        public void UpdateProduct(string distributorId, string name, string barcode, string photoUrl, bool availableToSell, string brandId, string productCategoryId)
         {
+            DistributorId = distributorId;
             Name = name;
             Barcode = barcode;
             PhotoUrl = photoUrl;
@@ -96,7 +95,6 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             var unitToUpdate = Units.FirstOrDefault(x => x.Id.ToString() == unitId);
             if (unitToUpdate == null) throw new UnitNotFoundException(unitId);
 
-
             unitToUpdate.Update(name, count, contentCount, price, sellingPrice, weight, isAvailable);
 
             // rais product updated event
@@ -114,6 +112,5 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             // rais product updated event
             AddDomainEvent(new ProductUpdated(this));
         }
-
     }
 }

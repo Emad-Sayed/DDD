@@ -14,7 +14,7 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
         Order Add(Order order);
 
         void Update(Order order);
-        Task<(int, List<Order>)> GetAllAsync(List<OrderStatus> orderStatuses, int pageNumber, int pageSize, string keyWord);
+        Task<(int, List<Order>)> GetAllAsync(List<OrderStatus> orderStatuses, int pageNumber, int pageSize, string keyWord, string distributorId);
         Task<(int, List<Order>)> GetCustomerOrders(string customerId, List<OrderStatus> orderStatuses, int pageNumber, int pageSize, string keyWord);
         Task<Order> GetByIdAsync(string orderId);
     }

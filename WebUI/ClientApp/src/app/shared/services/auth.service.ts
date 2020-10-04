@@ -50,6 +50,7 @@ export class AuthService {
             this.oauthService.fetchTokenUsingPasswordFlowAndLoadUserProfile(loginModel.email, loginModel.password).then((u) => {
                 this.router.navigate(['/products'])
                 localStorage.setItem('roles', u.role);
+                localStorage.setItem('distributorId', u.BusinessUserId[0]);
             });
         });
     }

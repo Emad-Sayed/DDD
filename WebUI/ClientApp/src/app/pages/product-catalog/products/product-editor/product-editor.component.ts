@@ -9,6 +9,9 @@ import { HttpEventType } from '@angular/common/http';
 import { UploadService } from 'src/app/shared/services/upload.service';
 import { Config } from 'src/app/shared/confing/config';
 import { PhotoEditorService } from 'src/app/shared/services/photo-editor.service';
+import { DistributorsManagmentService } from 'src/app/pages/distributor-managment/distributors-managment.service';
+import { Distributor } from 'src/app/shared/models/distributor-managment/distributor.model';
+import { isatty } from 'tty';
 
 @Component({
   selector: 'app-product-editor',
@@ -20,17 +23,21 @@ export class ProductEditorComponent implements OnInit {
   @Input('isEditorOpen') isEditorOpen: boolean;
 
   isEditing = false;
+  isAdmin = false;
   product: Product = new Product();
   brands: Brand[] = [];
+  distributors: Distributor[] = [];
   productCategories: ProductCategory[] = [];
   BasePhotoUrl = Config.BasePhotoUrl;
 
   constructor(
     private productCatalogService: ProductCatalogService,
+    private distributorsManagmentService: DistributorsManagmentService,
     private photoEditorService: PhotoEditorService,
     private core: CoreService) { }
 
   ngOnInit() {
+    this.getDistributors();
     this.getBrands();
     this.getProductCategories();
     this.productCatalogService.productEditor.subscribe(res => {
@@ -41,7 +48,10 @@ export class ProductEditorComponent implements OnInit {
         this.isEditing = false;
         this.product = new Product();
       }
-    })
+    });
+
+    const roles = localStorage.getItem('roles').split(',');
+    if (roles) this.isAdmin = roles.includes('Admin');
   }
 
   getProductById(productId: string) {
@@ -58,6 +68,11 @@ export class ProductEditorComponent implements OnInit {
     });
   }
 
+  getDistributors() {
+    this.distributorsManagmentService.getDistributors().subscribe(res => {
+      this.distributors.push(...res.data)
+    });
+  }
   getProductCategories() {
     this.productCatalogService.getAllProductCategories().subscribe(res => {
       this.productCategories.push(...res.data)
@@ -138,6 +153,8 @@ export class ProductEditorComponent implements OnInit {
   }
 
   saveData() {
+    if(!this.isAdmin)
+        this.product.distributorId = localStorage.getItem('distributorId');
     if (this.isEditing) {
       this.updateProduct();
     } else {

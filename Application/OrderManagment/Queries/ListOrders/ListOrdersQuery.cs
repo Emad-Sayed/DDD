@@ -17,6 +17,7 @@ namespace Application.OrderManagment.Queries.ListOrders
         public int PageSize { get; set; } = 10;
         public string KeyWord { get; set; }
         public List<OrderStatus> OrderStatuses { get; set; }
+        public string DistributorId { get; set; }
 
         public class Handler : IRequestHandler<ListOrdersQuery, ListEntityVM<OrderVM>>
         {
@@ -31,7 +32,7 @@ namespace Application.OrderManagment.Queries.ListOrders
 
             public async Task<ListEntityVM<OrderVM>> Handle(ListOrdersQuery request, CancellationToken cancellationToken)
             {
-                var ordersFromRepo = await _ordersRepository.GetAllAsync(request.OrderStatuses, request.PageNumber, request.PageSize, request.KeyWord);
+                var ordersFromRepo = await _ordersRepository.GetAllAsync(request.OrderStatuses, request.PageNumber, request.PageSize, request.KeyWord, request.DistributorId);
 
                 var ordersToReturn = _mapper.Map<List<OrderVM>>(ordersFromRepo.Item2);
 

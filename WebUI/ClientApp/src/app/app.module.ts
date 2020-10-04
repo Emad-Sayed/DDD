@@ -25,6 +25,7 @@ import { MatIconModule, MatSliderModule } from '@angular/material';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from './shared/services/auth.service';
 import { PreviewProductExcelComponent } from './pages/product-catalog/products/preview-product-excel/preview-product-excel.component';
+import { AuthInterceptor2 } from './shared/interceptors/token.service';
 
 // import { ConfigurationService } from './shared/services/app.configuration.service';
 
@@ -69,10 +70,18 @@ export function tokenGetter() {
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useFactory: function (router: Router, authService: AuthService) {
+    //     return new AuthInterceptor(router, authService);
+    //   },
+    //   multi: true,
+    //   deps: [Router, AuthService]
+    // },
     {
       provide: HTTP_INTERCEPTORS,
       useFactory: function (router: Router, authService: AuthService) {
-        return new AuthInterceptor(router, authService);
+        return new AuthInterceptor2(authService, router);
       },
       multi: true,
       deps: [Router, AuthService]

@@ -36,6 +36,14 @@
               {{ productCategory.name }}</option>
           </select>
         </div>
+        <div class="row mt-2" *ngIf="isAdmin">
+          <label for="select-brand" class="col-4 col-form-label">الموزع</label>
+          <select class="col-8 form-control" id="select-brand" name="distributorId" [(ngModel)]="product.distributorId">
+            <option selected>إختر الموزع</option>
+            <option *ngFor="let distributor of distributors" [value]="distributor.id">
+              {{ distributor.name }}</option>
+          </select>
+        </div>
         <div class="row mt-2 for-sale">
           <div class="col">
             <label class="checkbox checkbox-primary pr-0">

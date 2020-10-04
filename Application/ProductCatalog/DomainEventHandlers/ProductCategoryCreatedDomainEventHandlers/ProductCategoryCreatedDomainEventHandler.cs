@@ -41,7 +41,7 @@ namespace Application.ProductCatalog.DomainEventHandlers.ProductCategoryCreatedD
 
             var productCategoryToAddToAlgoia = _mapper.Map<AlgoliaProductCategoryVM>(productCategory);
 
-            await _searchEngine.AddEntity(productCategoryToAddToAlgoia, "productCategories");
+            await _searchEngine.AddEntity(productCategoryToAddToAlgoia, "dev_category");
         }
     }
 }

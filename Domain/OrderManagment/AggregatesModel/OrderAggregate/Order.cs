@@ -11,6 +11,8 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
     public class Order : AuditableEntity, IAggregateRoot
     {
         public string CustomerId { get; private set; }
+        public string DistributorId { get; private set; }
+        public string DistributorName { get; private set; }
         public int OrderNumber { get; private set; }
         public string CustomerName { get; private set; }
         public string CustomerShopName { get; private set; }
@@ -35,9 +37,11 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             OrderItems = new List<OrderItem>();
         }
 
-        public Order(string customerId, string customerName, string customerCode, string customerShopName, string customerShopAddress, string customerCity, string customerArea, string customerLocationOnMap)
+        public Order(string distributorId, string distributorName, string customerId, string customerName, string customerCode, string customerShopName, string customerShopAddress, string customerCity, string customerArea, string customerLocationOnMap)
         {
             CustomerId = customerId;
+            DistributorId = distributorId;
+            DistributorName = distributorName;
             CustomerName = customerName;
             CustomerCode = customerCode;
             CustomerShopName = customerShopName;

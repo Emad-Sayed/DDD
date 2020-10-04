@@ -6,6 +6,8 @@ namespace Application.ProductCatalog.ProductAggregate.ViewModels
 {
     public class ProductToImportVM
     {
+        public string PhotoUrl { get; set; }
+        public string Barcode { get; set; }
         public string Name { get; set; }
         public BrandToImportVM Brand { get; set; }
         public ProductCategoryToImportVM ProductCategory { get; set; }

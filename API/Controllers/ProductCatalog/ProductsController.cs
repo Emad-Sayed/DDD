@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Configuration;
 using Application.Common.Interfaces;
@@ -36,6 +37,9 @@ namespace API.Controllers.ProductCatalog
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] ListProductsQuery query)
         {
+            if(User.IsInRole("Distributor"))
+                query.DistributorId = User?.FindFirstValue("BusinessUserId");
+
             var result = await Mediator.Send(query);
             return Ok(result);
         }

@@ -14,6 +14,7 @@ namespace Application.ProductCatalog.ProductAggregate.ViewModels
         public string Barcode { get; set; }
         public string PhotoUrl { get; set; }
         public bool AvailableToSell { get; set; }
+        public string DistributorId { get; set; }
 
         public string BrandId { get; set; }
         public BrandVM Brand { get; set; }

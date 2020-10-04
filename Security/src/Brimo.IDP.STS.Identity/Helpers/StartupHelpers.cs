@@ -434,9 +434,10 @@ namespace Brimo.IDP.STS.Identity.Helpers
             foreach (var role in roles)
             {
                 context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
-                context.IssuedClaims.Add(new Claim(JwtClaimTypes.Name, user.FullName ?? user.UserName));
             }
 
+            context.IssuedClaims.Add(new Claim(JwtClaimTypes.Name, user.FullName ?? user.UserName));
+            context.IssuedClaims.Add(new Claim("BusinessUserId", user.BusinessUserId ?? string.Empty));
         }
 
         public Task IsActiveAsync(IsActiveContext context)

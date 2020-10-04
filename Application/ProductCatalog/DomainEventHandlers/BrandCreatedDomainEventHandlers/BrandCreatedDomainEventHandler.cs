@@ -40,7 +40,7 @@ namespace Application.ProductCatalog.DomainEventHandlers.BrandCreatedDomainEvent
 
             var brandToAddToAlgoia = _mapper.Map<AlgoliaBrandVM>(brand);
 
-            await _searchEngine.AddEntity(brandToAddToAlgoia, "brands");
+            await _searchEngine.AddEntity(brandToAddToAlgoia, "dev_brand");
         }
     }
 }
