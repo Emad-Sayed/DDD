@@ -43,7 +43,7 @@ namespace Domain.ProductCatalog.AggregatesModel.ProductAggregate
             Weight = weight;
             IsAvailable = isAvailable;
             ProductId = productId;
-            Id = id == default ? Guid.NewGuid() : id;
+            //Id = id == default ? Guid.NewGuid() : id;
         }
 
         public void Update(string name, int count, int contentCount, float price, float sellingPrice, float weight, bool isAvailable)

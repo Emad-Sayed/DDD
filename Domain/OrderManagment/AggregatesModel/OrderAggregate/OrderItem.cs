@@ -23,7 +23,7 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
 
         protected OrderItem() { }
 
-        public OrderItem(string orderId, string productId, string productName, float unitPrice, float unitSellingPrice, string photoUrl, string unitId, string unitName, int unitCount = 1)
+        public OrderItem(string orderId, string productId, string productName, float unitPrice, float unitSellingPrice, string photoUrl, string unitId, string unitName, int customerCount = 1)
         {
             OrderId = orderId;
             ProductId = productId;
@@ -31,15 +31,15 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
             ProductName = productName;
             UnitPrice = unitPrice;
             UnitSellingPrice = unitSellingPrice;
-            UnitCount = unitCount;
+            UnitCount = customerCount;
             PhotoUrl = photoUrl;
             UnitId = unitId;
             UnitName = unitName;
         }
 
-        public void Update(string unitId, string unitName,float unitPrice, float unitSellingPrice, int unitCount = 1)
+        public void Update(string unitId, string unitName,float unitPrice, float unitSellingPrice, int cusotmerCount = 1)
         {
-            UnitCount = unitCount;
+            UnitCount = cusotmerCount;
             UnitId = unitId;
             UnitPrice = unitPrice;
             UnitSellingPrice = unitSellingPrice;

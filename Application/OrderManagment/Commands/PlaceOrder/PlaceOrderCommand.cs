@@ -76,8 +76,6 @@ namespace Application.OrderManagment.Commands.PlaceOrder
 
                         order.AddOrderItem(productDetails.Id, productDetails.Name, unit.Price, unit.SellingPrice, productDetails.PhotoUrl, unit.Id, unit.Name, vanItem.CustomerCount);
 
-                        order.ReCalcTotalOrderPrice();
-
                         _orderRepository.Add(order);
                     }
 

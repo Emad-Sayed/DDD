@@ -64,39 +64,40 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
         // This Order AggregateRoot's method "AddOrderItem()" should be the only way to add Items to the Order,
         // so any behavior (discounts, etc.) and validations are controlled by the AggregateRoot 
         // in order to maintain consistency between the whole Aggregate. 
-        public void AddOrderItem(string productId, string productName, float unitPrice, float unitSellingPrice, string photoUrl, string unitId, string unitName, int unitCount = 1)
+        public void AddOrderItem(string productId, string productName, float unitPrice, float unitSellingPrice, string photoUrl, string unitId, string unitName, int customerCount = 1)
         {
             var existingOrderForProduct = OrderItems.SingleOrDefault(o => o.ProductId == productId && o.UnitId == unitId);
             if (existingOrderForProduct != null) throw new ProductExitInOrderException(productId);
 
             //add validated new order item
-            var orderItem = new OrderItem(Id.ToString(), productId, productName, unitPrice, unitSellingPrice, photoUrl, unitId, unitName, unitCount);
+            var orderItem = new OrderItem(Id.ToString(), productId, productName, unitPrice, unitSellingPrice, photoUrl, unitId, unitName, customerCount);
 
             OrderItems.Add(orderItem);
+
+            ReCalcTotalOrderPrice();
         }
 
-        public void ReCalcTotalOrderPrice()
+        private void ReCalcTotalOrderPrice()
         {
             TotalPrice = 0;
             foreach (var item in OrderItems)
             {
-                TotalPrice += item.UnitSellingPrice;
+                TotalPrice += item.UnitSellingPrice * item.UnitCount;
             }
         }
 
-        public void UpdateOrderItem(string orderItemId, string unitId, string unitName, float unitPrice, float unitSellingPrice, int unitCount)
+        public void UpdateOrderItem(string orderItemId, string unitId, string unitName, float unitPrice, float unitSellingPrice, int cusotmerCount)
         {
             var orderItemToUpdate = OrderItems.FirstOrDefault(x => x.Id == new Guid(orderItemId));
             if (orderItemToUpdate == null) throw new OrderItemNotFoundException(orderItemId);
 
-            var oldOrderItemPrice = orderItemToUpdate.UnitSellingPrice * orderItemToUpdate.UnitCount;
 
-            orderItemToUpdate.Update(unitId, unitName, unitPrice, unitSellingPrice, unitCount);
+            orderItemToUpdate.Update(unitId, unitName, unitPrice, unitSellingPrice, cusotmerCount);
 
-            TotalPrice = TotalPrice - oldOrderItemPrice;
-            TotalPrice = TotalPrice + orderItemToUpdate.UnitSellingPrice * orderItemToUpdate.UnitCount;
 
             AddDomainEvent(new OrderUpdated(this));
+
+            ReCalcTotalOrderPrice();
         }
 
         public void ConfirmOrder()
