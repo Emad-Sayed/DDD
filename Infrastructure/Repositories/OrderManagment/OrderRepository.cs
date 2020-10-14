@@ -51,6 +51,7 @@ namespace Infrastructure.Repositories.OrderManagment
                 keyWord = keyWord.ToLower();
                 query = query.Where(x =>
                 x.Id.ToString().ToLower().Contains(keyWord) ||
+                x.OrderNumber.ToString().Contains(keyWord) ||
                 x.CustomerId.ToLower().Contains(keyWord) ||
                 x.CustomerName.ToLower().Contains(keyWord)
                 );

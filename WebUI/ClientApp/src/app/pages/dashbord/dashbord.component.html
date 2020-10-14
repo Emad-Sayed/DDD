@@ -1,103 +1,159 @@
-<!-- /.row -->
-
-<div class="row">
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-file-text fa"></i>
+<div class="container pb-5">
+    <div class="row" dir="ltr">
+        <div class="col-lg-3">
+            <div class="ibox" dir="ltr">
+                <div class="ibox-title">
+                    <div class="ibox-tools">
+                        <span class="label label-success float-right">Today</span>
                     </div>
-                    <div class="col-xs-9 text-right">
-                        <div class='huge'>12</div>
-                        <div class="under-number">Total Orders</div>
-                    </div>
+                    <h5>Shipped orders</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{dashbordReport.orderShipped}}</h1>
                 </div>
             </div>
-            <a>
-                <div class="panel-footer">
-                    <span class="pull-left blue">View Details</span>
-                    <span class="pull-right blue"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <div class="ibox-tools">
+                        <span class="label label-info float-right">Today</span>
+                    </div>
+                    <h5>Canceled orders</h5>
                 </div>
-            </a>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{dashbordReport.orderCanceled}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <div class="ibox-tools">
+                        <span class="label label-primary float-right">Today</span>
+                    </div>
+                    <h5>Confirmed orders</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{dashbordReport.orderConfirmed}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <div class="ibox-tools">
+                        <span class="label label-danger float-right">Today</span>
+                    </div>
+                    <h5>Number of signup</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{dashbordReport.numberOfSignUpToDay}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row my-3 bg-white p-2">
+        <div class="col-9">
+            <canvas baseChart class="line-chart" [datasets]="firstLineChartData" [labels]="lineChart1Labels"
+                [options]="lineChartOptions" [legend]="lineChartLegend" [chartType]="lineChartType"
+                [plugins]="lineChartPlugins"></canvas>
+        </div>
+        <div class="col-3">
+            <div class="row  m-4">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-xs btn-white" (click)="changeChart1ToMonthely()">Month</button>
+                    <button type="button" class="btn btn-xs btn-white" (click)="changeChart1ToYearly()">Year</button>
+                </div>
+            </div>
+            <div class="row  m-4">
+                <p *ngIf="chart1Monthely" class="my-2">Total sign up in all months
+                    {{dashbordReport.totalSignUpUsersPerMonth}}</p>
+                <p *ngIf="!chart1Monthely" class="my-2">Total sign up in year {{dashbordReport.totalSignUpUsersPerYear}}
+                </p>
+                <p class="my-2">Total sign up in last month {{dashbordReport.numberOfSignUpInLastMonth}}</p>
+                <p class="my-2">Total active users {{dashbordReport.totalAcitveUsers}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mr-2">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Best selling areas</h5>
+                </div>
+                <div class="ibox-content">
+                    <canvas baseChart [data]="areasPieChartData" [labels]="areasPieChartLabels"
+                        [chartType]="pieChartType" [options]="pieChartOptions" [plugins]="pieChartPlugins"
+                        [colors]="pieChartColors" [legend]="pieChartLegend">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Best selling cities</h5>
+                </div>
+                <div class="ibox-content">
+                    <canvas baseChart [data]="citiesPieChartData" [labels]="citiesPieChartLabels"
+                        [chartType]="pieChartType" [options]="pieChartOptions" [plugins]="pieChartPlugins"
+                        [colors]="pieChartColors" [legend]="pieChartLegend">
+                    </canvas>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- ********************************************************************************************************* -->
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-green">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-comments fa"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class='huge'>23</div>
-                        <div class="under-number">Total Products</div>
-                    </div>
+    <div class="row">
+        <div class="col mr-2">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Best selling products</h5>
+                </div>
+                <div class="ibox-content">
+                    <canvas baseChart [data]="productsPieChartData" [labels]="productsPieChartLabels"
+                        [chartType]="pieChartType" [options]="pieChartOptions" [plugins]="pieChartPlugins"
+                        [colors]="pieChartColors" [legend]="pieChartLegend">
+                    </canvas>
                 </div>
             </div>
-            <a>
-                <div class="panel-footer">
-                    <span class="pull-left green">View Details</span>
-                    <span class="pull-right green"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
+        </div>
+        <div class="col">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Best selling brands</h5>
                 </div>
-            </a>
+                <div class="ibox-content">
+                    <canvas baseChart [data]="brandsPieChartData" [labels]="brandsPieChartLabels"
+                        [chartType]="pieChartType" [options]="pieChartOptions" [plugins]="pieChartPlugins"
+                        [colors]="pieChartColors" [legend]="pieChartLegend">
+                    </canvas>
+                </div>
+            </div>
         </div>
     </div>
-
-
-
-    <!-- ********************************************************************************************************* -->
-
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-yellow">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-user fa"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class='huge'>23</div>
-                        <div class="under-number">Total Customers</div>
-                    </div>
-                </div>
-            </div>
-            <a>
-                <div class="panel-footer">
-                    <span class="pull-left yellow">View Details</span>
-                    <span class="pull-right yellow"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
+    <div class="row my-3 bg-white p-2">
+        <div class="col-9">
+            <canvas baseChart class="line-chart" [datasets]="secondLineChartData" [labels]="lineChart2Labels"
+                [options]="lineChartOptions" [legend]="lineChartLegend" [chartType]="lineChartType"
+                [plugins]="lineChartPlugins"></canvas>
         </div>
-    </div>
-
-    <!-- ********************************************************************************************************* -->
-
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-red">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-list fa"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class='huge'>13</div>
-                        <div class="under-number">Total Distributers</div>
-                    </div>
+        <div class="col-3">
+            <div class="row  m-4">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-xs btn-white" (click)="changeChart2ToMonthely()">Month</button>
+                    <button type="button" class="btn btn-xs btn-white" (click)="changeChart2ToYearly()">Year</button>
                 </div>
             </div>
-            <a>
-                <div class="panel-footer">
-                    <span class="pull-left red">View Details</span>
-                    <span class="pull-right red"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
+            <div class="row  m-4">
+                <p *ngIf="chart2Monthely" class="my-2">Total orders in month
+                    {{dashbordReport.totalSignUpUsersPerMonth}}</p>
+                <p *ngIf="!chart2Monthely" class="my-2">Total orders in year 49
+                </p>
+                <p class="my-2">Total orders in last month 48</p>
+                <p class="my-2">Monthely income from orders 4848</p>
+            </div>
         </div>
     </div>
 </div>
-<!-- /.row -->

@@ -21,6 +21,7 @@
                 <a ngbNavLink>طلبات جديدة <span class="badge badge-primary">{{totalPlacedOrders}}</span></a>
                 <ng-template ngbNavContent>
                     <div class="card">
+                        <span class="p-3">العدد الكلي {{totalPlacedOrders}}</span>
                         <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
                             <div class="table-responsive" infiniteScroll [infiniteScrollDistance]="2"
                                 [infiniteScrollThrottle]="50" (scrolled)="onScrollPlacedOrders()"
@@ -73,6 +74,7 @@
                 <a ngbNavLink>طلبات تحت التحميل <span class="badge badge-info">{{totalConfirmedOrders}}</span></a>
                 <ng-template ngbNavContent>
                     <div class="card">
+                        <span class="p-3">العدد الكلي {{totalConfirmedOrders}}</span>
                         <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
                             <div class="table-responsive" infiniteScroll [infiniteScrollDistance]="2"
                                 [infiniteScrollThrottle]="50" (scrolled)="onScrollConfirmedOrders()"
@@ -125,6 +127,7 @@
                 <a ngbNavLink>في الطريق إلي العميل <span class="badge badge-warning">{{totalShippedOrders}}</span></a>
                 <ng-template ngbNavContent>
                     <div class="card">
+                        <span class="p-3">العدد الكلي {{totalShippedOrders}}</span>
                         <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
                             <div class="table-responsive" infiniteScroll [infiniteScrollDistance]="2"
                                 [infiniteScrollThrottle]="50" (scrolled)="onScrollShippedOrders()"

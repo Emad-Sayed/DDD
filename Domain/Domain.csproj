@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Campaign\" />
+    <Folder Include="NotificationManagment\Exceptions\" />
   </ItemGroup>
 
   <ItemGroup>

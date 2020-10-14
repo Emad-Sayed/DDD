@@ -55,7 +55,7 @@ namespace Brimo.IDP.STS.Identity.Common.Middlewares
                     _logger.LogError(re, "TypeOfException", "BusinessException");
                     break;
                 case Exception e:
-                    errors.Add(new Error("Server_Error", string.IsNullOrWhiteSpace(e.Message) ? "ERROR" : e.Message));
+                    errors.Add(new Error("Server_Error", string.IsNullOrWhiteSpace(e.Message) ? e.InnerException.Message : e.Message));
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     message = "Internal Server Error";
                     _logger.LogError(e, "TypeOfException", "ApplicationException");

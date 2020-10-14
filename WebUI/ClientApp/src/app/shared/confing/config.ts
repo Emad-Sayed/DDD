@@ -16,6 +16,9 @@ export class Config {
   public static Offers = `${Config.OfferManagment}/Offers`;
 
   public static PhotoUploader = `PhotoUploader`;
-  public static BasePhotoUrl = `https://brimodevcdnendpoint.azureedge.net/images/`
+  public static BasePhotoUrl = `https://brimodevcdnendpoint.azureedge.net/images/`;
+
+  public static Reports = `Reports`;
+
 
 }

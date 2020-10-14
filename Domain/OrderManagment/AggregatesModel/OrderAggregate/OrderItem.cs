@@ -11,6 +11,7 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
 
         public string ProductId { get; private set; }
         public string ProductName { get; private set; }
+        public string BrandName { get; private set; }
         public string PhotoUrl { get; private set; }
         public float UnitPrice { get; private set; }
         public float UnitSellingPrice { get; set; }
@@ -23,12 +24,13 @@ namespace Domain.OrderManagment.AggregatesModel.OrderAggregate
 
         protected OrderItem() { }
 
-        public OrderItem(string orderId, string productId, string productName, float unitPrice, float unitSellingPrice, string photoUrl, string unitId, string unitName, int customerCount = 1)
+        public OrderItem(string orderId, string productId, string productName, string brandName, float unitPrice, float unitSellingPrice, string photoUrl, string unitId, string unitName, int customerCount = 1)
         {
             OrderId = orderId;
             ProductId = productId;
 
             ProductName = productName;
+            BrandName = brandName;
             UnitPrice = unitPrice;
             UnitSellingPrice = unitSellingPrice;
             UnitCount = customerCount;
