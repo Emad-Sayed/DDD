@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.NotificationManagment.Commands.CreateNotification;
 using Domain.OrderManagment.Events;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -14,17 +15,21 @@ namespace Application.OrderManagment.DomainEventHandlers.OrderCancelledDomainEve
     {
         private readonly ILogger<OrderCancelledDomainEventHandler> _logger;
         private readonly ICurrentUserService _currentUserService;
-        public OrderCancelledDomainEventHandler(ILogger<OrderCancelledDomainEventHandler> logger, ICurrentUserService currentUserService)
+        private readonly IMediator _mediator;
+        public OrderCancelledDomainEventHandler(ILogger<OrderCancelledDomainEventHandler> logger, ICurrentUserService currentUserService, IMediator mediator)
         {
             _logger = logger;
             _currentUserService = currentUserService;
+            _mediator = mediator;
         }
 
-        public Task Handle(OrderCancelled notification, CancellationToken cancellationToken)
+        public async Task Handle(OrderCancelled notification, CancellationToken cancellationToken)
         {
+            var createNotificationCommand = new CreateNotificationCommand { Title = " إلغاء الطلب", Content = "تم الغاء الطلب الخاص بك", EntityId = notification.Order.Id.ToString(), NotificationType = 0 };
+
+            await _mediator.Send(createNotificationCommand);
 
             _logger.LogInformation("Brimo API EventHandelr: {Name} {@UserId} {@UserName} {@Request}", nameof(OrderCancelled), _currentUserService.UserId, _currentUserService.Name, notification);
-            return Task.CompletedTask;
         }
     }
 }

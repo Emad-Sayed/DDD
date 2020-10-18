@@ -74,16 +74,17 @@ namespace Application.OrderManagment.Commands.PlaceOrder
                                 customerDetailsFromQuery.LocationOnMap);
                         }
 
-                        order.AddOrderItem(productDetails.Id, productDetails.Name,productDetails.Brand.Name, unit.Price, unit.SellingPrice, productDetails.PhotoUrl, unit.Id, unit.Name, vanItem.CustomerCount);
+                        order.AddOrderItem(productDetails.Id, productDetails.Name, productDetails.Brand.Name, unit.Price, unit.SellingPrice, productDetails.PhotoUrl, unit.Id, unit.Name, vanItem.CustomerCount);
 
                         _orderRepository.Add(order);
+
+                        await _orderRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
                     }
 
                 }
 
 
 
-                await _orderRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
 
                 return "orderToPlace.Id.ToString()";
             }

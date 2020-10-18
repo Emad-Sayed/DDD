@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.NotificationManagment.Commands.CreateNotification;
 using Domain.OrderManagment.Events;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -13,6 +14,7 @@ namespace Application.OrderManagment.DomainEventHandlers.OrderShippedDomainEvent
     public class OrderShippedDomainEventHandler : INotificationHandler<OrderShipped>
     {
         private readonly ILogger<OrderShippedDomainEventHandler> _logger;
+        private readonly IMediator _mediator;
         private readonly ICurrentUserService _currentUserService;
 
         public OrderShippedDomainEventHandler(ILogger<OrderShippedDomainEventHandler> logger, ICurrentUserService currentUserService)
@@ -21,11 +23,13 @@ namespace Application.OrderManagment.DomainEventHandlers.OrderShippedDomainEvent
             _currentUserService = currentUserService;
         }
 
-        public Task Handle(OrderShipped notification, CancellationToken cancellationToken)
+        public async Task Handle(OrderShipped notification, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Brimo API EventHandelr: {Name} {@UserId} {@UserName} {@Request}", nameof(OrderShipped), _currentUserService.UserId, _currentUserService.Name, notification);
+            var createNotificationCommand = new CreateNotificationCommand { Title = "تم شجن الطلب", Content = "تم شحن الطلب الخاص بك", EntityId = notification.Order.Id.ToString(), NotificationType = 0 };
 
-            return Task.CompletedTask;
+            await _mediator.Send(createNotificationCommand);
+
+            _logger.LogInformation("Brimo API EventHandelr: {Name} {@UserId} {@UserName} {@Request}", nameof(OrderShipped), _currentUserService.UserId, _currentUserService.Name, notification);
         }
     }
 }

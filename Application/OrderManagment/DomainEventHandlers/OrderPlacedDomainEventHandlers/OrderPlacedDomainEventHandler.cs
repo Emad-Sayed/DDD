@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.NotificationManagment.Commands.CreateNotification;
 using Application.ShoppingVan.Commands.DeleteCurrentCustomerVan;
 using Application.ShoppingVan.Queries.CurrentCustomerVan;
 using Domain.OrderManagment.Events;
@@ -29,9 +30,11 @@ namespace Application.OrderManagment.DomainEventHandlers.OrderPlacedDomainEventH
 
         public async Task Handle(OrderPlaced notification, CancellationToken cancellationToken)
         {
+            var createNotificationCommand = new CreateNotificationCommand { Title = " الطلب", Content = "تم الطلب الخاص بك", EntityId = notification.Order.Id.ToString(), NotificationType = 0 };
+
+            await _mediator.Send(createNotificationCommand);
+
             _logger.LogInformation("Brimo API EventHandelr: {Name} {@UserId} {@UserName} {@Request}", nameof(OrderPlaced), _currentUserService.UserId, _currentUserService.Name, notification);
-            //var customerVanFromQuery = await _mediator.Send(new CurrentCustomerVanQuery { }, cancellationToken);
-            //if (customerVanFromQuery != null) await _mediator.Send(new DeleteCurrentCustomerVanCommand { }, cancellationToken);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.NotificationManagment.Commands.CreateNotification;
 using Domain.OrderManagment.Events;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -13,18 +14,23 @@ namespace Application.OrderManagment.DomainEventHandlers.OrderConfirmedDomainEve
     public class OrderConfirmedDomainEventHandler : INotificationHandler<OrderConfirmed>
     {
         private readonly ILogger<OrderConfirmedDomainEventHandler> _logger;
+        private readonly IMediator _mediator;
         private readonly ICurrentUserService _currentUserService;
-        public OrderConfirmedDomainEventHandler(ILogger<OrderConfirmedDomainEventHandler> logger, ICurrentUserService currentUserService)
+        public OrderConfirmedDomainEventHandler(ILogger<OrderConfirmedDomainEventHandler> logger, ICurrentUserService currentUserService, IMediator mediator)
         {
             _logger = logger;
             _currentUserService = currentUserService;
+            _mediator = mediator;
         }
 
-        public Task Handle(OrderConfirmed notification, CancellationToken cancellationToken)
+        public async Task Handle(OrderConfirmed notification, CancellationToken cancellationToken)
         {
+            var createNotificationCommand = new CreateNotificationCommand { Title = " تاكيد الطلب", Content = "تم تاكيد الطلب الخاص بك", EntityId = notification.Order.Id.ToString(), NotificationType = 0 };
+
+            await _mediator.Send(createNotificationCommand);
 
             _logger.LogInformation("Brimo API EventHandelr: {Name} {@UserId} {@UserName} {@Request}", nameof(OrderConfirmed), _currentUserService.UserId, _currentUserService.Name, notification);
-            return Task.CompletedTask;
+
         }
     }
 }

@@ -122,6 +122,7 @@ namespace Application.IntegrationTests
         private class CurrentUserService : ICurrentUserService
         {
             public string UserId => _currentUserId;
+            public string BusinessUserId => "test";
 
             public string Name => "Test";
         }

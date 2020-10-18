@@ -18,6 +18,8 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
         public string LocationOnMap { get; private set; }
         public bool IsActive { get; private set; }
 
+        public string DevicesId { get; set; }
+
         public string AreaId { get; private set; }
         public Area Area { get; private set; }
 

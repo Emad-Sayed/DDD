@@ -1,5 +1,6 @@
 ﻿using Domain.Common.Interfaces;
 using Domain.CustomerManagment.AggregatesModel.CustomerAggregate;
+using Domain.CustomerManagment.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Persistence.CustomerManagment;
 using System;
@@ -121,7 +122,7 @@ namespace Infrastructure.Repositories.CustomerManagment
                 keyWord = keyWord.ToLower();
                 query = query.Where(x =>
                 x.Name.Contains(keyWord) ||
-                x.Id.Contains(keyWord) 
+                x.Id.Contains(keyWord)
                 );
             }
 
@@ -152,6 +153,14 @@ namespace Infrastructure.Repositories.CustomerManagment
         public void DeleteCity(City city)
         {
             _context.CustomersCities.Remove(city);
+        }
+
+        public async Task<string> GetCustomerDevicesIDsByAccountId(string accountId)
+        {
+            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.AccountId == accountId);
+            if (customer == null) throw new CustomerNotFoundException(accountId);
+
+            return customer.DevicesId;
         }
     }
 }

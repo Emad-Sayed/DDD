@@ -77,6 +77,9 @@ namespace Persistence.CustomerManagment.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasDefaultValueSql("NEXT VALUE FOR shared.CustomerNumbers");
 
+                    b.Property<string>("DevicesId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
