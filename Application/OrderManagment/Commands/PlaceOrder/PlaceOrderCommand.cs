@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.CustomerManagment.Queries.CustomerByAccountId;
+using Application.DistributorManagment.Queries.DistributorById;
 using Application.OrderManagment.ViewModels;
 using Application.ProductCatalog.ProductAggregate.Queries.ProductById;
 using Application.ShoppingVan.Queries.CurrentCustomerVan;
@@ -54,6 +55,8 @@ namespace Application.OrderManagment.Commands.PlaceOrder
                     {
                         var productDetails = await _mediator.Send(new ProductByIdQuery { ProductId = vanItem.ProductId });
 
+                        var distributordDetails = await _mediator.Send(new DistributorByIdQuery { DistributorId = productDetails.DistributorId });
+
                         var unit = productDetails.Units.FirstOrDefault(x => x.Id == vanItem.UnitId);
 
                         if (unit == null) throw new UnitNotFoundException(vanItem.UnitId);
@@ -63,7 +66,7 @@ namespace Application.OrderManagment.Commands.PlaceOrder
                         {
                             order = new Order(
                                 productDetails.DistributorId,
-                                productDetails.DistributorId,
+                                distributordDetails.Name,
                                 _currentUserService.UserId,
                                 customerDetailsFromQuery.FullName,
                                 customerDetailsFromQuery.CustomerCode,

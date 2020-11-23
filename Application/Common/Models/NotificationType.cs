@@ -6,6 +6,6 @@ namespace Application.Common.Models
 {
     public enum NotificationType
     {
-        Email = 1
+        Order = 1
     }
 }

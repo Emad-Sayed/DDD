@@ -30,7 +30,7 @@ namespace Application.OrderManagment.DomainEventHandlers.OrderPlacedDomainEventH
 
         public async Task Handle(OrderPlaced notification, CancellationToken cancellationToken)
         {
-            var createNotificationCommand = new CreateNotificationCommand { Title = " الطلب", Content = "تم الطلب الخاص بك", EntityId = notification.Order.Id.ToString(), NotificationType = 0 };
+            var createNotificationCommand = new CreateNotificationCommand { Title = " الطلب", Content = "تم الطلب الخاص بك", EntityId = notification.Order.Id.ToString(), NotificationType = 0, CustomerId = notification.Order.CustomerId };
 
             await _mediator.Send(createNotificationCommand);
 

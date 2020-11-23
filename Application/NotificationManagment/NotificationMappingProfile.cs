@@ -10,7 +10,9 @@ namespace Application.NotificationManagment
     {
         public NotificationMappingProfile()
         {
-            CreateMap<Notification, NotificationVM>().ReverseMap();
+            CreateMap<Notification, NotificationVM>()
+                .ForMember(x => x.CreateDate, y => y.MapFrom(s => s.Created))
+                .ReverseMap();
         }
     }
 }

@@ -25,7 +25,7 @@ export class RecentlyOrdersComponent implements OnInit, OnDestroy {
   shippedOrders: Order[] = [];
   totalShippedOrders: number = 0;
 
-  placedOrdersQuery: any = { OrderStatuses: [0] };
+  placedOrdersQuery: any = { OrderStatuses: [0], };
   placedOrdersPage: Page = new Page();
 
   confirmedOrdersQuery: any = { OrderStatuses: [1] };
@@ -50,6 +50,10 @@ export class RecentlyOrdersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.placedOrdersQuery.pageNumber = this.placedOrdersPage.pageNumber++;
+    this.confirmedOrdersQuery.pageNumber = this.confirmedOrdersPage.pageNumber++;
+    this.shippedOrdersQuery.pageNumber = this.shippedOrdersPage.pageNumber++;
+
     this.getPlacedOrders();
     this.getConfirmedOrders();
     this.getShippedOrders();
@@ -81,8 +85,10 @@ export class RecentlyOrdersComponent implements OnInit, OnDestroy {
   }
 
   getPlacedOrders() {
+    this.placedOrdersQuery.pageNumber = this.placedOrdersPage.pageNumber;
+    this.placedOrdersQuery.pageSize = this.placedOrdersPage.pageSize;
     this.orderManagmentService.getOrders(this.placedOrdersQuery).subscribe(res => {
-      this.placedOrders = res.data;
+      this.placedOrders.push(...res.data);
       this.totalPlacedOrders = res.totalCount;
     })
   }
@@ -90,15 +96,19 @@ export class RecentlyOrdersComponent implements OnInit, OnDestroy {
 
 
   getConfirmedOrders() {
+    this.confirmedOrdersQuery.pageNumber = this.confirmedOrdersPage.pageNumber;
+    this.confirmedOrdersQuery.pageSize = this.confirmedOrdersPage.pageSize;
     this.orderManagmentService.getOrders(this.confirmedOrdersQuery).subscribe(res => {
-      this.confirmedOrders = res.data;
+      this.confirmedOrders.push(...res.data);
       this.totalConfirmedOrders = res.totalCount;
     })
   }
 
   getShippedOrders() {
+    this.shippedOrdersQuery.pageNumber = this.shippedOrdersPage.pageNumber;
+    this.shippedOrdersQuery.pageSize = this.shippedOrdersPage.pageSize;
     this.orderManagmentService.getOrders(this.shippedOrdersQuery).subscribe(res => {
-      this.shippedOrders = res.data;
+      this.shippedOrders.push(...res.data);
       this.totalShippedOrders = res.totalCount;
     })
   }
@@ -109,19 +119,16 @@ export class RecentlyOrdersComponent implements OnInit, OnDestroy {
 
   onScrollPlacedOrders() {
     this.placedOrdersPage.pageNumber++;
-    if ((this.placedOrdersPage.pageNumber * this.placedOrdersPage.pageSize) >= this.totalPlacedOrders) return;
     this.getPlacedOrders();
   }
 
   onScrollConfirmedOrders() {
     this.confirmedOrdersPage.pageNumber++;
-    if ((this.confirmedOrdersPage.pageNumber * this.confirmedOrdersPage.pageSize) >= this.totalConfirmedOrders) return;
     this.getConfirmedOrders();
   }
 
   onScrollShippedOrders() {
     this.shippedOrdersPage.pageNumber++;
-    if ((this.shippedOrdersPage.pageNumber * this.shippedOrdersPage.pageSize) >= this.totalShippedOrders) return;
     this.getShippedOrders();
   }
 

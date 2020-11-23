@@ -25,7 +25,7 @@ namespace Application.OrderManagment.DomainEventHandlers.OrderConfirmedDomainEve
 
         public async Task Handle(OrderConfirmed notification, CancellationToken cancellationToken)
         {
-            var createNotificationCommand = new CreateNotificationCommand { Title = " تاكيد الطلب", Content = "تم تاكيد الطلب الخاص بك", EntityId = notification.Order.Id.ToString(), NotificationType = 0 };
+            var createNotificationCommand = new CreateNotificationCommand { Title = " تاكيد الطلب", Content = "تم تاكيد الطلب الخاص بك", EntityId = notification.Order.Id.ToString(), NotificationType = 0, CustomerId = notification.Order.CustomerId };
 
             await _mediator.Send(createNotificationCommand);
 

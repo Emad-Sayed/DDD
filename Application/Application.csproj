@@ -29,7 +29,6 @@
     <Folder Include="OffersManagment\DomainEventHandlers\" />
     <Folder Include="ReportsManagment\DomainEventHandlers\" />
     <Folder Include="ReportsManagment\Commands\" />
-    <Folder Include="ReportsManagment\Queries\RetailerPerformanceReport\" />
   </ItemGroup>
 
 </Project>

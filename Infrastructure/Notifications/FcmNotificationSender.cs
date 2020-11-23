@@ -8,6 +8,9 @@ using CorePush.Google;
 using System.Net.Http;
 using Domain.NotificationManagment.AggregatesModel;
 using Newtonsoft.Json;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Linq;
 
 namespace Infrastructure.Notifications
 {
@@ -25,13 +28,41 @@ namespace Infrastructure.Notifications
 
             foreach (var deviceId in DevicesIds)
             {
-                if (deviceId == null) return;
-                var fcmSettings = new FcmSettings { ServerKey = _configuration["FirebaseNotifications:ServerKey"], SenderId = _configuration["FirebaseNotifications:SenderID"] };
 
-                var fcm = new FcmSender(fcmSettings, new HttpClient());
-                var notificationToSend = new GoogleNotification { Title = notification.Title, Content = notification.Content, Data = new GoogleNotification.DataPayload { EntityId = notification.EntityId } };
-                    var fcmResponse = await fcm.SendAsync(deviceId, notificationToSend);
+                var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer AAAAtEfU_eM:APA91bGqs-GI48VQjdMYYqicacss7XOdK9-pXnMWLnebE7P2m0owmMmZwVkvLtEyao0V4lXYN7tczsfYuke33RrefmIdONnwhN8dVrdMDIyjVXbBW73Rk2f9x5HsZ3_MKZ8d7P7CBOPm");
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+                var body = new
+                {
+                    to = deviceId,
+                    notification = new
+                    {
+                        body = notification.Content,
+                        title = notification.Title
+                    },
+                    data = new
+                    {
+                        entityId = notification.EntityId,
+                        notificationId = notification.Id.ToString(),
+
+                    }
+                };
+
+                var json = JsonConvert.SerializeObject(body);
+
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var res = await httpClient.PostAsync("https://fcm.googleapis.com/fcm/send", data);
+                //var ss = fcmResponse;
+                if (res.IsSuccessStatusCode)
+                {
+                    return;
+                }
+                else
+                {
+                    throw new Exception(await res.Content.ReadAsStringAsync());
+                }
             }
         }
     }

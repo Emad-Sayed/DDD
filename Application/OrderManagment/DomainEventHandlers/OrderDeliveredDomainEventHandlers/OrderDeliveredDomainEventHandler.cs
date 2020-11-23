@@ -26,7 +26,7 @@ namespace Application.OrderManagment.DomainEventHandlers.OrderDeliveredDomainEve
 
         public async Task Handle(OrderDelivered notification, CancellationToken cancellationToken)
         {
-            var createNotificationCommand = new CreateNotificationCommand { Title = " توصيل الطلب", Content = "تم توصيل الطلب الخاص بك", EntityId = notification.Order.Id.ToString(), NotificationType = 0 };
+            var createNotificationCommand = new CreateNotificationCommand { Title = " توصيل الطلب", Content = "تم توصيل الطلب الخاص بك", EntityId = notification.Order.Id.ToString(), NotificationType = 0, CustomerId = notification.Order.CustomerId };
 
             await _mediator.Send(createNotificationCommand);
 

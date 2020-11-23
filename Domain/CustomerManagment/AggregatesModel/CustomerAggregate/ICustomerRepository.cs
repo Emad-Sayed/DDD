@@ -21,6 +21,6 @@ namespace Domain.CustomerManagment.AggregatesModel.CustomerAggregate
         City AddCity(City city);
         void UpdateCity(City city);
         void DeleteCity(City city);
-        Task<string> GetCustomerDevicesIDsByAccountId(string accountId);
+        Task<string> GetCustomerDevicesID(string accountId);
     }
 }

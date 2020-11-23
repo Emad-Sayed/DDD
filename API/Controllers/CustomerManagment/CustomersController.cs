@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Configuration;
+using Application.CustomerManagment.Commands.AddDeviceID;
 using Application.CustomerManagment.Commands.CreateCustomer;
 using Application.CustomerManagment.Commands.DeleteCustomer;
+using Application.CustomerManagment.Commands.RemoveDeviceID;
 using Application.CustomerManagment.Commands.UpdateCustomer;
 using Application.CustomerManagment.Queries.CustomerById;
 using Application.CustomerManagment.Queries.ListCities;
@@ -51,6 +53,21 @@ namespace API.Controllers.CustomerManagment
             return Ok(result);
         }
 
+        [HttpPost("AddDeviceId")]
+        [Authorize]
+        public async Task<IActionResult> AddDeviceId([FromBody] AddDeviceIDCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("RemoveDeviceId")]
+        [Authorize]
+        public async Task<IActionResult> RemoveDeviceId([FromBody] RemoveDeviceIDCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
 
         [HttpPost("ActiveAndDeactiveCustomer")]
         [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]

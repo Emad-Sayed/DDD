@@ -2,13 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartType, ChartOptions, ChartDataSets } from 'chart.js';
 import { BaseChartDirective, Color, Label } from 'ng2-charts';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
-import { DashbordReport } from 'src/app/shared/models/dashbord/dashbord_report.model';
-import { TopSellingArea } from 'src/app/shared/models/dashbord/top_selling_area';
-import { TopSellingCity } from 'src/app/shared/models/dashbord/top_selling_city';
-import { TopSellingProduct } from 'src/app/shared/models/dashbord/top_selling_product';
+import { DashbordReport } from 'src/app/shared/models/reports/dashbord/dashbord_report.model';
 import * as pluginAnnotations from 'chartjs-plugin-annotation';
-import { DashbordService } from './dashbord.service';
-import { P } from '@angular/cdk/keycodes';
+import { ReportsService } from '../reports.service';
 
 @Component({
   selector: 'app-dashbord',
@@ -113,7 +109,7 @@ export class DashbordComponent implements OnInit {
   public brandsPieChartLabels: Label[] = [];
   public brandsPieChartData: number[] = [];
 
-  constructor(private dashbordService: DashbordService) { }
+  constructor(private dashbordService: ReportsService) { }
 
   ngOnInit(): void {
     this.getDashbordReport();

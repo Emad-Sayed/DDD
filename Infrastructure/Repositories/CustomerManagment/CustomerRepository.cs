@@ -155,10 +155,10 @@ namespace Infrastructure.Repositories.CustomerManagment
             _context.CustomersCities.Remove(city);
         }
 
-        public async Task<string> GetCustomerDevicesIDsByAccountId(string accountId)
+        public async Task<string> GetCustomerDevicesID(string customerId)
         {
-            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.AccountId == accountId);
-            if (customer == null) throw new CustomerNotFoundException(accountId);
+            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.AccountId == customerId);
+            if (customer == null) throw new CustomerNotFoundException(customerId);
 
             return customer.DevicesId;
         }

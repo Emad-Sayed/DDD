@@ -1,0 +1,143 @@
+<div class="row py-5">
+    <div class="col mr-2">
+        <div class="ibox">
+            <div class="ibox-title">
+                <div class="row">
+                    <div class="col">
+                        <h5>Top Selling Products Per Area </h5>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Select Area</label>
+                            <select class="form-control" id="exampleFormControlSelect1" (change)="selectedAreaChanged()"
+                                [(ngModel)]="currentSelectedArea" name="currentSelectedArea">
+                                <option *ngFor="let area of areas" [value]="area.name">{{area.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <canvas baseChart [data]="topSellingProductsPerAreaPieChartData"
+                    [labels]="topSellingProductsPerAreaPieChartLabels" [chartType]="pieChartType"
+                    [options]="pieChartOptions" [plugins]="pieChartPlugins" [colors]="pieChartColors"
+                    [legend]="pieChartLegend">
+                </canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="ibox">
+            <div class="ibox-title">
+                <div class="row">
+                    <div class="col">
+                        <h5>Top Selling Products Per City </h5>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect2">Select City</label>
+                            <select class="form-control" id="exampleFormControlSelect2" (change)="selectedCityChanged()"
+                                [(ngModel)]="currentSelectedCity" name="currentSelectedCity">
+                                <option *ngFor="let city of cities" [value]="city.name">{{city.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <canvas baseChart [data]="topSellingProductsPerCityPieChartData"
+                    [labels]="topSellingProductsPerCityPieChartLabels" [chartType]="pieChartType"
+                    [options]="pieChartOptions" [plugins]="pieChartPlugins" [colors]="pieChartColors"
+                    [legend]="pieChartLegend">
+                </canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row py-5">
+    <div class="col mr-2">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>Top Selling Products Per Quantity </h5>
+            </div>
+            <div class="ibox-content">
+                <canvas baseChart [data]="topSellingProductsPerQuantityPieChartData"
+                    [labels]="topSellingProductsPerQuantityPieChartLabels" [chartType]="pieChartType"
+                    [options]="pieChartOptions" [plugins]="pieChartPlugins" [colors]="pieChartColors"
+                    [legend]="pieChartLegend">
+                </canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <!-- <div class="ibox">
+            <div class="ibox-title">
+                <div class="row">
+                    <div class="col">
+                        <h5>Top Selling Products Per City </h5>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect2">Select City</label>
+                            <select class="form-control" id="exampleFormControlSelect2" (change)="selectedCityChanged()"
+                                [(ngModel)]="currentSelectedCity" name="currentSelectedCity">
+                                <option *ngFor="let city of cities" [value]="city.name">{{city.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <canvas baseChart [data]="topSellingProductsPerCityPieChartData"
+                    [labels]="topSellingProductsPerCityPieChartLabels" [chartType]="pieChartType"
+                    [options]="pieChartOptions" [plugins]="pieChartPlugins" [colors]="pieChartColors"
+                    [legend]="pieChartLegend">
+                </canvas>
+            </div>
+        </div> -->
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <span class="p-3"> Total Count {{totalCount}}</span>
+            <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
+                <div class="table-responsive" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+                    (scrolled)="onScroll()" [scrollWindow]="false">
+                    <table class="table table-dashboard mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="border-top-0">#</th>
+                                <th scope="col" class="border-top-0">Barcode </th>
+                                <th scope="col" class="border-top-0">Product Name</th>
+                                <th scope="col" class="border-top-0">Total Sales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf="productPerformanceReports.length == 0">
+                                <td colspan="4">
+                                    <img src="assets/images/nodata.svg" class="nodata-img">
+                                </td>
+                            </tr>
+                            <tr *ngFor="let productPerformanceReport of productPerformanceReports; let i = index"
+                                rel="off-canvas" class="canvas-btn">
+                                <th scope="row">{{ i + 1 }}</th>
+                                <td>
+                                    {{ productPerformanceReport?.barcode }}
+                                </td>
+                                <td>
+                                    {{ productPerformanceReport?.productName }}
+                                </td>
+                                <td>
+                                    {{ productPerformanceReport?.totalProductSales }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

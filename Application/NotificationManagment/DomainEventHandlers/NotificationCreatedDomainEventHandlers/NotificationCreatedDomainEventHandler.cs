@@ -34,7 +34,7 @@ namespace Application.NotificationManagment.DomainEventHandlers.NotificationCrea
         public async Task Handle(NotificationCreated notification, CancellationToken cancellationToken)
         {
 
-            var deviceIDQuery = new GetMyDevicesIdQuery();
+            var deviceIDQuery = new GetCustomerDeviceId { CustomerId = notification.Notification.UserId };
 
             var deviceId = await _mediator.Send(deviceIDQuery);
 

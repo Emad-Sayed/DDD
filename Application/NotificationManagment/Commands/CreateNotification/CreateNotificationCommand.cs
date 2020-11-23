@@ -15,6 +15,7 @@ namespace Application.NotificationManagment.Commands.CreateNotification
         public string Content { get; set; }
         public string EntityId { get; set; }
         public NotificationType NotificationType { get; set; }
+        public string CustomerId { get; set; }
 
         public class Handler : IRequestHandler<CreateNotificationCommand, string>
         {
@@ -30,11 +31,11 @@ namespace Application.NotificationManagment.Commands.CreateNotification
             public async Task<string> Handle(CreateNotificationCommand request, CancellationToken cancellationToken)
             {
 
-                var newNotificationToAdd = new Notification(request.Title, request.Content, request.EntityId, _currentUserService.UserId, request.NotificationType);
+                var newNotificationToAdd = new Notification(request.Title, request.Content, request.EntityId, request.CustomerId, request.NotificationType);
 
                 _notificationRepository.Add(newNotificationToAdd);
 
-                await _notificationRepository.UnitOfWork.SaveEntitiesSeveralTransactionsAsync(cancellationToken);
+                await _notificationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
                 return newNotificationToAdd.Id.ToString();
             }

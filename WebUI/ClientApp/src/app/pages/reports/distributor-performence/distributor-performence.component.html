@@ -1,0 +1,109 @@
+<div class="row py-5">
+    <div class="col mr-2">
+        <div class="ibox">
+            <div class="ibox-title">
+                <div class="row">
+                    <div class="col">
+                        <h5>Top Selling Products Per Distributor </h5>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Select Distributor</label>
+                            <select class="form-control" id="exampleFormControlSelect1"
+                                (change)="selectedDistributorForProductChanged()"
+                                [(ngModel)]="currentSelectedDistributorForProduct"
+                                name="currentSelectedDistributorForProduct">
+                                <option *ngFor="let distributor of distributors" [value]="distributor.name">
+                                    {{distributor.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <canvas baseChart [data]="topSellingProductsPerDistributorPieChartData"
+                    [labels]="topSellingProductsPerDistributorPieChartLabels" [chartType]="pieChartType"
+                    [options]="pieChartOptions" [plugins]="pieChartPlugins" [colors]="pieChartColors"
+                    [legend]="pieChartLegend">
+                </canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="ibox">
+            <div class="ibox-title">
+                <div class="row">
+                    <div class="col">
+                        <h5>Top Selling Brands Per Distributor </h5>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect2">Select Distributor</label>
+                            <select class="form-control" id="exampleFormControlSelect2"
+                                (change)="selectedDistributorForBrandChanged()"
+                                [(ngModel)]="currentSelectedDistributorForBrand"
+                                name="currentSelectedDistributorForBrand">
+                                <option *ngFor="let distributor of distributors" [value]="distributor.name">
+                                    {{distributor.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <canvas baseChart [data]="topSellingBrandsPerDistributorPieChartData"
+                    [labels]="topSellingBrandsPerDistributorPieChartLabels" [chartType]="pieChartType"
+                    [options]="pieChartOptions" [plugins]="pieChartPlugins" [colors]="pieChartColors"
+                    [legend]="pieChartLegend">
+                </canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <span class="p-3"> Total Count {{totalCount}}</span>
+            <div class="card-body" id="collapseOne" aria-labelledby="headingOne">
+                <div class="table-responsive" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+                    (scrolled)="onScroll()" [scrollWindow]="false">
+                    <table class="table table-dashboard mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="border-top-0">#</th>
+                                <th scope="col" class="border-top-0">Distributor Name</th>
+                                <th scope="col" class="border-top-0">Avarage Number Of Orders Per Month</th>
+                                <th scope="col" class="border-top-0">Average Orders Price</th>
+                                <th scope="col" class="border-top-0">Total Orders Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf="distributorPerformanceReports.length == 0">
+                                <td colspan="4">
+                                    <img src="assets/images/nodata.svg" class="nodata-img">
+                                </td>
+                            </tr>
+                            <tr *ngFor="let distributorPerformanceReport of distributorPerformanceReports; let i = index"
+                                rel="off-canvas" class="canvas-btn">
+                                <th scope="row">{{ i + 1 }}</th>
+                                <td>
+                                    {{ distributorPerformanceReport?.distributorName }}
+                                </td>
+                                <td>
+                                    {{ distributorPerformanceReport?.avarageNumberOfOrdersPerMonth }}
+                                </td>
+                                <td>
+                                    {{ distributorPerformanceReport?.averageOrdersPrice | currency:'EGP' }}
+                                </td>
+                                <td>
+                                    {{ distributorPerformanceReport?.totalOrdersPrice | currency:'EGP' }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

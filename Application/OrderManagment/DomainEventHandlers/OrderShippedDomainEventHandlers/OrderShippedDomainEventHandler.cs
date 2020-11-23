@@ -17,15 +17,16 @@ namespace Application.OrderManagment.DomainEventHandlers.OrderShippedDomainEvent
         private readonly IMediator _mediator;
         private readonly ICurrentUserService _currentUserService;
 
-        public OrderShippedDomainEventHandler(ILogger<OrderShippedDomainEventHandler> logger, ICurrentUserService currentUserService)
+        public OrderShippedDomainEventHandler(ILogger<OrderShippedDomainEventHandler> logger, ICurrentUserService currentUserService, IMediator mediator)
         {
             _logger = logger;
             _currentUserService = currentUserService;
+            _mediator = mediator;
         }
 
         public async Task Handle(OrderShipped notification, CancellationToken cancellationToken)
         {
-            var createNotificationCommand = new CreateNotificationCommand { Title = "تم شجن الطلب", Content = "تم شحن الطلب الخاص بك", EntityId = notification.Order.Id.ToString(), NotificationType = 0 };
+            var createNotificationCommand = new CreateNotificationCommand { Title = "تم شجن الطلب", Content = "تم شحن الطلب الخاص بك", EntityId = notification.Order.Id.ToString(), NotificationType = 0, CustomerId = notification.Order.CustomerId };
 
             await _mediator.Send(createNotificationCommand);
 

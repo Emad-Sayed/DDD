@@ -7,6 +7,8 @@ namespace Application.NotificationManagment.ViewModels
 {
     public class NotificationVM
     {
+        public string Id { get; set; }
+        public string CreateDate { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public string EntityId { get; set; }
